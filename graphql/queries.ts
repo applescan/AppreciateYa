@@ -19,22 +19,23 @@ query Users {
 `;
 
 export const GET_USERS_AND_ORGANIZATIONS = gql`
-  query Query {
-    users {
-      id
-      name
-      email
-      role
-      organization {
-        id
-        name
-      }
-    }
-    organizations {
+query GET_USERS_AND_ORGANIZATIONS {
+users(orderBy: { createdAt: asc }) {
+    id
+    name
+    email
+    role
+    createdAt
+    organization {
       id
       name
     }
   }
+  organizations {
+    id
+    name
+  }
+}
 `;
 
 export const GET_POSTS = gql`
@@ -60,23 +61,52 @@ export const GET_POSTS = gql`
 `;
 
 export const GET_ORGANIZATIONS = gql`
-	query Organizations {
-		organizations {
-			id
-			name
-			users {
-				id
-				email
-				name
-				role
-				orgId
-			}
-			posts {
-				id
-				content
-				authorId
-				orgId
-			}
-		}
+query Organizations {
+	organizations {
+	  address
+	  admins {
+		name
+		email
+		role
+	  }
+	  country
+	  id
+	  name
+	  organizationType
+	  users {
+		email
+		name
+	  }
 	}
+  }
+`;
+
+
+export const GET_ORG_NAME_BY_IDS = gql`
+query GET_ORG_NAME_BY_ID($id: ID!) {
+	organization(where: { id: $id }) {
+	  name
+	}
+  }
+`;
+
+export const GET_ORG_INFO = gql`
+query GET_ORG_INFO {
+	organizations {
+	  address
+	  country
+	  name
+	  organizationType
+	  users {
+		role
+		name
+		email
+	  }
+	  admins {
+		role
+		name
+		email
+	  }
+	}
+  }
 `;

@@ -26,9 +26,13 @@ export enum UserRole {
   export interface Organization {
     id: string;
     name: string;
+    address: string;
+    country: string;
+    organizationType: string;
     users: User[];
+    admins: User[];  
     posts: Post[];
-  }
+}
   
   export interface Query {
     users: User[];

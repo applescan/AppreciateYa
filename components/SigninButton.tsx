@@ -8,10 +8,20 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/HoverCard"
 import { capitalizeEachWord, getInitials } from "@/helpers/helpers";
-
+import { useQuery } from '@apollo/client';
+import { GET_ORG_NAME_BY_IDS } from "@/graphql/queries";
+import { HiOutlineOfficeBuilding } from 'react-icons/hi';
 
 const SigninButton = () => {
   const { data: session } = useSession();
+  const { data: orgData } = useQuery(GET_ORG_NAME_BY_IDS, {
+    skip: !session?.user.orgId,
+    variables: { id: session?.user.orgId },
+  });
+
+  const orgName = orgData?.organization?.name || 'test';
+
+  console.log(orgName)
 
   if (session && session.user) {
     return (
@@ -36,8 +46,8 @@ const SigninButton = () => {
                   Sign Out
                 </button>
                 <div className="flex items-center pt-2">
-                  <span className="text-xs text-gray-900">
-                    Company name ltd.
+                  <span className="text-xs text-gray-600 flex items-center gap-1">
+                    <HiOutlineOfficeBuilding /> {orgName}
                   </span>
                 </div>
               </div>

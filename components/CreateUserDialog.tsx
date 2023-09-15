@@ -18,12 +18,16 @@ import {
 } from "@/components/ui/Dropdown";
 import { Button } from '@/components/ui/Button';
 import { BiSolidMessageSquareAdd } from "react-icons/bi";
+import { capitalizeEachWord } from '@/helpers/helpers';
 
 interface CreateUserDialogProps {
+    isOpen: boolean;
+    onOpenChange: (isOpen: boolean) => void;
     data: { organizations: Organization[] };
+    refetchUsers: () => void;
 }
 
-const CreateUserDialog: React.FC<CreateUserDialogProps> = ({ data }) => {
+const CreateUserDialog: React.FC<CreateUserDialogProps> = ({ isOpen, onOpenChange, data, refetchUsers }) => {
     const [selectedRole, setSelectedRole] = useState<UserRole | null>(null);
     const [selectedOrg, setSelectedOrg] = useState<number | null>(null);
     const [createUserData, setCreateUserData] = useState<{
@@ -62,6 +66,8 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({ data }) => {
 
         if (response.ok) {
             const result = await response.json();
+            refetchUsers();
+            onOpenChange(false);
             console.log(result);
         } else {
             console.error('Error creating user:', response.status);
@@ -69,7 +75,7 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({ data }) => {
     };
 
     return (
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={onOpenChange}>
             <DialogTrigger>
                 <div className='p-2 rounded-md text-sm border bg-gradient-to-r from-pink-500 to-indigo-500 hover:from-pink-400 hover:to-indigo-400 text-white'> <div className='flex items-center gap-2'><BiSolidMessageSquareAdd /> Create new user</div></div>
             </DialogTrigger>
@@ -124,16 +130,15 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({ data }) => {
                                     <DropdownMenuTrigger asChild>
                                         <Button
                                             variant="outline"
-                                            className={selectedRole ? '' : 'italic text-gray-400 font-light'}
+                                            className={selectedRole ? (capitalizeEachWord(selectedRole) ? '' : 'italic text-gray-400 font-light') : 'italic text-gray-400 font-light'}
                                         >
-                                            {selectedRole || "Select Role"}
+                                            {selectedRole ? capitalizeEachWord(selectedRole) : "Select Role"}
                                         </Button>
-
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent className="w-[29rem]">
                                         {Object.keys(UserRole).map((key) => (
                                             <DropdownMenuItem key={key} onSelect={() => setSelectedRole(UserRole[key as keyof typeof UserRole])}>
-                                                {key}
+                                                {capitalizeEachWord(key)}
                                             </DropdownMenuItem>
                                         ))}
                                     </DropdownMenuContent>
@@ -161,9 +166,10 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({ data }) => {
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </div>
-
-
-                            <Button type="submit" className="mt-6">Create User</Button>
+                            <div className="mt-6 flex justify-end items-center gap-2 ">
+                                <Button onClick={() => onOpenChange(false)} variant={"outline"}>Cancel</Button>
+                                <Button type="submit">Create User</Button>
+                            </div>
                         </form>
 
                     </DialogDescription>
