@@ -70,31 +70,18 @@ export const resolvers = {
             return await context.prisma.post.delete({ where: { id } });
         },
         createOrganization: async (_: any, args: any, context: Context) => {
-            const { name, address, country, organizationType, adminIds } = args.data;
+            const { name, address, country, organizationType } = args.data;
 
-            const newOrg = await context.prisma.organization.create({
+            return await context.prisma.organization.create({
                 data: {
                     name,
                     address,
                     country,
                     organizationType
-                },
-                select: { id: true } // This ensures that only the ID is returned
-            });
-
-            // Update users with the role of ADMIN for the new organization
-            await context.prisma.user.updateMany({
-                where: {
-                    id: { in: adminIds },
-                },
-                data: {
-                    orgId: newOrg.id,
-                    role: 'ADMIN'
                 }
             });
-
-            return newOrg;
-        },
+        }
+        ,
         editOrganization: async (_: any, args: any, context: Context) => {
             const { id, name, address, country, organizationType } = args.data;
 

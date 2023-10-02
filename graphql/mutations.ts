@@ -64,21 +64,17 @@ export const DELETE_POST = gql`
 `;
 
 export const CREATE_ORGANIZATION = gql`
-    mutation CreateOrganization($name: String!, $address: String!, $country: String!, $organizationType: String!, $adminIds: [Int!]!) {
-        createOrganization(data: {name: $name, address: $address, country: $country, organizationType: $organizationType, adminIds: $adminIds}) {
+    mutation CreateOrganization($name: String!, $address: String!, $country: String!, $organizationType: String!) {
+        createOrganization(data: {name: $name, address: $address, country: $country, organizationType: $organizationType}) {
             id
             name
             address
             country
             organizationType
-            admins {
-              id
-              name
-              role
-            }
         }
     }
 `;
+
 
 export const EDIT_ORGANIZATION = gql`
     mutation EditOrganization($data: EditOrganizationInput!) {

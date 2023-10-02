@@ -37,21 +37,29 @@ const OrganizationCard: React.FC<OrganizationCardProps> = ({ organization, onEdi
             <div className="px-6 py-2">
                 <h3 className="text-base font-semibold">Admins</h3>
                 <ul>
-                    {organization.admins.map(admin => (
-                        <li key={admin.email} className="flex items-center text-xs gap-2">
-                            <TbUserCog className='cursor-pointer text-gray-600' />
-                            <span>{admin.name} - {admin.email}</span>
-                        </li>
-                    ))}
+                    {organization.admins.length > 0 ? (
+                        organization.admins.map(admin => (
+                            <li key={admin.email} className="flex items-center text-xs gap-2">
+                                <TbUserCog className='cursor-pointer text-gray-600' />
+                                <span>{capitalizeEachWord(admin.name)} - {admin.email}</span>
+                            </li>
+                        ))
+                    ) : (
+                        <li className="text-xs text-gray-400">No admin</li>
+                    )}
                 </ul>
                 <h3 className="text-base font-semibold pt-2">Users</h3>
                 <ul className='mb-4'>
-                    {organization.users.map(user => (
-                        <li key={user.email} className="flex items-center text-xs gap-2">
-                            <TbUser className='cursor-pointer text-gray-600'/>
-                            <span>{user.name} - {user.email}</span>
-                        </li>
-                    ))}
+                    {organization.users.length > 0 ? (
+                        organization.users.map(user => (
+                            <li key={user.email} className="flex items-center text-xs gap-2">
+                                <TbUser className='cursor-pointer text-gray-600' />
+                                <span>{capitalizeEachWord(user.name)} - {user.email}</span>
+                            </li>
+                        ))
+                    ) : (
+                        <li className="text-xs text-gray-400">No user</li>
+                    )}
                 </ul>
             </div>
         </Card>

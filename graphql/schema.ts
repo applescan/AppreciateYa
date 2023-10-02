@@ -35,7 +35,6 @@ type User {
     address: String!
     country: String!
     organizationType: String!
-    adminIds: [Int!]!
   }
 
   input EditOrganizationInput {

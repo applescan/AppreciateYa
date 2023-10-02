@@ -1,5 +1,5 @@
 'use-client'
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import {
     Dialog,
     DialogContent,
@@ -13,6 +13,8 @@ import { Button } from '@/components/ui/Button';
 import { BiSolidMessageSquareAdd } from "react-icons/bi";
 import { useMutation } from '@apollo/client';
 import { CREATE_ORGANIZATION } from '@/graphql/mutations';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/Dropdown';
+import { countryList } from '@/helpers/helpers';
 
 interface CreateOrganizationDialogProps {
     isOpen: boolean;
@@ -20,31 +22,70 @@ interface CreateOrganizationDialogProps {
     refetchOrganizations: () => void;
 }
 
-const orgDataInitialState = {
-    name: '',
-    address: '',
-    country: '',
-    organizationType: ''
-};
-
-const fields = [
-    { label: 'Name', id: 'name' as keyof typeof orgDataInitialState },
-    { label: 'Address', id: 'address' as keyof typeof orgDataInitialState },
-    { label: 'Country', id: 'country' as keyof typeof orgDataInitialState },
-    { label: 'Organization Type', id: 'organizationType' as keyof typeof orgDataInitialState },
-];
-
 const CreateOrganizationDialog: React.FC<CreateOrganizationDialogProps> = ({ isOpen, onOpenChange, refetchOrganizations }) => {
     const [createOrganization] = useMutation(CREATE_ORGANIZATION);
+    const [currentCountry, setCurrentCountry] = useState<string>('');
+
+    const fields = [
+        { label: 'Name', id: 'name' as keyof typeof orgDataInitialState },
+        { label: 'Address', id: 'address' as keyof typeof orgDataInitialState },
+        { label: 'Country', id: 'country' as keyof typeof orgDataInitialState },
+        { label: 'Organization Type', id: 'organizationType' as keyof typeof orgDataInitialState },
+    ];
+
+    const orgDataInitialState = {
+        name: '',
+        address: '',
+        country: currentCountry,
+        organizationType: ''
+    };
+
     const [orgData, setOrgData] = useState<typeof orgDataInitialState>(orgDataInitialState);
 
+    const getCountryFromLocation = async () => {
+        return new Promise<string | null>((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(async position => {
+                try {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+                    const data = await response.json();
+                    resolve(data.address.country);
+                } catch (error) {
+                    reject(error);
+                }
+            }, (error) => {
+                reject(error);
+            });
+        });
+    };
+
+
+    useEffect(() => {
+        const fetchCountry = async () => {
+            try {
+                const detectedCountry = await getCountryFromLocation();
+                setCurrentCountry(detectedCountry || "New Zealand");
+            } catch (error) {
+                setCurrentCountry("New Zealand");
+            }
+        };
+        fetchCountry();
+    }, []);
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
+
+        // Set the current country if the user hasn't selected any
+        if (!orgData.country) {
+            orgData.country = currentCountry;
+        }
+
         await createOrganization({ variables: orgData });
         refetchOrganizations();
         onOpenChange(false);
     };
+
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -66,18 +107,40 @@ const CreateOrganizationDialog: React.FC<CreateOrganizationDialogProps> = ({ isO
                             {fields.map(field => (
                                 <div key={field.id} className="mt-4">
                                     <label htmlFor={field.id}>{field.label}</label>
-                                    <Input
-                                        type="text"
-                                        id={field.id}
-                                        name={field.id}
-                                        placeholder='Type..'
-                                        className="w-full p-2 mt-2 border rounded"
-                                        value={orgData[field.id]}
-                                        onChange={handleChange}
-                                        required
-                                    />
+                                    {field.id !== "country" ? (
+                                        <Input
+                                            type="text"
+                                            id={field.id}
+                                            name={field.id}
+                                            placeholder='Type..'
+                                            className="w-full p-2 mt-2 border rounded"
+                                            value={orgData[field.id]}
+                                            onChange={handleChange}
+                                            required
+                                        />
+                                    ) : (
+                                        <div className="flex flex-col mt-2">
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="outline">
+                                                        {orgData[field.id] || currentCountry}
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent className="w-[29rem]">
+                                                    {countryList.map((country) => (
+                                                        <DropdownMenuItem key={country} onSelect={() => {
+                                                            setOrgData(prev => ({ ...prev, country }));
+                                                        }}>
+                                                            {country}
+                                                        </DropdownMenuItem>
+                                                    ))}
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </div>
+                                    )}
                                 </div>
                             ))}
+
                             <div className="mt-6 flex justify-end items-center gap-2">
                                 <Button onClick={() => onOpenChange(false)} variant={"outline"}>Cancel</Button>
                                 <Button type="submit">Create User</Button>

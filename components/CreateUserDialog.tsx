@@ -1,4 +1,4 @@
-'use-client'
+"use client"
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Organization, UserRole } from '@/lib/types/types';
 import {

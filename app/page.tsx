@@ -43,9 +43,9 @@ export default function Home() {
 
   return (
     <div style={{
-      backgroundImage: `url("/header.jpg")`,
-      height: "60vh",
-      backgroundRepeat: "no-repeat",
+      backgroundImage: `url("/bg-5.gif")`,
+      height: "80vh",
+      backgroundRepeat: "repeat",
       backgroundSize: "cover",
     }}>
 

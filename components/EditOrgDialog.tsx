@@ -13,7 +13,7 @@ interface EditOrganizationDialogProps {
     isOpen: boolean;
     onOpenChange: (isOpen: boolean) => void;
     organization: Organization | null;
-    refetchOrganizations: () => void; // Changed from refetchUsers
+    refetchOrganizations: () => void;
 }
 
 const EditOrganizationDialog: React.FC<EditOrganizationDialogProps> = ({ isOpen, onOpenChange, organization, refetchOrganizations }) => {
@@ -22,13 +22,36 @@ const EditOrganizationDialog: React.FC<EditOrganizationDialogProps> = ({ isOpen,
 
     const [currentCountry, setCurrentCountry] = useState<string>('');
 
-    // Infer country from browser's locale
-    useEffect(() => {
-        const country = new Intl.Locale(navigator.language).maximize().region;
-        setCurrentCountry(country || "New Zealand");
-    }, []);
-    
+    const getCountryFromLocation = async () => {
+        return new Promise<string | null>((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(async position => {
+                try {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+                    const data = await response.json();
+                    resolve(data.address.country);
+                } catch (error) {
+                    reject(error);
+                }
+            }, (error) => {
+                reject(error);
+            });
+        });
+    };
 
+
+    useEffect(() => {
+        const fetchCountry = async () => {
+            try {
+                const detectedCountry = await getCountryFromLocation();
+                setCurrentCountry(detectedCountry || "New Zealand");
+            } catch (error) {
+                setCurrentCountry("New Zealand");
+            }
+        };
+        fetchCountry();
+    }, []);
 
     const [editOrganizationData, setEditOrganizationData] = useState<{
         name: string;

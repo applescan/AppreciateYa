@@ -1,27 +1,45 @@
 "use client";
 import { signIn, signOut, useSession } from "next-auth/react";
 import React from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "@/components/ui/HoverCard"
+} from "@/components/ui/HoverCard";
 import { capitalizeEachWord, getInitials } from "@/helpers/helpers";
 import { useQuery } from '@apollo/client';
 import { GET_ORG_NAME_BY_IDS } from "@/graphql/queries";
 import { HiOutlineOfficeBuilding } from 'react-icons/hi';
+import { Skeleton } from "./ui/Skeleton";
 
 const SigninButton = () => {
-  const { data: session } = useSession();
-  const { data: orgData } = useQuery(GET_ORG_NAME_BY_IDS, {
+  const { data: session, status } = useSession();
+
+  const { data: orgData, loading } = useQuery(GET_ORG_NAME_BY_IDS, {
     skip: !session?.user.orgId,
     variables: { id: session?.user.orgId },
   });
 
-  const orgName = orgData?.organization?.name || 'test';
+  const orgName = orgData?.organization?.name || 'No Organisation data';
 
-  console.log(orgName)
+  if (status === "loading") {
+    return <div className="flex items-center space-x-2">
+      <Skeleton className="h-10 w-10 rounded-full" />
+      <div className="space-y-2">
+        <Skeleton className="h-4 w-[60px]" />
+      </div>
+    </div>;
+  }
+
+  if (loading) {
+    return <div className="flex items-center space-x-2">
+      <Skeleton className="h-10 w-10 rounded-full" />
+      <div className="space-y-2">
+        <Skeleton className="h-4 w-[60px]" />
+      </div>
+    </div>;
+  }
 
   if (session && session.user) {
     return (
@@ -34,7 +52,6 @@ const SigninButton = () => {
                 <AvatarFallback>
                   {session.user.name ? getInitials(session.user.name) : 'NA'}
                 </AvatarFallback>
-
               </Avatar>
               <p className="text-gray-800 font-normal">{capitalizeEachWord(session.user.name)}</p>
             </button>
@@ -54,10 +71,10 @@ const SigninButton = () => {
             </div>
           </HoverCardContent>
         </HoverCard>
-
       </>
     );
   }
+
   return (
     <button onClick={() => signIn()} className="text-green-600 ml-auto">
       Sign In
@@ -66,8 +83,3 @@ const SigninButton = () => {
 };
 
 export default SigninButton;
-
-
-
-
-
