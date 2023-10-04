@@ -1,24 +1,26 @@
 import { gql } from "@apollo/client";
 
 export const CREATE_USER = gql`
-    mutation CreateUser($email: String!, $password: String!, $name: String!, $role: String!, $orgId: ID!) {
-        createUser(email: $email, password: $password, name: $name, role: $role, orgId: $orgId) {
+    mutation CreateUser($email: String!, $password: String!, $name: String!, $role: String!, $orgId: Int!, $image: String) {
+        createUser(email: $email, password: $password, name: $name, role: $role, orgId: $orgId, image: $image) {
             id
             email
             name
             role
             orgId
+            image
         }
     }
 `;
 
 export const EDIT_USER = gql`
-mutation EditUser($id: Int!, $name: String!, $email: String!, $role: UserRole!, $orgId: Int!) {
-    editUser(id: $id, name: $name, email: $email, role: $role, orgId: $orgId) {
+mutation EditUser($id: Int!, $name: String!, $email: String!, $role: UserRole!, $orgId: Int!, $image: String) {
+    editUser(id: $id, name: $name, email: $email, role: $role, orgId: $orgId, image: $image) {
       id
       name
       email
       role
+      image
       organization {
         id
         name
@@ -36,7 +38,7 @@ export const DELETE_USER = gql`
 `;
 
 export const CREATE_POST = gql`
-    mutation CreatePost($content: String!, $authorId: ID!, $orgId: ID!) {
+    mutation CreatePost($content: String!, $authorId: Int!, $orgId: Int!) {
         createPost(content: $content, authorId: $authorId, orgId: $orgId) {
             id
             content

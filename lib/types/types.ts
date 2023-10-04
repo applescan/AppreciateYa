@@ -7,6 +7,7 @@ export enum UserRole {
     id: string;
     email: string;
     name: string;
+    image?: string;
     role: UserRole;
     posts: Post[];
     organization: Organization;

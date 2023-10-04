@@ -8,7 +8,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/Dropdown";
-import { Organization, UserRole } from '@/lib/types/types';
+import { Organization } from '@/lib/types/types';
 import { useQuery } from '@apollo/client';
 import { GET_ORGANIZATIONS } from '@/graphql/queries';
 import Loading from '@/components/ui/Loading';

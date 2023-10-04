@@ -4,6 +4,7 @@ type User {
     email: String!
     name: String!
     role: UserRole!
+    image: String
     posts: [Post!]!
     organization: Organization!
     createdAt: String!
@@ -51,6 +52,7 @@ type User {
   }
   
   type Query {
+    user(id: Int!): User
     users(orderBy: UserOrderByInput): [User!]!
     posts: [Post!]!
     organizations: [Organization!]!
@@ -70,8 +72,8 @@ type User {
     desc
   }
   type Mutation {
-    createUser(email: String!, password: String!, name: String!, role: UserRole!, orgId: Int!): User!
-    editUser(id: Int!, name: String!, email: String!, role: UserRole!, orgId: Int!): User!
+    createUser(email: String!, password: String!, name: String!, role: UserRole!, orgId: Int!, image: String): User!
+    editUser(id: Int!, name: String!, email: String!, role: UserRole!, orgId: Int!, image: String): User!
     deleteUser(id: Int!): User!
     createPost(content: String!, authorId: Int!, orgId: Int!): Post!
     updatePost(id: Int!, content: String!): Post!

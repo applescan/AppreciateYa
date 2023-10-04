@@ -3,19 +3,47 @@ import { gql } from "@apollo/client";
 export const GET_USERS = gql`
 query Users {
 	users {
-	  name
 	  id
+	  name
+	  email
+	  role
+	  image
+	  createdAt
+	  updatedAt
 	  organization {
+		id
 		name
 		posts {
+		  id
 		  content
 		  author {
+			id
 			name
+			email
+			role
 		  }
 		}
 	  }
 	}
   }
+`;
+
+export const GET_USER_BY_ID = gql`
+query GetUserById($id: Int!) {
+    user(id: $id)  {
+        id
+        name
+        email
+        role
+        image
+        createdAt
+        updatedAt
+        organization {
+            id
+            name
+        }
+    }
+}
 `;
 
 export const GET_USERS_AND_ORGANIZATIONS = gql`
@@ -25,7 +53,9 @@ users(orderBy: { createdAt: asc }) {
     name
     email
     role
+    image
     createdAt
+    updatedAt
     organization {
       id
       name
@@ -43,14 +73,18 @@ export const GET_POSTS = gql`
 		posts {
 			id
 			content
-			authorId
-			orgId
+			createdAt
+			updatedAt
 			author {
 				id
 				email
 				name
 				role
-				orgId
+				image
+				organization {
+					id
+					name
+				}
 			}
 			organization {
 				id
@@ -63,28 +97,33 @@ export const GET_POSTS = gql`
 export const GET_ORGANIZATIONS = gql`
 query Organizations {
 	organizations {
-	  address
-	  admins {
-		name
-		email
-		role
-	  }
-	  country
 	  id
 	  name
+	  address
+	  country
 	  organizationType
 	  users {
+		id
 		email
 		name
+		role
+		image
+	  }
+	  admins {
+		id
+		email
+		name
+		role
+		image
 	  }
 	}
   }
 `;
 
-
 export const GET_ORG_NAME_BY_IDS = gql`
 query GET_ORG_NAME_BY_ID($id: ID!) {
 	organization(where: { id: $id }) {
+	  id
 	  name
 	}
   }
@@ -93,19 +132,24 @@ query GET_ORG_NAME_BY_ID($id: ID!) {
 export const GET_ORG_INFO = gql`
 query GET_ORG_INFO {
 	organizations {
+	  id
+	  name
 	  address
 	  country
-	  name
 	  organizationType
 	  users {
-		role
+		id
 		name
 		email
+		role
+		image
 	  }
 	  admins {
-		role
+		id
 		name
 		email
+		role
+		image
 	  }
 	}
   }

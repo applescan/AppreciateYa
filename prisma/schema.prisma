@@ -16,6 +16,7 @@ model User {
   password     String
   name         String
   role         UserRole
+  image        String?      @db.VarChar(255)
   posts        Post[]
   orgId        Int
   organization Organization @relation(fields: [orgId], references: [id])

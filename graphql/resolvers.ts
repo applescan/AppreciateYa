@@ -3,6 +3,11 @@ import * as bcrypt from "bcrypt";
 
 export const resolvers = {
     Query: {
+        user: async (_: any, args: { id: number }, context: Context) => {
+            return await context.prisma.user.findUnique({
+                where: { id: args.id }
+            });
+        },        
         users: async (_: any, args: { orderBy?: { createdAt?: 'asc' | 'desc' } }, context: Context) => {
             return await context.prisma.user.findMany({
                 orderBy: args.orderBy
@@ -20,7 +25,7 @@ export const resolvers = {
     },
     Mutation: {
         createUser: async (_: any, args: any, context: Context) => {
-            const { email, password, name, role, orgId } = args;
+            const { email, password, name, role, orgId, image } = args;
             const hashedPassword = await bcrypt.hash(password, 10);
             return await context.prisma.user.create({
                 data: {
@@ -29,18 +34,20 @@ export const resolvers = {
                     name,
                     role,
                     orgId: Number(orgId),
+                    image,
                 },
             });
         },
         editUser: async (_: any, args: any, context: Context) => {
-            const { id, name, email, role, orgId } = args;
+            const { id, name, email, role, orgId, image } = args;
             return await context.prisma.user.update({
                 where: { id },
                 data: {
                     name,
                     email,
                     role,
-                    orgId: Number(orgId)
+                    orgId: Number(orgId),
+                    image
                 }
             });
         },

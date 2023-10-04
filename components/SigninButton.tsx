@@ -12,10 +12,11 @@ import { useQuery } from '@apollo/client';
 import { GET_ORG_NAME_BY_IDS } from "@/graphql/queries";
 import { HiOutlineOfficeBuilding } from 'react-icons/hi';
 import { Skeleton } from "./ui/Skeleton";
+import { useRouter } from 'next/navigation'
 
 const SigninButton = () => {
   const { data: session, status } = useSession();
-
+  const router = useRouter()
   const { data: orgData, loading } = useQuery(GET_ORG_NAME_BY_IDS, {
     skip: !session?.user.orgId,
     variables: { id: session?.user.orgId },
@@ -58,7 +59,10 @@ const SigninButton = () => {
           </HoverCardTrigger>
           <HoverCardContent className="w-80">
             <div className="flex justify-between space-x-4">
-              <div className="space-y-1">
+              <div className="space-y-1 space-x-4">
+                <button onClick={() => router.push('/profile')} className="text-gray-900">
+                  Profile
+                </button>
                 <button onClick={() => signOut()} className="text-red-600">
                   Sign Out
                 </button>
