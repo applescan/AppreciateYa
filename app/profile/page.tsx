@@ -1,9 +1,12 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { EDIT_USER } from '@/graphql/mutations';
 import { GET_USER_BY_ID } from '@/graphql/queries';
+import { Input } from '@/components/ui/Input';
 import { useSession } from 'next-auth/react';
+import { Button } from '@/components/ui/Button';
+import Loading from '@/components/ui/Loading';
 
 export default function Page() {
     const { data: sessionData, status } = useSession();
@@ -12,18 +15,61 @@ export default function Page() {
     const [imageUrl, setImageUrl] = useState(user?.image || "");
     const [imageSrc, setImageSrc] = useState();
     const [uploadData, setUploadData] = useState();
-
+    const [editUserMutation] = useMutation(EDIT_USER);
     // Fetch user data based on their ID using GET_USER_BY_ID query
     const { loading, error, data } = useQuery(GET_USER_BY_ID, {
         variables: { id: user?.id },
-        skip: !user // Skip the query if user is not available
+        skip: !user
     });
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error.message}</p>;
+
+    console.log(data?.user?.organization.id)
+    const [editUserData, setEditUserData] = useState<{
+        name: string;
+        email: string;
+        password?: string;
+        role: string;
+        orgId: number;
+    }>({
+        name: user?.name || '',
+        email: user?.email || '',
+        role: user?.role || '',
+        orgId: Number(data?.user?.organization.id)
+    });
+
+    const mutationVariables = useMemo(() => ({
+        id: Number(user?.id),
+        name: editUserData.name,
+        email: editUserData.email,
+        role: editUserData.role,
+        orgId: editUserData.orgId,
+    }), [user, editUserData]);
+
+    const handleEditUser = async () => {
+        console.log("Editing user...");
+
+        try {
+            await editUserMutation({ variables: mutationVariables });
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+
 
     const currentUser = data?.user;
-    console.log(currentUser)
 
+    useEffect(() => {
+        // This ensures that when the current user data is fetched,
+        // you're updating the role and orgId in your state.
+        if (currentUser) {
+            setEditUserData({
+                name: currentUser?.name || '',
+                email: currentUser?.email || '',
+                role: currentUser?.role || '',
+                orgId: Number(data?.user?.organization.id)
+            });
+        }
+    }, [currentUser]);
 
     const handleOnChange = (changeEvent: { target: { files: Blob[]; }; }) => {
         const reader = new FileReader();
@@ -79,30 +125,97 @@ export default function Page() {
 
     if (status === "loading") return <p>Loading...</p>;
 
+    const handleDeletePicture = () => {
+        editUser({
+            variables: {
+                id: user.id,
+                image: null // Remove the image URL from the user's profile
+            }
+        })
+            .then(response => {
+                setImageUrl(null);
+            })
+            .catch(error => {
+                console.error('Error deleting user image:', error);
+            });
+    }
+
+    if (loading) return <Loading></Loading>;
+    if (error) return <p>Error: {error.message}</p>;
+
+
     return (
         <div>
             <main>
-                <h1>Profile: {currentUser.name}</h1>
+                <p>Profile: {currentUser.name}</p>
                 <p>Email: {currentUser.email}</p>
                 <p>Role: {currentUser.role}</p>
                 <img src={currentUser.image} alt="User profile" />
 
+                {/* Delete Picture Button */}
+                <button onClick={handleDeletePicture}>Delete Picture</button>
 
-                <h1>Image Uploader</h1>
                 <p>Upload your image to Cloudinary!</p>
                 <form method="post" onChange={handleOnChange} onSubmit={handleOnSubmit}>
                     <p>
                         <input type="file" name="file" />
                     </p>
-                    <img src={imageSrc} alt="Selected for upload" />
                     {imageSrc && !uploadData && (
                         <p>
                             <button type="submit">Upload Files</button>
                         </p>
                     )}
-                    {uploadData && (
-                        <code><pre>{JSON.stringify(uploadData, null, 2)}</pre></code>
-                    )}
+                </form>
+
+                {/* Profile Details Form */}
+                <form onSubmit={(e) => {
+                    e.preventDefault();
+                    handleEditUser();
+                }}>
+
+                    {/* Name field */}
+                    <div className="mt-4">
+                        <label htmlFor="editName">Name</label>
+                        <Input
+                            type="text"
+                            id="editName"
+                            name="name"
+                            placeholder='Type..'
+                            className="w-full p-2 mt-2 border rounded"
+                            value={editUserData.name}
+                            onChange={(event) => {
+                                const { name, value } = event.target;
+                                setEditUserData(prev => ({ ...prev, [name]: value }));
+                            }}
+
+                        />
+                    </div>
+
+                    {/* Email field */}
+                    <div className="mt-4">
+                        <label htmlFor="editEmail">Email</label>
+                        <Input
+                            type="email"
+                            id="editEmail"
+                            name="email"
+                            placeholder='Type..'
+                            className="w-full p-2 mt-2 border rounded"
+                            value={editUserData.email}
+                            onChange={(event) => {
+                                const { name, value } = event.target;
+                                setEditUserData(prev => ({ ...prev, [name]: value }));
+                            }}
+
+                        />
+                    </div>
+
+                    {/* Submit and Cancel Buttons */}
+                    <div className="mt-6 flex justify-between">
+
+                        <div className='flex items-center gap-2'>
+                            <Button type="submit">Update User</Button>
+                        </div>
+                    </div>
                 </form>
             </main>
         </div>

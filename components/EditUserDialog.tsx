@@ -2,7 +2,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 import { DELETE_USER, EDIT_USER } from '@/graphql/mutations';
-
 import { Organization, User, UserRole } from '@/lib/types/types';
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/Dialog";
 import { Input } from '@/components/ui/Input';

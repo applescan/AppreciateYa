@@ -10,19 +10,32 @@ import {
 import { capitalizeEachWord, getInitials } from "@/helpers/helpers";
 import { useQuery } from '@apollo/client';
 import { GET_ORG_NAME_BY_IDS } from "@/graphql/queries";
+import { GET_USER_BY_ID } from '@/graphql/queries';
 import { HiOutlineOfficeBuilding } from 'react-icons/hi';
 import { Skeleton } from "./ui/Skeleton";
 import { useRouter } from 'next/navigation'
 
 const SigninButton = () => {
   const { data: session, status } = useSession();
-  const router = useRouter()
+  const router = useRouter();
+
+  // Destructure here for cleaner code
+  const { orgId, id: userId, image } = session?.user || {};
+
   const { data: orgData, loading } = useQuery(GET_ORG_NAME_BY_IDS, {
-    skip: !session?.user.orgId,
-    variables: { id: session?.user.orgId },
+    skip: !orgId,
+    variables: { id: orgId },
   });
 
   const orgName = orgData?.organization?.name || 'No Organisation data';
+
+  // Fetch user data based on their ID using GET_USER_BY_ID query
+  const { data: userData } = useQuery(GET_USER_BY_ID, {
+    variables: { id: userId },
+    skip: !userId
+  });
+
+  const profileImg = userData?.user?.image || image;
 
   if (status === "loading") {
     return <div className="flex items-center space-x-2">
@@ -49,7 +62,7 @@ const SigninButton = () => {
           <HoverCardTrigger asChild>
             <button className="flex items-center gap-3">
               <Avatar>
-                <AvatarImage src="" />
+                <AvatarImage src={profileImg} />
                 <AvatarFallback>
                   {session.user.name ? getInitials(session.user.name) : 'NA'}
                 </AvatarFallback>
