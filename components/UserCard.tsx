@@ -21,7 +21,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, onEditClick }) => {
         <Card className="mt-2 mb-4">
             <div className="flex items-center">
                 <Avatar className='h-20 w-20 ml-5'>
-                    <AvatarImage src="" />
+                    <AvatarImage src={user.image} />
                     <AvatarFallback className='text-2xl'>
                         {user?.name ? getInitials(user.name) : 'NA'}
                     </AvatarFallback>

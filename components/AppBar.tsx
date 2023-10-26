@@ -8,10 +8,22 @@ import { MdClose } from "react-icons/md"
 import { useState } from 'react'
 import Image from 'next/image';
 import { Dialog, Popover } from '@headlessui/react'
+import { useSession } from "next-auth/react";
 
 const AppBar = () => {
-
+  const { data: sessionData, status } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  const adminMenu = () => {
+    if (sessionData?.user.role === 'ADMIN' || status === 'authenticated') {
+      return (<Link
+        href={{ pathname: "/admin/organisations" }}
+        className="-mx-3 block rounded-lg px-3 py-2 text-base font-normal leading-7 text-gray-900 hover:bg-gray-50">
+        Admin Dashboard
+      </Link>)
+    }
+  }
+
   return (
     <>
       <header className="bg-white">
@@ -30,9 +42,14 @@ const AppBar = () => {
           <Popover.Group className="hidden lg:flex lg:gap-x-12 items-center">
             <Link
               href={{ pathname: "/UserPost" }}
-              className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+              className="-mx-3 block rounded-lg px-3 py-2 text-base font-normal leading-7 text-gray-900 hover:bg-gray-50">
               Posts
             </Link>
+            {(sessionData?.user?.role === 'ADMIN' && status === 'authenticated') && (
+              <Link href="/admin/users" passHref>
+                <p className="-mx-3 block rounded-lg px-3 py-2 text-base font-normal leading-7 text-gray-900 hover:bg-gray-50">User Management</p>
+              </Link>
+            )}
             <SigninButton />
           </Popover.Group>
         </nav>
@@ -54,9 +71,14 @@ const AppBar = () => {
                 <div className="space-y-4 py-6">
                   <Link
                     href={{ pathname: "/UserPost" }}
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-normal leading-7 text-gray-900 hover:bg-gray-50">
                     Posts
                   </Link>
+                  {(sessionData?.user?.role === 'ADMIN' && status === 'authenticated') && (
+                    <Link href="/admin/users" passHref>
+                      <p className="-mx-3 block rounded-lg px-3 py-2 text-base font-normal leading-7 text-gray-900 hover:bg-gray-50">User Management</p>
+                    </Link>
+                  )}
                   <SigninButton />
                 </div>
               </div>

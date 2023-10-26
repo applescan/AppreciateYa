@@ -93,7 +93,7 @@ const LoginPage: React.FC = () => {
               </div>
 
               <div className="mt-6 flex w-full items-center gap-2">
-              <Button type="submit" className='w-full text-center flex justify-center items-center'>Welcome back</Button>
+              <Button type="submit" className='w-full text-center flex justify-center items-center'>Let's go!</Button>
               </div>
             </form>
             <p className='font-normal text-center py-4 text-sm text-purple-900'>Don't have an account? <span className='underline font-bold text-sm text-purple-900 italic cursor-pointer' onClick={() => router.push('/auth/signup')}>Sign up</span></p>

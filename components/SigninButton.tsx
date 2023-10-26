@@ -70,21 +70,19 @@ const SigninButton = () => {
               <p className="text-gray-800 font-normal">{capitalizeEachWord(session.user.name)}</p>
             </button>
           </HoverCardTrigger>
-          <HoverCardContent className="w-80">
-            <div className="flex justify-between space-x-4">
-              <div className="space-y-1 space-x-4">
-                <button onClick={() => router.push('/profile')} className="text-gray-900">
-                  Profile
-                </button>
-                <button onClick={() => signOut()} className="text-red-600">
-                  Sign Out
-                </button>
-                <div className="flex items-center pt-2">
-                  <span className="text-xs text-gray-600 flex items-center gap-1">
-                    <HiOutlineOfficeBuilding /> {orgName}
-                  </span>
-                </div>
-              </div>
+          <HoverCardContent className="w-52 flex flex-col text-left">
+            <div className="flex flex-col gap-1">
+              <button onClick={() => router.push('/profile')} className="text-gray-900 text-left font-normal">
+                Profile
+              </button>
+              <button onClick={() => signOut()} className="text-red-600 text-left font-normal">
+                Sign Out
+              </button>
+            </div>
+            <div className="flex items-center pt-2">
+              <span className="text-xs text-gray-600 flex items-center gap-1">
+                <HiOutlineOfficeBuilding /> {orgName}
+              </span>
             </div>
           </HoverCardContent>
         </HoverCard>

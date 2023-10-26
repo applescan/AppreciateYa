@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { EDIT_USER } from '@/graphql/mutations';
 import { GET_USER_BY_ID } from '@/graphql/queries';
@@ -7,33 +7,44 @@ import { Input } from '@/components/ui/Input';
 import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/Button';
 import Loading from '@/components/ui/Loading';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar';
+import { capitalizeEachWord, getInitials } from '@/helpers/helpers';
+import { VERIFY_CURRENT_PASSWORD } from '@/graphql/mutations';
+
 
 export default function Page() {
     const { data: sessionData, status } = useSession();
     const user = sessionData?.user;
     const [editUser] = useMutation(EDIT_USER);
     const [imageUrl, setImageUrl] = useState(user?.image || "");
-    const [imageSrc, setImageSrc] = useState();
+    const [imageSrc, setImageSrc] = useState<string | undefined>();
     const [uploadData, setUploadData] = useState();
     const [editUserMutation] = useMutation(EDIT_USER);
-    // Fetch user data based on their ID using GET_USER_BY_ID query
     const { loading, error, data } = useQuery(GET_USER_BY_ID, {
         variables: { id: user?.id },
         skip: !user
     });
-
-    console.log(data?.user?.organization.id)
+    const currentUser = data?.user;
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [verifyCurrentPasswordMutation] = useMutation(VERIFY_CURRENT_PASSWORD);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [editUserData, setEditUserData] = useState<{
         name: string;
         email: string;
         password?: string;
         role: string;
         orgId: number;
+        currentPassword: string;
+        newPassword: string;
+        confirmPassword: string;
     }>({
         name: user?.name || '',
         email: user?.email || '',
         role: user?.role || '',
-        orgId: Number(data?.user?.organization.id)
+        orgId: Number(data?.user?.organization.id),
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
     });
 
     const mutationVariables = useMemo(() => ({
@@ -42,61 +53,113 @@ export default function Page() {
         email: editUserData.email,
         role: editUserData.role,
         orgId: editUserData.orgId,
+        password: editUserData.newPassword ? editUserData.newPassword : undefined
     }), [user, editUserData]);
 
-    const handleEditUser = async () => {
-        console.log("Editing user...");
+    const isPasswordValid = useMemo(() => {
+        if (editUserData.currentPassword) {
+            return editUserData.newPassword && editUserData.confirmPassword;
+        }
+        return true;
+    }, [editUserData.currentPassword, editUserData.newPassword, editUserData.confirmPassword]);
 
-        try {
-            await editUserMutation({ variables: mutationVariables });
-        } catch (error) {
-            console.error(error);
+    const handleEditUser = async () => {
+        setErrorMessage(null);
+
+        if (!isPasswordValid) {
+            setErrorMessage("New password fields can't be empty when current password is provided.");
+            return;
+        }
+
+        // Check if the passwords match.
+        if (editUserData.newPassword !== editUserData.confirmPassword) {
+            setErrorMessage("Passwords do not match");
+            return;
+        }
+
+        // If a new password is being set, verify the current password.
+        if (editUserData.newPassword && editUserData.currentPassword) {
+            try {
+                // Verify current password.
+                await verifyCurrentPasswordMutation({
+                    variables: {
+                        userId: user?.id,
+                        password: editUserData.currentPassword,
+                    },
+                });
+
+                // If verification is successful, proceed to update user details.
+                await editUserMutation({ variables: mutationVariables });
+
+                // Reload the page after successful update.
+                window.location.reload();
+            } catch (error: any) {
+                setErrorMessage(error.message || "An error occurred");
+            }
+        } else if (!editUserData.newPassword) {
+            // If no new password is being set, simply update user details without verifying.
+            try {
+                await editUserMutation({ variables: mutationVariables });
+
+                // Reload the page after successful update.
+                window.location.reload();
+            } catch (error: any) {
+                setErrorMessage(error.message || "An error occurred");
+            }
+        } else {
+            setErrorMessage("Please provide your current password to set a new one.");
         }
     };
 
-
-
-    const currentUser = data?.user;
-
     useEffect(() => {
-        // This ensures that when the current user data is fetched,
-        // you're updating the role and orgId in your state.
         if (currentUser) {
             setEditUserData({
                 name: currentUser?.name || '',
                 email: currentUser?.email || '',
                 role: currentUser?.role || '',
-                orgId: Number(data?.user?.organization.id)
+                orgId: Number(data?.user?.organization.id),
+                currentPassword: '',
+                newPassword: '',
+                confirmPassword: ''
             });
         }
     }, [currentUser]);
 
-    const handleOnChange = (changeEvent: { target: { files: Blob[]; }; }) => {
-        const reader = new FileReader();
 
-        reader.onload = function (onLoadEvent) {
-            setImageSrc(onLoadEvent.target.result);
-            setUploadData(undefined);
+    const handleOnChange = (changeEvent: React.FormEvent<HTMLFormElement>) => {
+        const form = changeEvent.currentTarget;
+        const fileInput = form.querySelector<HTMLInputElement>("input[type='file']");
+        if (fileInput && fileInput.files && fileInput.files.length > 0) {
+            const reader = new FileReader();
+
+            reader.onload = function (onLoadEvent: ProgressEvent<FileReader>) {
+                if (onLoadEvent.target && onLoadEvent.target.result) {
+                    setImageSrc(onLoadEvent.target.result as string);
+                }
+            }
+
+            reader.readAsDataURL(fileInput.files[0]);
+            handleOnSubmit(changeEvent);
         }
-
-        reader.readAsDataURL(changeEvent.target.files[0]);
     }
 
     const handleOnSubmit = async (event: { preventDefault: () => void; currentTarget: any; }) => {
         event.preventDefault();
 
         const form = event.currentTarget;
-        const fileInput = Array.from(form.elements).find(({ name }) => name === 'file');
-
+        const fileInput = Array.from(form.elements).find((element: any) => element.name === 'file') as HTMLInputElement;
         const formData = new FormData();
 
-        for (const file of fileInput.files) {
-            formData.append('file', file);
+        if (fileInput.files) {
+            const filesArray = Array.from(fileInput.files);
+            for (const file of filesArray) {
+                formData.append('file', file);
+            }
         }
 
         formData.append('upload_preset', 'profile');
 
-        const data = await fetch('https://api.cloudinary.com/v1_1/dek61sfoh/image/upload', {
+        const data = await fetch(`${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}`, {
             method: 'POST',
             body: formData
         }).then(r => r.json());
@@ -116,29 +179,36 @@ export default function Page() {
                 setImageUrl(response.data.editUser.image);
             })
             .catch(error => {
-                console.error('Error updating user with new image:', error);
+                setErrorMessage('Error updating user with new image: ' + error.message);
             });
 
         setImageSrc(data.secure_url);
         setUploadData(data);
     }
 
-    if (status === "loading") return <p>Loading...</p>;
+    if (status === "loading") return <Loading></Loading>;
 
     const handleDeletePicture = () => {
+
         editUser({
             variables: {
                 id: user.id,
-                image: null // Remove the image URL from the user's profile
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                orgId: user.orgId,
+                image: null
             }
         })
             .then(response => {
                 setImageUrl(null);
             })
             .catch(error => {
-                console.error('Error deleting user image:', error);
+                setErrorMessage('Error deleting user image: ' + error.message);
             });
+
     }
+
 
     if (loading) return <Loading></Loading>;
     if (error) return <p>Error: {error.message}</p>;
@@ -146,77 +216,149 @@ export default function Page() {
 
     return (
         <div>
-            <main>
-                <p>Profile: {currentUser.name}</p>
-                <p>Email: {currentUser.email}</p>
-                <p>Role: {currentUser.role}</p>
-                <img src={currentUser.image} alt="User profile" />
-
-                {/* Delete Picture Button */}
-                <button onClick={handleDeletePicture}>Delete Picture</button>
-
-                <p>Upload your image to Cloudinary!</p>
-                <form method="post" onChange={handleOnChange} onSubmit={handleOnSubmit}>
-                    <p>
-                        <input type="file" name="file" />
-                    </p>
-                    {imageSrc && !uploadData && (
-                        <p>
-                            <button type="submit">Upload Files</button>
-                        </p>
-                    )}
-                </form>
-
-                {/* Profile Details Form */}
-                <form onSubmit={(e) => {
-                    e.preventDefault();
-                    handleEditUser();
-                }}>
-
-                    {/* Name field */}
-                    <div className="mt-4">
-                        <label htmlFor="editName">Name</label>
-                        <Input
-                            type="text"
-                            id="editName"
-                            name="name"
-                            placeholder='Type..'
-                            className="w-full p-2 mt-2 border rounded"
-                            value={editUserData.name}
-                            onChange={(event) => {
-                                const { name, value } = event.target;
-                                setEditUserData(prev => ({ ...prev, [name]: value }));
-                            }}
-
-                        />
-                    </div>
-
-                    {/* Email field */}
-                    <div className="mt-4">
-                        <label htmlFor="editEmail">Email</label>
-                        <Input
-                            type="email"
-                            id="editEmail"
-                            name="email"
-                            placeholder='Type..'
-                            className="w-full p-2 mt-2 border rounded"
-                            value={editUserData.email}
-                            onChange={(event) => {
-                                const { name, value } = event.target;
-                                setEditUserData(prev => ({ ...prev, [name]: value }));
-                            }}
-
-                        />
-                    </div>
-
-                    {/* Submit and Cancel Buttons */}
-                    <div className="mt-6 flex justify-between">
-
-                        <div className='flex items-center gap-2'>
-                            <Button type="submit">Update User</Button>
+            <main className='flex flex-col gap-8 mb-10'>
+                <div className='border border-gray-200 rounded-lg px-10 py-4'>
+                    <div className='flex items-center gap-4 justify-between'>
+                        <div className='flex items-center gap-10'>
+                            <Avatar className='h-36 w-36'>
+                                <AvatarImage src={currentUser.image} />
+                                <AvatarFallback className='text-3xl'>
+                                    {currentUser?.name ? getInitials(currentUser.name) : 'NA'}
+                                </AvatarFallback>
+                            </Avatar>
+                            <div>
+                                <p className='text-2xl font-extrabold text-gray-900'>{currentUser.name}</p>
+                                <p className='text-base	text-gray-500'>{`${capitalizeEachWord(currentUser.role)} @${currentUser.organization.name}`}</p>
+                            </div>
+                        </div>
+                        <div className='flex gap-4 items-center'>
+                            <form method="post" onChange={handleOnChange} onSubmit={handleOnSubmit}>
+                                <p>
+                                    <input type="file" name="file" style={{ display: 'none' }} ref={fileInputRef} />
+                                </p>
+                                <p>
+                                    <Button type="button" onClick={() => {
+                                        if (fileInputRef.current) {
+                                            fileInputRef.current.click();
+                                        }
+                                    }}>Upload new picture</Button>
+                                </p>
+                            </form>
+                            <Button onClick={handleDeletePicture} variant={"outline"}>Remove</Button>
                         </div>
                     </div>
-                </form>
+                </div>
+
+                {/* Profile Details Form */}
+                <div className='border border-gray-200 rounded-lg px-10 py-4'>
+                    <div className='py-4'>
+                        <p className='font-bold text-xl'>Personal Information</p>
+                        <p className='text-sm'>Update your personal information</p>
+                    </div>
+                    <form onSubmit={(e) => {
+                        e.preventDefault();
+                        handleEditUser();
+                    }}>
+
+                        <div className="mt-4 flex gap-4 mb-6 w-full">
+                            <div className="flex-1">
+                                <label htmlFor="editName">Name</label>
+                                <Input
+                                    type="text"
+                                    id="editName"
+                                    name="name"
+                                    placeholder='Type..'
+                                    className="w-full p-2 mt-2 border rounded"
+                                    value={editUserData.name}
+                                    onChange={(event) => {
+                                        const { name, value } = event.target;
+                                        setEditUserData(prev => ({ ...prev, [name]: value }));
+                                    }}
+                                />
+                            </div>
+                            <div className="flex-1">
+                                <label htmlFor="editEmail">Email</label>
+                                <Input
+                                    type="email"
+                                    id="editEmail"
+                                    name="email"
+                                    placeholder='Type..'
+                                    className="w-full p-2 mt-2 border rounded"
+                                    value={editUserData.email}
+                                    onChange={(event) => {
+                                        const { name, value } = event.target;
+                                        setEditUserData(prev => ({ ...prev, [name]: value }));
+                                    }}
+                                />
+                            </div>
+                        </div>
+
+                        <div className='py-4'>
+                            <p className='font-bold text-xl'>Change Password</p>
+                            <p className='text-sm'>Your new password must be different from your previous password</p>
+                        </div>
+
+                        {/* Current Password field */}
+                        <div className="mt-1  mr-4">
+                            <label htmlFor="currentPassword">Current Password</label>
+                            <Input
+                                type="password"
+                                id="currentPassword"
+                                name="currentPassword"
+                                placeholder='Enter current password'
+                                className="w-1/2 p-2 mt-2 border rounded"
+                                value={editUserData.currentPassword}
+                                onChange={(event) => {
+                                    const { name, value } = event.target;
+                                    setEditUserData(prev => ({ ...prev, [name]: value }));
+                                }}
+                            />
+                        </div>
+
+                        <div className="mt-4 flex gap-4 w-full ">
+                            <div className="flex-1">
+                                <label htmlFor="newPassword">New Password</label>
+                                <Input
+                                    type="password"
+                                    id="newPassword"
+                                    name="newPassword"
+                                    placeholder='Enter your new password'
+                                    className="w-full p-2 mt-2 border rounded"
+                                    value={editUserData.newPassword}
+                                    onChange={(event) => {
+                                        const { name, value } = event.target;
+                                        setEditUserData(prev => ({ ...prev, [name]: value }));
+                                    }}
+                                />
+                            </div>
+                            <div className="flex-1">
+                                <label htmlFor="confirmPassword">Confirm New Password</label>
+                                <Input
+                                    type="password"
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    placeholder='Confirm your new password'
+                                    className="w-full p-2 mt-2 border rounded"
+                                    value={editUserData.confirmPassword}
+                                    onChange={(event) => {
+                                        const { name, value } = event.target;
+                                        setEditUserData(prev => ({ ...prev, [name]: value }));
+                                    }}
+                                />
+                            </div>
+                        </div>
+
+                        {errorMessage && <p className="text-red-500 mt-4">• {errorMessage}</p>}
+
+                        {/* Submit and Cancel Buttons */}
+                        <div className="mt-6 flex justify-between">
+
+                            <div className='flex items-center gap-2'>
+                                <Button type="submit">Update Changes</Button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </main>
         </div>
     );

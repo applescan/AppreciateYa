@@ -14,8 +14,8 @@ export const CREATE_USER = gql`
 `;
 
 export const EDIT_USER = gql`
-mutation EditUser($id: Int!, $name: String!, $email: String!, $role: UserRole!, $orgId: Int!, $image: String) {
-    editUser(id: $id, name: $name, email: $email, role: $role, orgId: $orgId, image: $image) {
+mutation EditUser($id: Int!, $name: String!, $email: String!, $role: UserRole!, $orgId: Int!, $image: String, $password: String) {
+    editUser(id: $id, name: $name, email: $email, role: $role, orgId: $orgId, image: $image, password: $password) {
       id
       name
       email
@@ -26,8 +26,9 @@ mutation EditUser($id: Int!, $name: String!, $email: String!, $role: UserRole!, 
         name
       }
     }
-}  
+}
 `;
+
 
 export const DELETE_USER = gql`
     mutation DeleteUser($id: Int!) {
@@ -90,3 +91,8 @@ export const EDIT_ORGANIZATION = gql`
     }
 `;
 
+export const VERIFY_CURRENT_PASSWORD = gql`
+    mutation VerifyCurrentPassword($userId: Int!, $password: String!) {
+        verifyCurrentPassword(userId: $userId, password: $password)
+    }
+`;

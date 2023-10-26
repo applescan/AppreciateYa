@@ -7,7 +7,7 @@ export const resolvers = {
             return await context.prisma.user.findUnique({
                 where: { id: args.id }
             });
-        },        
+        },
         users: async (_: any, args: { orderBy?: { createdAt?: 'asc' | 'desc' } }, context: Context) => {
             return await context.prisma.user.findMany({
                 orderBy: args.orderBy
@@ -39,7 +39,14 @@ export const resolvers = {
             });
         },
         editUser: async (_: any, args: any, context: Context) => {
-            const { id, name, email, role, orgId, image } = args;
+            const { id, name, email, role, orgId, image, password } = args;
+
+            // Conditionally hash the password if it's provided
+            let hashedPassword;
+            if (password) {
+                hashedPassword = await bcrypt.hash(password, 10);
+            }
+
             return await context.prisma.user.update({
                 where: { id },
                 data: {
@@ -47,7 +54,9 @@ export const resolvers = {
                     email,
                     role,
                     orgId: Number(orgId),
-                    image
+                    image,
+                    // Conditionally add the password field if a new one is provided
+                    ...(hashedPassword && { password: hashedPassword })
                 }
             });
         },
@@ -87,8 +96,7 @@ export const resolvers = {
                     organizationType
                 }
             });
-        }
-        ,
+        },
         editOrganization: async (_: any, args: any, context: Context) => {
             const { id, name, address, country, organizationType } = args.data;
 
@@ -101,6 +109,23 @@ export const resolvers = {
                     organizationType
                 },
             });
+        },
+        verifyCurrentPassword: async (_: any, args: { userId: number, password: string }, context: Context) => {
+            const user = await context.prisma.user.findUnique({
+                where: { id: args.userId }
+            });
+
+            if (!user) {
+                throw new Error("User not found");
+            }
+
+            const validPassword = await bcrypt.compare(args.password, user.password);
+
+            if (!validPassword) {
+                throw new Error("Incorrect password");
+            }
+
+            return true;
         },
     },
 

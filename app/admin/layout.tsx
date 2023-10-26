@@ -36,7 +36,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className='px-6 pt-12 flex flex-col gap-6 justify-center'>
             <div>
                 <h2 className='font-extrabold flex justify-center text-3xl text-gray-900'>
-                    Admin Dashboard </h2>
+                    User Management</h2>
             </div>
             <div>
                 <Tabs defaultValue={getDefaultTab()} className="w-full flex justify-center">
