@@ -19,9 +19,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </h2>
                 <p className='flex justify-center'>Update your account information</p>
             </div>
-            <div>
 
-            </div>
             <main>{children}</main>
         </div>
     )

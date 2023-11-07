@@ -14,24 +14,21 @@ const AppBar = () => {
   const { data: sessionData, status } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  const adminMenu = () => {
-    if (sessionData?.user.role === 'ADMIN' || status === 'authenticated') {
-      return (<Link
-        href={{ pathname: "/admin/organisations" }}
-        className="-mx-3 block rounded-lg px-3 py-2 text-base font-normal leading-7 text-gray-900 hover:bg-gray-50">
-        Admin Dashboard
-      </Link>)
-    }
-  }
-
   return (
     <>
       <header className="bg-white">
-        <nav className="flex items-center justify-between py-6 px-10" aria-label="Global">
+        <nav className="flex items-center justify-between py-6 px-6" aria-label="Global">
           <div className="flex justify-between">
-            <Link href="/">
-              <Image src="/logo.png" width={160} height={100} alt="Appreciate ya logo" />
-            </Link>
+            {status === 'authenticated' ? (
+              <Link href="/dashboard" passHref>
+                <Image src="/logo.png" width={160} height={100} alt="Appreciate ya logo" />
+              </Link>
+            ) : (
+              <Link href="/" passHref>
+                <Image src="/logo.png" width={160} height={100} alt="Appreciate ya logo" />
+              </Link>
+            )}
+
           </div>
           <div className="flex lg:hidden">
             <button type="button" className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700" onClick={() => setMobileMenuOpen(true)}>
@@ -41,9 +38,9 @@ const AppBar = () => {
           </div>
           <Popover.Group className="hidden lg:flex lg:gap-x-12 items-center">
             <Link
-              href={{ pathname: "/UserPost" }}
+              href={{ pathname: "/dashboard" }}
               className="-mx-3 block rounded-lg px-3 py-2 text-base font-normal leading-7 text-gray-900 hover:bg-gray-50">
-              Posts
+              Dashboard
             </Link>
             {(sessionData?.user?.role === 'ADMIN' && status === 'authenticated') && (
               <Link href="/admin/users" passHref>
@@ -68,11 +65,11 @@ const AppBar = () => {
             </div>
             <div className="mt-6 flow-root">
               <div className="my-6 divide-y divide-gray-500/10">
-                <div className="space-y-4 py-6">
+                <div className="">
                   <Link
-                    href={{ pathname: "/UserPost" }}
+                    href={{ pathname: "/dashboard" }}
                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-normal leading-7 text-gray-900 hover:bg-gray-50">
-                    Posts
+                    Dashboard
                   </Link>
                   {(sessionData?.user?.role === 'ADMIN' && status === 'authenticated') && (
                     <Link href="/admin/users" passHref>
@@ -85,14 +82,25 @@ const AppBar = () => {
             </div>
 
             <div className="absolute bottom-0 right-0 mr-6 mb-6">
-              <Link href="/">
-                <Image
-                  src="/logo.png"
-                  width={120}
-                  height={50}
-                  alt="Your image"
-                />
-              </Link>
+              {status === 'authenticated' ? (
+                <Link href="/dashboard">
+                  <Image
+                    src="/logo.png"
+                    width={120}
+                    height={50}
+                    alt="Your image"
+                  />
+                </Link>
+              ) : (
+                <Link href="/">
+                  <Image
+                    src="/logo.png"
+                    width={120}
+                    height={50}
+                    alt="Your image"
+                  />
+                </Link>
+              )}
             </div>
           </Dialog.Panel>
         </Dialog>

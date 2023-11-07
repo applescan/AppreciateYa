@@ -65,20 +65,21 @@ export const resolvers = {
             return await context.prisma.user.delete({ where: { id } });
         },
         createPost: async (_: any, args: any, context: Context) => {
-            const { content, authorId, orgId } = args;
+            const { content, authorId, recipientId, orgId } = args;
             return await context.prisma.post.create({
                 data: {
                     content,
                     authorId: Number(authorId),
+                    recipientId: Number(recipientId),
                     orgId: Number(orgId),
                 },
             });
         },
         updatePost: async (_: any, args: any, context: Context) => {
-            const { id, content } = args;
+            const { id, content, recipientId } = args;
             return await context.prisma.post.update({
                 where: { id },
-                data: { content },
+                data: { content, recipientId: Number(recipientId) },
             });
         },
         deletePost: async (_: any, args: any, context: Context) => {
@@ -130,19 +131,26 @@ export const resolvers = {
     },
 
     User: {
-        posts: async (parent: any, _: any, context: Context) => {
+        authoredPosts: async (parent: any, _: any, context: Context) => {
             return await context.prisma.post.findMany({ where: { authorId: parent.id } });
+        },
+        receivedPosts: async (parent: any, _: any, context: Context) => {
+            return await context.prisma.post.findMany({ where: { recipientId: parent.id } });
         },
         organization: async (parent: any, _: any, context: Context) => {
             return await context.prisma.organization.findUnique({ where: { id: parent.orgId } });
         },
     },
+
     Post: {
         author: async (parent: any, _: any, context: Context) => {
             return await context.prisma.user.findUnique({ where: { id: parent.authorId } });
         },
         organization: async (parent: any, _: any, context: Context) => {
             return await context.prisma.organization.findUnique({ where: { id: parent.orgId } });
+        },
+        recipient: async (parent: any, _: any, context: Context) => {
+            return await context.prisma.user.findUnique({ where: { id: parent.recipientId } });
         },
     },
     Organization: {

@@ -13,7 +13,16 @@ import { Button } from '@/components/ui/Button';
 import { BiSolidMessageSquareAdd } from "react-icons/bi";
 import { useMutation } from '@apollo/client';
 import { CREATE_ORGANIZATION } from '@/graphql/mutations';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/Dropdown';
+import {
+    Select,
+    SelectTrigger,
+    SelectValue,
+    SelectContent,
+    SelectItem,
+    SelectLabel,
+    SelectGroup,
+    SelectSeparator,
+} from './ui/Dropdown';
 import { countryList } from '@/helpers/helpers';
 
 interface CreateOrganizationDialogProps {
@@ -92,6 +101,11 @@ const CreateOrganizationDialog: React.FC<CreateOrganizationDialogProps> = ({ isO
         setOrgData(prev => ({ ...prev, [name]: value }));
     };
 
+    const handleCountrySelect = (country: string) => {
+        setCurrentCountry(country);
+        setOrgData(prev => ({ ...prev, country }));
+    };
+
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
             <DialogTrigger>
@@ -120,22 +134,20 @@ const CreateOrganizationDialog: React.FC<CreateOrganizationDialogProps> = ({ isO
                                         />
                                     ) : (
                                         <div className="flex flex-col mt-2">
-                                            <DropdownMenu>
-                                                <DropdownMenuTrigger asChild>
-                                                    <Button variant="outline">
-                                                        {orgData[field.id] || currentCountry}
-                                                    </Button>
-                                                </DropdownMenuTrigger>
-                                                <DropdownMenuContent className="w-[29rem]">
-                                                    {countryList.map((country) => (
-                                                        <DropdownMenuItem key={country} onSelect={() => {
-                                                            setOrgData(prev => ({ ...prev, country }));
-                                                        }}>
-                                                            {country}
-                                                        </DropdownMenuItem>
-                                                    ))}
-                                                </DropdownMenuContent>
-                                            </DropdownMenu>
+                                            <Select value={currentCountry} onValueChange={handleCountrySelect}>
+                                                <SelectTrigger aria-label="Country">
+                                                    <SelectValue placeholder="Select a country" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectGroup>
+                                                        {countryList.map((country) => (
+                                                            <SelectItem key={country} value={country}>
+                                                                {country}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectGroup>
+                                                </SelectContent>
+                                            </Select>
                                         </div>
                                     )}
                                 </div>

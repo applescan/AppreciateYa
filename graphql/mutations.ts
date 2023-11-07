@@ -29,7 +29,6 @@ mutation EditUser($id: Int!, $name: String!, $email: String!, $role: UserRole!, 
 }
 `;
 
-
 export const DELETE_USER = gql`
     mutation DeleteUser($id: Int!) {
         deleteUser(id: $id) {
@@ -39,14 +38,11 @@ export const DELETE_USER = gql`
 `;
 
 export const CREATE_POST = gql`
-    mutation CreatePost($content: String!, $authorId: Int!, $orgId: Int!) {
-        createPost(content: $content, authorId: $authorId, orgId: $orgId) {
-            id
-            content
-            authorId
-            orgId
-        }
+  mutation CreatePost($content: String!, $authorId: Int!, $orgId: Int!, $recipientId: Int!) {
+    createPost(content: $content, authorId: $authorId, orgId: $orgId, recipientId: $recipientId) {
+      id
     }
+  }
 `;
 
 export const UPDATE_POST = gql`
@@ -77,7 +73,6 @@ export const CREATE_ORGANIZATION = gql`
         }
     }
 `;
-
 
 export const EDIT_ORGANIZATION = gql`
     mutation EditOrganization($data: EditOrganizationInput!) {

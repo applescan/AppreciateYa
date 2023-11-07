@@ -11,14 +11,16 @@ import {
 } from "@/components/ui/Dialog";
 import { Input } from '@/components/ui/Input';
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
+    Select,
+    SelectTrigger,
+    SelectValue,
+    SelectContent,
+    SelectItem
 } from "@/components/ui/Dropdown";
 import { Button } from '@/components/ui/Button';
 import { BiSolidMessageSquareAdd } from "react-icons/bi";
 import { capitalizeEachWord } from '@/helpers/helpers';
+
 
 interface CreateUserDialogProps {
     isOpen: boolean;
@@ -126,45 +128,36 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({ isOpen, onOpenChang
 
                             <div className="mt-4 flex flex-col">
                                 <label htmlFor="role">Role</label>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button
-                                            variant="outline"
-                                            className={selectedRole ? (capitalizeEachWord(selectedRole) ? '' : 'italic text-gray-400 font-light') : 'italic text-gray-400 font-light'}
-                                        >
-                                            {selectedRole ? capitalizeEachWord(selectedRole) : "Select Role"}
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="w-[29rem]">
+                                <Select value={selectedRole || ''} onValueChange={(role) => setSelectedRole(role as UserRole)}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select Role" />
+                                    </SelectTrigger>
+                                    <SelectContent>
                                         {Object.keys(UserRole).map((key) => (
-                                            <DropdownMenuItem key={key} onSelect={() => setSelectedRole(UserRole[key as keyof typeof UserRole])}>
+                                            <SelectItem key={key} value={UserRole[key as keyof typeof UserRole]}>
                                                 {capitalizeEachWord(key)}
-                                            </DropdownMenuItem>
+                                            </SelectItem>
                                         ))}
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
+                                    </SelectContent>
+                                </Select>
                             </div>
 
 
                             <div className="mt-4 flex flex-col">
                                 <label htmlFor="orgId">Organization</label>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button
-                                            variant="outline"
-                                            className={selectedOrg !== null ? 'text-left' : 'italic text-gray-400 font-light'}
-                                        >
-                                            {selectedOrg !== null ? data?.organizations.find(org => Number(org.id) === selectedOrg)?.name : "Select Organization"}
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="w-[29rem]">
+                                <Select value={selectedOrg?.toString() || ''} onValueChange={(orgId) => handleOrgSelect(Number(orgId))}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select Organization" />
+                                    </SelectTrigger>
+                                    <SelectContent>
                                         {data?.organizations.map((org) => (
-                                            <DropdownMenuItem key={org.id} onSelect={() => handleOrgSelect(Number(org.id))}>
+                                            <SelectItem key={org.id} value={org.id}>
                                                 {org.name}
-                                            </DropdownMenuItem>
+                                            </SelectItem>
                                         ))}
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
+                                    </SelectContent>
+                                </Select>
+
                             </div>
                             <div className="mt-6 flex justify-end items-center gap-2 ">
                                 <Button onClick={() => onOpenChange(false)} variant={"outline"}>Cancel</Button>

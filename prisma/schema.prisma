@@ -11,24 +11,27 @@ datasource db {
 }
 
 model User {
-  id           Int          @id @default(autoincrement())
-  email        String       @unique
-  password     String
-  name         String
-  role         UserRole
-  image        String?      @db.VarChar(255)
-  posts        Post[]
-  orgId        Int
-  organization Organization @relation(fields: [orgId], references: [id])
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  id            Int          @id @default(autoincrement())
+  email         String       @unique
+  password      String
+  name          String
+  role          UserRole
+  image         String?      @db.VarChar(255)
+  authoredPosts Post[]       @relation("PostAuthor")
+  receivedPosts Post[]       @relation("PostRecipient")
+  orgId         Int
+  organization  Organization @relation(fields: [orgId], references: [id])
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
 }
 
 model Post {
   id           Int          @id @default(autoincrement())
   content      String
   authorId     Int
-  author       User         @relation(fields: [authorId], references: [id])
+  author       User         @relation("PostAuthor", fields: [authorId], references: [id])
+  recipientId  Int
+  recipient    User         @relation("PostRecipient", fields: [recipientId], references: [id])
   orgId        Int
   organization Organization @relation(fields: [orgId], references: [id])
   createdAt    DateTime     @default(now())

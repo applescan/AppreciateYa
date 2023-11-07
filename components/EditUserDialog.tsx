@@ -6,10 +6,11 @@ import { Organization, User, UserRole } from '@/lib/types/types';
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/Dialog";
 import { Input } from '@/components/ui/Input';
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
+    Select,
+    SelectTrigger,
+    SelectContent,
+    SelectItem,
+    SelectValue
 } from "@/components/ui/Dropdown";
 import { Button } from '@/components/ui/Button';
 import { capitalizeEachWord } from '@/helpers/helpers';
@@ -126,56 +127,43 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ isOpen, onOpenChange, u
                         </div>
 
                         {/* Role Dropdown */}
-                        <div className="mt-4 flex flex-col">
+                        <div className="mt-4 flex-col">
                             <label htmlFor="editRole">Role</label>
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button
-                                        variant="outline"
-                                        className={capitalizeEachWord(editUserData.role) ? '' : 'italic text-gray-400 font-light'}
-                                    >
-                                        {capitalizeEachWord(editUserData.role) || "Select Role"}
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent className="w-[29rem]">
+                            <Select
+                                value={editUserData.role}
+                                onValueChange={(role) => setEditUserData(prev => ({ ...prev, role }))}
+                            >
+                                <SelectTrigger aria-label="Role">
+                                    <SelectValue placeholder="Select Role" />
+                                </SelectTrigger>
+                                <SelectContent>
                                     {Object.keys(UserRole).map((key) => (
-                                        <DropdownMenuItem key={key} onSelect={() => {
-                                            const role = UserRole[key as keyof typeof UserRole];
-                                            setEditUserData(prev => ({ ...prev, role }));
-                                        }}>
+                                        <SelectItem key={key} value={key}>
                                             {capitalizeEachWord(key)}
-                                        </DropdownMenuItem>
+                                        </SelectItem>
                                     ))}
-                                </DropdownMenuContent>
-                            </DropdownMenu>
+                                </SelectContent>
+                            </Select>
                         </div>
 
                         {/* Organization Dropdown */}
-                        <div className="mt-4 flex flex-col">
+                        <div className="mt-4 flex-col">
                             <label htmlFor="editOrgId">Organization</label>
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button
-                                        variant="outline"
-                                        className={editUserData.orgId !== null ? 'text-left' : 'italic text-gray-400 font-light'}
-                                    >
-                                        {
-                                            editUserData.orgId !== null
-                                                ? organizations.find(org => Number(org.id) === editUserData.orgId)?.name
-                                                : "Select Organization"
-                                        }
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent className="w-[29rem]">
+                            <Select
+                                value={editUserData.orgId?.toString() || ''}
+                                onValueChange={(orgId) => setEditUserData(prev => ({ ...prev, orgId: Number(orgId) }))}
+                            >
+                                <SelectTrigger aria-label="Organization">
+                                    <SelectValue placeholder="Select Organization" />
+                                </SelectTrigger>
+                                <SelectContent>
                                     {organizations.map((org) => (
-                                        <DropdownMenuItem key={org.id} onSelect={() => {
-                                            setEditUserData(prev => ({ ...prev, orgId: Number(org.id) }));
-                                        }}>
+                                        <SelectItem key={org.id} value={org.id.toString()}>
                                             {org.name}
-                                        </DropdownMenuItem>
+                                        </SelectItem>
                                     ))}
-                                </DropdownMenuContent>
-                            </DropdownMenu>
+                                </SelectContent>
+                            </Select>
                         </div>
                         {/* Submit and Cancel Buttons */}
                         <div className="mt-6 flex justify-between">

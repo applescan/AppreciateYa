@@ -1,13 +1,18 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 import { EDIT_ORGANIZATION } from '@/graphql/mutations';
-
 import { Organization } from '@/lib/types/types';
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/Dialog";
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { countryList } from '@/helpers/helpers';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/Dropdown';
+import {
+    Select,
+    SelectTrigger,
+    SelectContent,
+    SelectItem,
+    SelectValue
+} from './ui/Dropdown';
 
 interface EditOrganizationDialogProps {
     isOpen: boolean;
@@ -19,7 +24,6 @@ interface EditOrganizationDialogProps {
 const EditOrganizationDialog: React.FC<EditOrganizationDialogProps> = ({ isOpen, onOpenChange, organization, refetchOrganizations }) => {
     const [editOrganizationMutation] = useMutation(EDIT_ORGANIZATION);
     //const [deleteOrganizationMutation] = useMutation(DELETE_ORGANIZATION);
-
     const [currentCountry, setCurrentCountry] = useState<string>('');
 
     const getCountryFromLocation = async () => {
@@ -39,7 +43,6 @@ const EditOrganizationDialog: React.FC<EditOrganizationDialogProps> = ({ isOpen,
             });
         });
     };
-
 
     useEffect(() => {
         const fetchCountry = async () => {
@@ -107,7 +110,7 @@ const EditOrganizationDialog: React.FC<EditOrganizationDialogProps> = ({ isOpen,
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
             <DialogContent>
-                <DialogTitle>Edit Organization</DialogTitle>
+                <DialogTitle>Edit Organisation</DialogTitle>
                 <div>
                     <form onSubmit={(e) => {
                         e.preventDefault();
@@ -145,30 +148,24 @@ const EditOrganizationDialog: React.FC<EditOrganizationDialogProps> = ({ isOpen,
                             />
                         </div>
 
-                        <div className="mt-4 flex flex-col">
+                        <div className="mt-4 flex-col">
                             <label htmlFor="editCountry">Country</label>
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button
-                                        variant="outline"
-                                    >
-                                        {editOrganizationData.country || "Select Country"}
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent className="w-[29rem]">
+                            <Select value={editOrganizationData.country} onValueChange={value => setEditOrganizationData(prev => ({ ...prev, country: value }))}>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select Country">{editOrganizationData.country}</SelectValue>
+                                </SelectTrigger>
+                                <SelectContent>
                                     {countryList.map((country) => (
-                                        <DropdownMenuItem key={country} onSelect={() => {
-                                            setEditOrganizationData(prev => ({ ...prev, country }));
-                                        }}>
+                                        <SelectItem key={country} value={country}>
                                             {country}
-                                        </DropdownMenuItem>
+                                        </SelectItem>
                                     ))}
-                                </DropdownMenuContent>
-                            </DropdownMenu>
+                                </SelectContent>
+                            </Select>
                         </div>
 
                         <div className="mt-4">
-                            <label htmlFor="editOrganizationType">Organization Type</label>
+                            <label htmlFor="editOrganizationType">Organisation Type</label>
                             <Input
                                 type="text"
                                 id="editOrganizationType"
@@ -190,7 +187,7 @@ const EditOrganizationDialog: React.FC<EditOrganizationDialogProps> = ({ isOpen,
                             </div>
                             <div className='flex items-center gap-2'>
                                 <Button onClick={() => onOpenChange(false)} variant={"outline"}>Cancel</Button>
-                                <Button type="submit">Update Organization</Button>
+                                <Button type="submit">Update Organisation</Button>
                             </div>
                         </div>
                     </form>

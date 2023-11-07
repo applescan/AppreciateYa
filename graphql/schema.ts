@@ -9,16 +9,19 @@ type User {
     organization: Organization!
     createdAt: String!
     updatedAt: String!
+    authoredPosts: [Post!]!
+    receivedPosts: [Post!]!
   }
   
   type Post {
     id: ID!
     content: String!
     author: User!
+    recipient: User!
     organization: Organization!
     createdAt: String!
     updatedAt: String!
-  }
+  }  
   
   type Organization {
     id: ID!
@@ -75,8 +78,8 @@ type User {
     createUser(email: String!, password: String!, name: String!, role: UserRole!, orgId: Int!, image: String): User!
     editUser(id: Int!, name: String!, email: String!, role: UserRole!, orgId: Int!, image: String, password: String): User!
     deleteUser(id: Int!): User!
-    createPost(content: String!, authorId: Int!, orgId: Int!): Post!
-    updatePost(id: Int!, content: String!): Post!
+    createPost(content: String!, authorId: Int!, recipientId: Int!, orgId: Int!): Post!
+    updatePost(id: Int!, content: String!, recipientId: Int!): Post!
     deletePost(id: Int!): Post!
     createOrganization(data: CreateOrganizationInput!): Organization!
     editOrganization(data: EditOrganizationInput!): Organization!

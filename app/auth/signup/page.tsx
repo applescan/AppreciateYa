@@ -3,10 +3,13 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
+    Select,
+    SelectTrigger,
+    SelectValue,
+    SelectContent,
+    SelectItem,
+    SelectGroup,
+    SelectLabel
 } from "@/components/ui/Dropdown";
 import { Organization } from '@/lib/types/types';
 import { useQuery } from '@apollo/client';
@@ -39,7 +42,6 @@ const SignUp: React.FC = () => {
         return emailRegex.test(email);
     };
 
-
     if (loading) return <Loading />
     if (error) return <p>Error: {error.message}</p>;
 
@@ -49,9 +51,10 @@ const SignUp: React.FC = () => {
         setSignupData({ ...signupData, [name]: newValue });
     };
 
-    const handleOrgSelect = (orgId: number) => {
+    const handleOrgSelect = (value: string) => {
+        const orgId = parseInt(value, 10);
         setSelectedOrg(orgId);
-        setSignupData({ ...signupData, orgId: orgId });
+        setSignupData({ ...signupData, orgId });
     };
 
     const handleSignUpSubmit = async (event: FormEvent) => {
@@ -158,23 +161,21 @@ const SignUp: React.FC = () => {
 
                             <div className="flex flex-col w-full">
                                 <label htmlFor="orgId" className='text-sm font-medium'>Organization</label>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button
-                                            variant="outline"
-                                            className={selectedOrg !== null ? 'text-left' : 'italic text-gray-400 font-light'}
-                                        >
-                                            {selectedOrg !== null ? data?.organizations.find((org: { id: string; }) => Number(org.id) === selectedOrg)?.name : "Select Organization"}
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="w-80 flex flex-col">
-                                        {data?.organizations.map((org: Organization) => (
-                                            <DropdownMenuItem key={org.id} onSelect={() => handleOrgSelect(Number(org.id))}>
-                                                {org.name}
-                                            </DropdownMenuItem>
-                                        ))}
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
+                                <Select name="orgId" onValueChange={handleOrgSelect}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select Organization" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                           
+                                            {data?.organizations.map((org: Organization) => (
+                                                <SelectItem key={org.id} value={org.id.toString()}>
+                                                    {org.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
                             </div>
 
                             <div className="mt-6 flex w-full items-center gap-2">
