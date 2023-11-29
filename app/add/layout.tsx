@@ -18,7 +18,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         return <Loading />;
     }
 
-    if (sessionData?.user.role !== 'ADMIN' || status === 'unauthenticated') {
+    if (status === 'unauthenticated') {
         return <p>You are not authorized to view this page!</p>;
     }
 

@@ -14,7 +14,11 @@ export const resolvers = {
             });
         },
         posts: async (_: any, __: any, context: Context) => {
-            return await context.prisma.post.findMany();
+            return await context.prisma.post.findMany({
+                orderBy: {
+                    updatedAt: 'desc'
+                }
+            });
         },
         organizations: async (_: any, __: any, context: Context) => {
             return await context.prisma.organization.findMany();
