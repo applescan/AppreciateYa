@@ -22,6 +22,11 @@ export const resolvers = {
         organization: async (_: any, args: any, context: Context) => {
             return await context.prisma.organization.findUnique({ where: { id: Number(args.where.id) } });
         },
+        usersByOrganizationId: async (_: any, args: { orgId: number }, context: Context) => {
+            return await context.prisma.user.findMany({
+                where: { orgId: args.orgId }
+            });
+        },
     },
     Mutation: {
         createUser: async (_: any, args: any, context: Context) => {

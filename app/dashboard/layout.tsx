@@ -19,7 +19,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }
 
     return (
-        <div className='px-6 pt-12 flex flex-col gap-6 justify-center'>
+        <div className='px-12 pt-12 flex flex-col gap-6 justify-center'>
             <div>
                 <h2 className='font-extrabold flex justify-center text-3xl text-gray-900'>
                     Kudos</h2>

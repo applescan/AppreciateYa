@@ -62,4 +62,9 @@ export const countryList = [
     "Vietnam"
 ];
 
+export function formatTime(timestamp: string) {
+    const date = new Date(Number(timestamp));
+    return date.toLocaleString();
+  }
+
 

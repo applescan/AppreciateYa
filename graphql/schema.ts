@@ -57,6 +57,7 @@ type User {
   type Query {
     user(id: Int!): User
     users(orderBy: UserOrderByInput): [User!]!
+    usersByOrganizationId(orgId: Int!): [User!]!
     posts: [Post!]!
     organizations: [Organization!]!
     organization(where: OrganizationWhereUniqueInput!): Organization

@@ -46,6 +46,18 @@ query GetUserById($id: Int!) {
 }
 `;
 
+export const GET_USERS_BY_ORGANIZATION_ID = gql`
+  query GetUsersByOrganizationId($orgId: Int!) {
+    usersByOrganizationId(orgId: $orgId) {
+	  id
+      name
+      email
+      role
+      image
+    }
+  }
+`;
+
 export const GET_USERS_AND_ORGANIZATIONS = gql`
 query GET_USERS_AND_ORGANIZATIONS {
 users(orderBy: { createdAt: asc }) {
@@ -68,31 +80,30 @@ users(orderBy: { createdAt: asc }) {
 }
 `;
 
-export const GET_POSTS = gql`
-	query Posts {
-		posts {
-			id
-			content
-			createdAt
-			updatedAt
-			author {
-				id
-				email
-				name
-				role
-				image
-				organization {
-					id
-					name
-				}
-			}
-			organization {
-				id
-				name
-			}
-		}
-	}
+
+export const GET_ALL_POSTS = gql`
+  query Posts {
+    posts {
+      id
+      content
+      createdAt
+      updatedAt
+      author {
+        id
+        name
+        image
+        organization {
+          id
+        }
+      }
+      recipient {
+        name
+        image
+      }
+    }
+  }
 `;
+
 
 export const GET_ORGANIZATIONS = gql`
 query Organizations {
