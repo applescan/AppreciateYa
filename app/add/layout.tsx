@@ -19,7 +19,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }
 
     if (status === 'unauthenticated') {
-        return <p>You are not authorized to view this page!</p>;
+        router.push('/')
     }
 
     return (

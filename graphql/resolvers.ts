@@ -1,5 +1,6 @@
 import { Context } from "../pages/api/graphql";
 import * as bcrypt from "bcrypt";
+import { startOfMonth, startOfQuarter, startOfYear, } from 'date-fns';
 
 export const resolvers = {
     Query: {
@@ -18,6 +19,34 @@ export const resolvers = {
                 orderBy: {
                     updatedAt: 'desc'
                 }
+            });
+        },
+        postsByOrganizationId: async (_: any, args: { orgId: number, filter: 'MONTH' | 'QUARTER' | 'YEAR' }, context: Context) => {
+            let dateFilter;
+
+            const now = new Date();
+
+            switch (args.filter) {
+                case 'MONTH':
+                    dateFilter = startOfMonth(now);
+                    break;
+                case 'QUARTER':
+                    dateFilter = startOfQuarter(now);
+                    break;
+                case 'YEAR':
+                    dateFilter = startOfYear(now);
+                    break;
+            }
+            return await context.prisma.post.findMany({
+                where: {
+                    orgId: args.orgId,
+                    updatedAt: {
+                        gte: dateFilter,
+                    },
+                },
+                orderBy: {
+                    updatedAt: 'desc',
+                },
             });
         },
         organizations: async (_: any, __: any, context: Context) => {

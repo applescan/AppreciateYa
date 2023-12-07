@@ -19,7 +19,6 @@ const SigninButton = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  // Destructure here for cleaner code
   const { orgId, id: userId, image } = session?.user || {};
 
   const { data: orgData, loading } = useQuery(GET_ORG_NAME_BY_IDS, {
@@ -29,7 +28,6 @@ const SigninButton = () => {
 
   const orgName = orgData?.organization?.name || 'No Organisation data';
 
-  // Fetch user data based on their ID using GET_USER_BY_ID query
   const { data: userData } = useQuery(GET_USER_BY_ID, {
     variables: { id: userId },
     skip: !userId

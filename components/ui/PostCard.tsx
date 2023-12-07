@@ -1,4 +1,6 @@
 import React from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from './Avatar';
+import { getInitials } from '@/helpers/helpers';
 
 interface PostCardProps {
     authorName: string;
@@ -22,8 +24,13 @@ export default function PostCard({
 
     return (
         <div className="flex flex-col p-6 space-y-6 overflow-hidden rounded-lg shadow-xl bg-gray-100/30 text-gray-900">
-            <div className="flex space-x-4">
-                <img alt={authorName} src={authorImage} className="object-cover w-12 h-12 rounded-full shadow bg-gray-500" />
+            <div className="flex space-x-4 items-center">
+                <Avatar className='w-12 h-12'>
+                    <AvatarImage src={authorImage} />
+                    <AvatarFallback>
+                        {authorName ? getInitials(authorName) : 'NA'}
+                    </AvatarFallback>
+                </Avatar>
                 <div className="flex flex-col space-y-1">
                     <span className="text-sm font-semibold">{authorName}</span>
                     <span className="text-xs text-gray-400">{postTime}</span>

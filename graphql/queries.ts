@@ -104,6 +104,29 @@ export const GET_ALL_POSTS = gql`
   }
 `;
 
+export const GET_ALL_POSTS_BY_ORG = gql`
+  query GetPostsByOrganizationId($orgId: Int!, $filter: PostFilterInput) {
+    postsByOrganizationId(orgId: $orgId, filter: $filter) {
+      id
+      content
+      createdAt
+      updatedAt
+      author {
+        id
+        name
+        image
+        organization {
+          id
+        }
+      }
+      recipient {
+        name
+        image
+      }
+    }
+  }
+`;
+
 
 export const GET_ORGANIZATIONS = gql`
 query Organizations {

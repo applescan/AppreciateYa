@@ -64,7 +64,14 @@ export const countryList = [
 
 export function formatTime(timestamp: string) {
     const date = new Date(Number(timestamp));
-    return date.toLocaleString();
+  
+    // Extracting day, month, and year
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // +1 because months are 0-indexed
+    const year = date.getFullYear();
+  
+    // Formatting to dd/mm/yyyy
+    return `${day}/${month}/${year}`;
   }
-
+  
 

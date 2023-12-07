@@ -2,6 +2,7 @@
 import React, { ReactNode } from 'react'
 import { useSession } from 'next-auth/react';
 import Loading from '@/components/ui/Loading';
+import { useRouter } from 'next/navigation' 
 
 interface LayoutProps {
     children: ReactNode;
@@ -9,13 +10,14 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
     const { data: sessionData, status } = useSession();
+    const router = useRouter()
 
     if (status === 'loading') {
         return <Loading />;
     }
 
     if (status === 'unauthenticated') {
-        return <p>You are not authorized to view this page!</p>;
+        router.push('/')
     }
 
     return (

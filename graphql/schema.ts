@@ -59,9 +59,20 @@ type User {
     users(orderBy: UserOrderByInput): [User!]!
     usersByOrganizationId(orgId: Int!): [User!]!
     posts: [Post!]!
+    postsByOrganizationId(orgId: Int!, filter: PostFilterInput): [Post!]!
     organizations: [Organization!]!
     organization(where: OrganizationWhereUniqueInput!): Organization
 }
+
+  input PostFilterInput {
+    type: FilterType!
+  }
+
+  enum FilterType {
+    MONTH
+    QUARTER
+    YEAR
+  }
 
   input UserOrderByInput {
     createdAt: SortOrder
@@ -69,12 +80,13 @@ type User {
 
   input OrganizationWhereUniqueInput {
     id: ID!
-}
+  }
 
   enum SortOrder {
     asc
     desc
   }
+
   type Mutation {
     createUser(email: String!, password: String!, name: String!, role: UserRole!, orgId: Int!, image: String): User!
     editUser(id: Int!, name: String!, email: String!, role: UserRole!, orgId: Int!, image: String, password: String): User!
