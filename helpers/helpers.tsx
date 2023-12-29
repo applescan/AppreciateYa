@@ -1,3 +1,5 @@
+import { Post } from "@/lib/types/types";
+
 export const getInitials = (name: string) => {
     const names = name.split(' ').map(capitalizeEachWord);
     let initials = names[0].substring(0, 1).toUpperCase();
@@ -64,14 +66,63 @@ export const countryList = [
 
 export function formatTime(timestamp: string) {
     const date = new Date(Number(timestamp));
-  
+
     // Extracting day, month, and year
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // +1 because months are 0-indexed
     const year = date.getFullYear();
-  
+
     // Formatting to dd/mm/yyyy
     return `${day}/${month}/${year}`;
-  }
-  
+}
 
+export function extractImageUrlFromContent(content: string) {
+    // Regular expression to match Markdown image syntax
+    const regex = /!\[.*?\]\((.*?)\)/;
+    const matches = content.match(regex);
+
+    // If matches found, return the first captured group, which is the URL
+    if (matches && matches[1]) {
+        return matches[1];
+    }
+
+    // If no matches, return a default image or an empty string
+    return '';
+}
+
+export function removeImageUrlFromContent(content: string) {
+    // Regular expression to match Markdown image syntax
+    const regex = /!\[.*?\]\(.*?\)/g;
+    return content.replace(regex, '').trim();
+}
+
+export function countGiftCards(
+    posts: Post[],
+    setGiftCardCounts: React.Dispatch<React.SetStateAction<any>>,
+    setTotalCards: React.Dispatch<React.SetStateAction<any>>,
+    card1: string,
+    card2: string,
+    card3: string) {
+
+    let card1Count = 0;
+    let card2Count = 0;
+    let card3Count = 0;
+
+    posts.forEach(post => {
+        const content = post.content;
+        if (content.includes(card1)) {
+            card1Count++;
+        }
+        if (content.includes(card2)) {
+            card2Count++;
+        }
+        if (content.includes(card3)) {
+            card3Count++;
+        }
+    });
+
+    setGiftCardCounts({ card1: card1Count, card2: card2Count, card3: card3Count });
+
+    const total = card1Count + card2Count + card3Count;
+    setTotalCards(total);
+}

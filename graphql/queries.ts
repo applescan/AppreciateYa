@@ -127,6 +127,53 @@ export const GET_ALL_POSTS_BY_ORG = gql`
   }
 `;
 
+export const GET_POSTS_BY_SPECIFIC_RECIPIENT = gql`
+  query GetPostsBySpecificRecipient($orgId: Int!, $recipientId: Int!, $filter: PostFilterInput) {
+    postsBySpecificRecipient(orgId: $orgId, recipientId: $recipientId, filter: $filter) {
+      id
+      content
+      createdAt
+      updatedAt
+      author {
+        id
+        name
+        image
+        organization {
+          id
+        }
+      }
+      recipient {
+        id
+        name
+        image
+      }
+    }
+  }
+`;
+
+export const GET_POSTS_BY_SPECIFIC_AUTHOR = gql`
+  query GetPostsBySpecificSender($orgId: Int!, $authorId: Int!, $filter: PostFilterInput) {
+    postsBySpecificSender(orgId: $orgId, authorId: $authorId, filter: $filter) {
+      id
+      content
+      createdAt
+      updatedAt
+      author {
+        id
+        name
+        image
+        organization {
+          id
+        }
+      }
+      recipient {
+        id
+        name
+        image
+      }
+    }
+  }
+`;
 
 export const GET_ORGANIZATIONS = gql`
 query Organizations {

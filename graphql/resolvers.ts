@@ -1,6 +1,6 @@
 import { Context } from "../pages/api/graphql";
 import * as bcrypt from "bcrypt";
-import { startOfMonth, startOfQuarter, startOfYear, } from 'date-fns';
+import { endOfMonth, endOfQuarter, endOfYear, startOfMonth, startOfQuarter, startOfYear, } from 'date-fns';
 
 export const resolvers = {
     Query: {
@@ -21,27 +21,108 @@ export const resolvers = {
                 }
             });
         },
-        postsByOrganizationId: async (_: any, args: { orgId: number, filter: 'MONTH' | 'QUARTER' | 'YEAR' }, context: Context) => {
-            let dateFilter;
-
+        postsByOrganizationId: async (_: any, args: { orgId: number, filter: { type: 'MONTH' | 'QUARTER' | 'YEAR' } }, context: Context) => {
+            let dateFilterStart, dateFilterEnd;
             const now = new Date();
 
-            switch (args.filter) {
+            switch (args.filter.type) {
                 case 'MONTH':
-                    dateFilter = startOfMonth(now);
+                    dateFilterStart = startOfMonth(now);
+                    dateFilterEnd = endOfMonth(now);
                     break;
                 case 'QUARTER':
-                    dateFilter = startOfQuarter(now);
+                    dateFilterStart = startOfQuarter(now);
+                    dateFilterEnd = endOfQuarter(now);
                     break;
                 case 'YEAR':
-                    dateFilter = startOfYear(now);
+                    dateFilterStart = startOfYear(now);
+                    dateFilterEnd = endOfYear(now);
                     break;
+                default:
+                    throw new Error(`Invalid filter type: ${args.filter}`);
             }
+
+            if (!dateFilterStart || !dateFilterEnd) {
+                throw new Error("Date filters could not be determined");
+            }
+
             return await context.prisma.post.findMany({
                 where: {
                     orgId: args.orgId,
                     updatedAt: {
-                        gte: dateFilter,
+                        gte: dateFilterStart.toISOString(),
+                        lte: dateFilterEnd.toISOString(),
+                    },
+                },
+                orderBy: {
+                    updatedAt: 'desc',
+                },
+            });
+        },
+
+        postsBySpecificRecipient: async (_: any, args: { orgId: number, recipientId: number, filter: { type: 'MONTH' | 'QUARTER' | 'YEAR' } }, context: Context) => {
+            let dateFilterStart, dateFilterEnd;
+            const now = new Date();
+
+            switch (args.filter.type) {
+                case 'MONTH':
+                    dateFilterStart = startOfMonth(now);
+                    dateFilterEnd = endOfMonth(now);
+                    break;
+                case 'QUARTER':
+                    dateFilterStart = startOfQuarter(now);
+                    dateFilterEnd = endOfQuarter(now);
+                    break;
+                case 'YEAR':
+                    dateFilterStart = startOfYear(now);
+                    dateFilterEnd = endOfYear(now);
+                    break;
+                default:
+                    throw new Error(`Invalid filter type: ${args.filter}`);
+            }
+
+            return await context.prisma.post.findMany({
+                where: {
+                    orgId: args.orgId,
+                    recipientId: args.recipientId,
+                    updatedAt: {
+                        gte: dateFilterStart.toISOString(),
+                        lte: dateFilterEnd.toISOString(),
+                    },
+                },
+                orderBy: {
+                    updatedAt: 'desc',
+                },
+            });
+        },
+        postsBySpecificSender: async (_: any, args: { orgId: number, authorId: number, filter: { type: 'MONTH' | 'QUARTER' | 'YEAR' } }, context: Context) => {
+            let dateFilterStart, dateFilterEnd;
+            const now = new Date();
+
+            switch (args.filter.type) {
+                case 'MONTH':
+                    dateFilterStart = startOfMonth(now);
+                    dateFilterEnd = endOfMonth(now);
+                    break;
+                case 'QUARTER':
+                    dateFilterStart = startOfQuarter(now);
+                    dateFilterEnd = endOfQuarter(now);
+                    break;
+                case 'YEAR':
+                    dateFilterStart = startOfYear(now);
+                    dateFilterEnd = endOfYear(now);
+                    break;
+                default:
+                    throw new Error(`Invalid filter type: ${args.filter}`);
+            }
+
+            return await context.prisma.post.findMany({
+                where: {
+                    orgId: args.orgId,
+                    authorId: args.authorId,
+                    updatedAt: {
+                        gte: dateFilterStart.toISOString(),
+                        lte: dateFilterEnd.toISOString(),
                     },
                 },
                 orderBy: {

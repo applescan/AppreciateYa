@@ -60,9 +60,11 @@ type User {
     usersByOrganizationId(orgId: Int!): [User!]!
     posts: [Post!]!
     postsByOrganizationId(orgId: Int!, filter: PostFilterInput): [Post!]!
+    postsBySpecificRecipient(orgId: Int!, recipientId: Int!, filter: PostFilterInput): [Post!]!
+    postsBySpecificSender(orgId: Int!, authorId: Int!, filter: PostFilterInput): [Post!]!
     organizations: [Organization!]!
     organization(where: OrganizationWhereUniqueInput!): Organization
-}
+  }  
 
   input PostFilterInput {
     type: FilterType!

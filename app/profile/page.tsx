@@ -227,7 +227,7 @@ export default function Page() {
                                 </AvatarFallback>
                             </Avatar>
                             <div>
-                                <p className='text-2xl font-extrabold text-gray-900'>{currentUser.name}</p>
+                                <p className='text-2xl font-extrabold text-gray-900'>{capitalizeEachWord(currentUser.name)}</p>
                                 <p className='text-base	text-gray-500'>{`${capitalizeEachWord(currentUser.role)} @${currentUser.organization.name}`}</p>
                             </div>
                         </div>

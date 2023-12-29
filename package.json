@@ -35,6 +35,8 @@
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
     "date-fns": "^2.30.0",
+    "echarts": "^5.4.3",
+    "echarts-for-react": "^3.0.2",
     "eslint": "8.47.0",
     "eslint-config-next": "13.4.19",
     "graphql": "^16.8.1",
