@@ -1,26 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from './Avatar';
-import { getInitials } from '@/helpers/helpers';
+import { capitalizeEachWord, getInitials } from '@/helpers/helpers';
+import { Button } from './Button';
+import EditPostDialog from '../EditPostDialog';
+import { CiClock2 } from "react-icons/ci";
 
-interface PostCardProps {
+type PostCardProps = {
+    postId: number;
     authorName: string;
     authorImage: string;
     postImage: string;
     recipient: string;
     content: string;
-    postTime: string;
-
+    postTime: React.ReactNode;
+    edit?: boolean
+    deletePost?: boolean
 }
 
 export default function PostCard({
+    postId,
     authorName,
     authorImage,
     postImage,
     recipient,
     content,
     postTime,
-
+    edit = false,
+    deletePost = false
 }: PostCardProps) {
+
+    const [isEdit, setIsEdit] = useState(false)
 
     return (
         <div className="flex flex-col p-6 space-y-6 overflow-hidden rounded-lg shadow-xl bg-gray-100/30 text-gray-900">
@@ -32,8 +41,11 @@ export default function PostCard({
                     </AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col space-y-1">
-                    <span className="text-sm font-semibold">{authorName}</span>
-                    <span className="text-xs text-gray-400">{postTime}</span>
+                    <span className="text-sm font-semibold">{capitalizeEachWord(authorName)}</span>
+                    <span className="text-xs text-gray-600 flex gap-0.5 items-center">
+                        <CiClock2 className='h-3 w-3' />
+                        {postTime}
+                    </span>
                 </div>
             </div>
             <div>
@@ -41,7 +53,17 @@ export default function PostCard({
                 <span className="mb-1 text-lg font-medium text-purple-800"> To:</span><span className="mb-1 text-lg font-medium text-gray-800"> {recipient}</span>
                 <p className="text-sm text-gray-800">{content}</p>
             </div>
+            <div>
+                <Button variant={'outline'} onClick={() => setIsEdit(true)} className={`${edit ? "" : "hidden"}`}>Edit</Button>
+            </div>
 
+            <EditPostDialog
+                isOpen={isEdit}
+                onOpenChange={setIsEdit}
+                postId={postId}
+                content={content}
+                selectedImage={postImage}
+            />
         </div>
     );
 }

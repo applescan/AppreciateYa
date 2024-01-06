@@ -8,11 +8,11 @@ import Loading from '@/components/ui/Loading';
 import EditUserDialog from '@/components/EditUserDialog';
 import UserCard from '@/components/UserCard';
 
-interface AdminPageProps {
+type AdminPageProps = {
   sessionData: any;
 }
 
-interface UsersAndOrganizationsData {
+type UsersAndOrganizationsData = {
   users: User[];
   organizations: Organization[];
 }

@@ -195,10 +195,10 @@ export const resolvers = {
             });
         },
         updatePost: async (_: any, args: any, context: Context) => {
-            const { id, content, recipientId } = args;
+            const { id, content } = args;
             return await context.prisma.post.update({
                 where: { id },
-                data: { content, recipientId: Number(recipientId) },
+                data: { content },
             });
         },
         deletePost: async (_: any, args: any, context: Context) => {

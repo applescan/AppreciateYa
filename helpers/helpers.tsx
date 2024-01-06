@@ -67,14 +67,20 @@ export const countryList = [
 export function formatTime(timestamp: string) {
     const date = new Date(Number(timestamp));
 
-    // Extracting day, month, and year
+    // Extracting day, month, year, hours, and minutes
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // +1 because months are 0-indexed
     const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
 
-    // Formatting to dd/mm/yyyy
-    return `${day}/${month}/${year}`;
+    // Formatting to dd/mm/yyyy hh:mm
+    return <div className="flex items-center gap-2">
+        <span className="font-medium">{hours}:{minutes}</span>
+        <span className="font-regular">{day}/{month}/{year}</span>
+    </div>
 }
+
 
 export function extractImageUrlFromContent(content: string) {
     // Regular expression to match Markdown image syntax
@@ -125,4 +131,27 @@ export function countGiftCards(
 
     const total = card1Count + card2Count + card3Count;
     setTotalCards(total);
+}
+
+export function topFansCount(authorNames: string[]) {
+
+    const counts: Record<string, number> = {};
+    authorNames.forEach((authorName: string) => {
+        counts[authorName] = (counts[authorName] || 0) + 1;
+    });
+
+    let maxCount = 0;
+    let topFans: string[] = [];
+
+    for (const author in counts) {
+        if (counts[author] > maxCount) {
+            maxCount = counts[author];
+            topFans = [author];
+        } else if (counts[author] === maxCount) {
+            topFans.push(author);
+        }
+    }
+
+    return topFans;
+
 }

@@ -10,18 +10,11 @@ import { Post } from '@/lib/types/types';
 import Loading from '@/components/ui/Loading';
 import { capitalizeEachWord, countGiftCards, extractImageUrlFromContent, formatTime, removeImageUrlFromContent } from '@/helpers/helpers';
 import { useSession } from 'next-auth/react';
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-  SelectGroup
-} from "@/components/ui/Dropdown";
 import { Card } from '@/components/ui/Card';
 import CoffeeChart from '@/components/CoffeeCharts';
 import ThankYouChart from '@/components/ThankYouCharts';
 import GiftCharts from '@/components/GiftCharts';
+import FilterDropdown from '@/components/FilterDropdown';
 
 const UserPostPage = () => {
   const { data: sessionData } = useSession();
@@ -74,28 +67,10 @@ const UserPostPage = () => {
         <div className='flex min-w-fit items-center gap-2'>
           <span className='text-gray-500 font-normal text-sm min-w-[55px]'>Filter by</span>
           <div className='w-[150px]'>
-            <Select onValueChange={handleFilterSelect}>
-              <SelectTrigger aria-label="Filter">
-                <SelectValue placeholder={capitalizeEachWord(selectedFilter)}>{capitalizeEachWord(selectedFilter)}</SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem key="month" value="MONTH">
-                    Month
-                  </SelectItem>
-                  <SelectItem key="quarter" value="QUARTER">
-                    Quarter
-                  </SelectItem>
-                  <SelectItem key="year" value="YEAR">
-                    Year
-                  </SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+            <FilterDropdown handleFilterSelect={handleFilterSelect} selectedFilter={selectedFilter} />
           </div>
         </div>
       </div>
-
 
       <div className='flex flex-col gap-4'>
         <h2 className='font-bold text-lg text-gray-900'>Overview</h2>
@@ -115,7 +90,7 @@ const UserPostPage = () => {
             </div>
           </Card>
           <Card className="mt-2 mb-4 w-full h-full flex items-center gap-2 justify-center border-0">
-          <GiftCharts gifts={totalGiftCards} totalPost={data?.postsByOrganizationId.length} />
+            <GiftCharts gifts={totalGiftCards} totalPost={data?.postsByOrganizationId.length} />
             <div className='flex gap-4 flex-col pr-6'>
               <h2 className='text-xl font-bold text-gray-800'>Vouchers</h2>
               <p className='text-5xl font-extrabold bg-clip-text  text-transparent bg-gradient-to-r from-purple-700 to-gray-800'>{totalGiftCards}/{data?.postsByOrganizationId.length}</p>
@@ -130,13 +105,13 @@ const UserPostPage = () => {
           data.postsByOrganizationId.map((post: Post) => (
             <PostCard
               key={post.id}
+              postId={Number(post.id)}
               authorName={post.author.name}
               authorImage={post.author.image || 'default-avatar-url'}
               postImage={extractImageUrlFromContent(post.content)}
               recipient={post.recipient.name}
               content={removeImageUrlFromContent(post.content)}
-              postTime={formatTime(post.createdAt)}
-            />
+              postTime={formatTime(post.createdAt)} edit={false} deletePost={false} />
           ))
         ) : (
           <p>No posts found</p>

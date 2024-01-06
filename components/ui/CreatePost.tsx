@@ -49,7 +49,7 @@ export default function CreatePost() {
                 isOpen={isDialogOpen}
                 onOpenChange={setIsDialogOpen}
                 recipientId={recipientId}
-                 setRecipientId={setRecipientId}
+                setRecipientId={setRecipientId}
                 selectedImage={selectedImage}
                 content={content}
                 setContent={setContent}

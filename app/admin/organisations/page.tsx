@@ -8,11 +8,11 @@ import CreateOrganizationDialog from '@/components/CreateOrgDialog';
 import OrganizationCard from '@/components/OrganizationCard';
 import EditOrganizationDialog from '@/components/EditOrgDialog';
 
-interface AdminPageProps {
+type AdminPageProps = {
   sessionData: any;
 }
 
-interface OrganizationsData {
+type OrganizationsData = {
   organizations: Organization[];
 }
 

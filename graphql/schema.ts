@@ -94,7 +94,7 @@ type User {
     editUser(id: Int!, name: String!, email: String!, role: UserRole!, orgId: Int!, image: String, password: String): User!
     deleteUser(id: Int!): User!
     createPost(content: String!, authorId: Int!, recipientId: Int!, orgId: Int!): Post!
-    updatePost(id: Int!, content: String!, recipientId: Int!): Post!
+    updatePost(id: Int!, content: String!): Post!
     deletePost(id: Int!): Post!
     createOrganization(data: CreateOrganizationInput!): Organization!
     editOrganization(data: EditOrganizationInput!): Organization!

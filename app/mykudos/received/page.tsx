@@ -18,6 +18,7 @@ import {
   SelectItem,
   SelectGroup
 } from "@/components/ui/Dropdown";
+import FilterDropdown from '@/components/FilterDropdown';
 
 const UserPostPage = () => {
   const { data: sessionData } = useSession();
@@ -64,28 +65,11 @@ const UserPostPage = () => {
   return (
     <>
       <div className='pb-5 flex justify-end'>
-       
+
         <div className='flex min-w-fit items-center gap-2'>
           <span className='text-gray-500 font-normal text-sm min-w-[55px]'>Filter by</span>
           <div className='w-[150px]'>
-            <Select onValueChange={handleFilterSelect}>
-              <SelectTrigger aria-label="Filter">
-                <SelectValue placeholder={capitalizeEachWord(selectedFilter)}>{capitalizeEachWord(selectedFilter)}</SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem key="month" value="MONTH">
-                    Month
-                  </SelectItem>
-                  <SelectItem key="quarter" value="QUARTER">
-                    Quarter
-                  </SelectItem>
-                  <SelectItem key="year" value="YEAR">
-                    Year
-                  </SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+            <FilterDropdown handleFilterSelect={handleFilterSelect} selectedFilter={selectedFilter} />
           </div>
         </div>
       </div>
@@ -95,6 +79,7 @@ const UserPostPage = () => {
           data.postsBySpecificRecipient.map((post: Post) => (
             <PostCard
               key={post.id}
+              postId={Number(post.id)}
               authorName={post.author.name}
               authorImage={post.author.image || 'default-avatar-url'}
               postImage={extractImageUrlFromContent(post.content)}
