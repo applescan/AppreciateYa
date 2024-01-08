@@ -159,7 +159,7 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({ isOpen, onOpenChang
                                 </Select>
 
                             </div>
-                            <div className="mt-6 flex justify-end items-center gap-2 ">
+                            <div className="mt-6 flex justify-between items-center gap-2">
                                 <Button onClick={() => onOpenChange(false)} variant={"outline"}>Cancel</Button>
                                 <Button type="submit">Create User</Button>
                             </div>

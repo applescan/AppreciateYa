@@ -10,6 +10,7 @@ import Loading from '@/components/ui/Loading';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar';
 import { capitalizeEachWord, getInitials } from '@/helpers/helpers';
 import { VERIFY_CURRENT_PASSWORD } from '@/graphql/mutations';
+import ErrorPage from '@/components/ui/Error';
 
 
 export default function Page() {
@@ -211,7 +212,7 @@ export default function Page() {
 
 
     if (loading) return <Loading></Loading>;
-    if (error) return <p>Error: {error.message}</p>;
+    if (error) return <ErrorPage/>
 
 
     return (

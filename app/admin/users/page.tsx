@@ -7,6 +7,7 @@ import CreateUserDialog from '@/components/CreateUserDialog';
 import Loading from '@/components/ui/Loading';
 import EditUserDialog from '@/components/EditUserDialog';
 import UserCard from '@/components/UserCard';
+import ErrorPage from '@/components/ui/Error';
 
 type AdminPageProps = {
   sessionData: any;
@@ -36,7 +37,7 @@ const AdminPage: React.FC<AdminPageProps> = ({ sessionData }) => {
   });
 
   if (loading) return <Loading></Loading>;
-  if (error) return <p>Error :(</p>;
+  if (error) return <ErrorPage/>
 
   return (
     <div className="container mx-auto px-4">

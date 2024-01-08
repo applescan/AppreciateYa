@@ -15,6 +15,7 @@ import CoffeeChart from '@/components/CoffeeCharts';
 import ThankYouChart from '@/components/ThankYouCharts';
 import GiftCharts from '@/components/GiftCharts';
 import FilterDropdown from '@/components/FilterDropdown';
+import ErrorPage from '@/components/ui/Error';
 
 const UserPostPage = () => {
   const { data: sessionData } = useSession();
@@ -47,7 +48,7 @@ const UserPostPage = () => {
   }, [data]);
 
   if (loading) return <Loading />;
-  if (error) return <p>Error: {error.message}</p>;
+  if (error) return <ErrorPage/>
 
 
   const handleFilterSelect = (value: string) => {

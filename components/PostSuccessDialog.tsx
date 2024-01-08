@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/Dialog";
 import { Button } from '@/components/ui/Button';
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 
-interface PostSuccessDialogProps {
+type PostSuccessDialogProps = {
     isOpen: boolean;
     onOpenChange: (isOpen: boolean) => void;
 }

@@ -23,7 +23,6 @@ interface EditOrganizationDialogProps {
 
 const EditOrganizationDialog: React.FC<EditOrganizationDialogProps> = ({ isOpen, onOpenChange, organization, refetchOrganizations }) => {
     const [editOrganizationMutation] = useMutation(EDIT_ORGANIZATION);
-    //const [deleteOrganizationMutation] = useMutation(DELETE_ORGANIZATION);
     const [currentCountry, setCurrentCountry] = useState<string>('');
 
     const getCountryFromLocation = async () => {
@@ -85,18 +84,6 @@ const EditOrganizationDialog: React.FC<EditOrganizationDialogProps> = ({ isOpen,
             console.error(error);
         }
     };
-
-    // const handleDeleteOrganization = async () => {
-    //     if (organization && organization.id) {
-    //         try {
-    //             await deleteOrganizationMutation({ variables: { id: Number(organization.id) } });
-    //             onOpenChange(false);
-    //             refetchOrganizations(); // Refetching the organizations after deletion.
-    //         } catch (error) {
-    //             console.error("Error deleting organization:", error);
-    //         }
-    //     }
-    // };
 
     useEffect(() => {
         setEditOrganizationData({
@@ -182,13 +169,8 @@ const EditOrganizationDialog: React.FC<EditOrganizationDialogProps> = ({ isOpen,
 
                         {/* Submit and Cancel Buttons */}
                         <div className="mt-6 flex justify-between">
-                            <div>
-                                {/* <Button variant="outline" onClick={handleDeleteOrganization}>Delete Organization</Button> */}
-                            </div>
-                            <div className='flex items-center gap-2'>
-                                <Button onClick={() => onOpenChange(false)} variant={"outline"}>Cancel</Button>
-                                <Button type="submit">Update Organisation</Button>
-                            </div>
+                            <Button onClick={() => onOpenChange(false)} variant={"outline"}>Cancel</Button>
+                            <Button type="submit">Update Organisation</Button>
                         </div>
                     </form>
                 </div>

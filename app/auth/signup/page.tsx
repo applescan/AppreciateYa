@@ -16,6 +16,7 @@ import { useQuery } from '@apollo/client';
 import { GET_ORGANIZATIONS } from '@/graphql/queries';
 import Loading from '@/components/ui/Loading';
 import { signIn } from 'next-auth/react';
+import ErrorPage from '@/components/ui/Error';
 
 
 const SignUp: React.FC = () => {
@@ -43,7 +44,7 @@ const SignUp: React.FC = () => {
     };
 
     if (loading) return <Loading />
-    if (error) return <p>Error: {error.message}</p>;
+    if (error) return <ErrorPage/>
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = event.target;

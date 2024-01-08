@@ -7,6 +7,7 @@ import Loading from '@/components/ui/Loading';
 import CreateOrganizationDialog from '@/components/CreateOrgDialog';
 import OrganizationCard from '@/components/OrganizationCard';
 import EditOrganizationDialog from '@/components/EditOrgDialog';
+import ErrorPage from '@/components/ui/Error';
 
 type AdminPageProps = {
   sessionData: any;
@@ -35,7 +36,7 @@ const AdminOrgsPage: React.FC<AdminPageProps> = ({ sessionData }) => {
   });
 
   if (loading) return <Loading />;
-  if (error) return <p>Error :(</p>;
+  if (error) return <ErrorPage/>
 
   return (
     <div className="container mx-auto px-4">

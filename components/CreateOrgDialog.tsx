@@ -19,9 +19,7 @@ import {
     SelectValue,
     SelectContent,
     SelectItem,
-    SelectLabel,
     SelectGroup,
-    SelectSeparator,
 } from './ui/Dropdown';
 import { countryList } from '@/helpers/helpers';
 
@@ -153,7 +151,7 @@ const CreateOrganizationDialog: React.FC<CreateOrganizationDialogProps> = ({ isO
                                 </div>
                             ))}
 
-                            <div className="mt-6 flex justify-end items-center gap-2">
+                            <div className="mt-6 flex justify-between items-center gap-2">
                                 <Button onClick={() => onOpenChange(false)} variant={"outline"}>Cancel</Button>
                                 <Button type="submit">Create User</Button>
                             </div>

@@ -3,22 +3,13 @@ import React, { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_POSTS_BY_SPECIFIC_RECIPIENT } from '@/graphql/queries';
 import PostCard from '@/components/ui/PostCard';
-import Button from "@/components/Button";
-import { RiHeartAddLine } from "react-icons/ri";
 import { useRouter } from 'next/navigation';
 import { Post } from '@/lib/types/types';
 import Loading from '@/components/ui/Loading';
-import { capitalizeEachWord, formatTime } from '@/helpers/helpers';
+import { formatTime } from '@/helpers/helpers';
 import { useSession } from 'next-auth/react';
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-  SelectGroup
-} from "@/components/ui/Dropdown";
 import FilterDropdown from '@/components/FilterDropdown';
+import ErrorPage from '@/components/ui/Error';
 
 const UserPostPage = () => {
   const { data: sessionData } = useSession();
@@ -53,7 +44,7 @@ const UserPostPage = () => {
   }
 
   if (loading) return <Loading />;
-  if (error) return <p>Error: {error.message}</p>;
+  if (error) return <ErrorPage/>
 
 
   const handleFilterSelect = (value: string) => {

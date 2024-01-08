@@ -4,6 +4,9 @@ import { capitalizeEachWord, getInitials } from '@/helpers/helpers';
 import { Button } from './Button';
 import EditPostDialog from '../EditPostDialog';
 import { CiClock2 } from "react-icons/ci";
+import DeleteDialog from '../DeleteDialog';
+import { useMutation } from '@apollo/client';
+import { DELETE_POST } from '@/graphql/mutations';
 
 type PostCardProps = {
     postId: number;
@@ -30,6 +33,16 @@ export default function PostCard({
 }: PostCardProps) {
 
     const [isEdit, setIsEdit] = useState(false)
+    const [isDelete, setIsDelete] = useState(false)
+    const [deletePostMutation] = useMutation(DELETE_POST);
+
+    const handleDelete = async () => {
+        try {
+            await deletePostMutation({ variables: { id: Number(postId) } });
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     return (
         <div className="flex flex-col p-6 space-y-6 overflow-hidden rounded-lg shadow-xl bg-gray-100/30 text-gray-900">
@@ -50,11 +63,12 @@ export default function PostCard({
             </div>
             <div>
                 <img src={postImage} alt={recipient} height={100} width={200} className="object-cover w-full mb-4 bg-gray-500" />
-                <span className="mb-1 text-lg font-medium text-purple-800"> To:</span><span className="mb-1 text-lg font-medium text-gray-800"> {recipient}</span>
-                <p className="text-sm text-gray-800">{content}</p>
+                <span className="text-lg font-bold text-gray-800"> To: {capitalizeEachWord(recipient)}</span>
+                <p className="text-sm text-gray-800 text-medium pt-2">{content}</p>
             </div>
-            <div>
-                <Button variant={'outline'} onClick={() => setIsEdit(true)} className={`${edit ? "" : "hidden"}`}>Edit</Button>
+            <div className='flex items-center justify-between'>
+                <Button variant={'outline'} onClick={() => setIsDelete(true)} className={`${deletePost ? "" : "hidden"}`}>Delete</Button>
+                <Button variant={'default'} onClick={() => setIsEdit(true)} className={`${edit ? "px-4" : "hidden"}`}>Edit</Button>
             </div>
 
             <EditPostDialog
@@ -64,6 +78,11 @@ export default function PostCard({
                 content={content}
                 selectedImage={postImage}
             />
+
+            <DeleteDialog
+                isOpen={isDelete}
+                onOpenChange={setIsDelete}
+                handleSubmit={handleDelete} />
         </div>
     );
 }

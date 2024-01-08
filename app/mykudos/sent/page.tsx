@@ -12,12 +12,14 @@ import { extractImageUrlFromContent, formatTime, removeImageUrlFromContent, topF
 import { useSession } from 'next-auth/react';
 import { Card } from '@/components/ui/Card';
 import FilterDropdown from '@/components/FilterDropdown';
+import ErrorPage from '@/components/ui/Error';
 
 const UserPostPage = () => {
   const { data: sessionData } = useSession();
   const currentOrgId = parseInt(sessionData?.user?.orgId);
   const currentUserId = parseInt(sessionData?.user?.id);
   const [selectedFilter, setSelectedFilter] = useState('MONTH');
+
   const { data: usersData, loading: usersLoading, error: usersError } = useQuery<{ usersByOrganizationId: User[] }>(GET_USERS_BY_ORGANIZATION_ID, {
     variables: { orgId: currentOrgId },
   });
@@ -28,8 +30,8 @@ const UserPostPage = () => {
 
   const router = useRouter();
 
-  if (loading) return <Loading />;
-  if (error) return <p>Error: {error.message}</p>; //TODO: depending on the error redirect to the dashboard
+  if (loading || !data || !usersData) return <Loading />;
+  if (error || usersError) return <ErrorPage/>
 
 
   const handleFilterSelect = (value: string) => {
@@ -96,7 +98,7 @@ const UserPostPage = () => {
               postImage={extractImageUrlFromContent(post.content)}
               recipient={post.recipient.name}
               content={removeImageUrlFromContent(post.content)}
-              postTime={formatTime(post.createdAt)} edit={true} deletePost={false}
+              postTime={formatTime(post.createdAt)} edit={true} deletePost={true}
             />
           ))
         ) : (
