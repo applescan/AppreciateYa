@@ -8,7 +8,7 @@ import { RiHeartAddLine } from "react-icons/ri";
 import { useRouter } from 'next/navigation';
 import { Post } from '@/lib/types/types';
 import Loading from '@/components/ui/Loading';
-import { capitalizeEachWord, countGiftCards, extractImageUrlFromContent, formatTime, removeImageUrlFromContent } from '@/helpers/helpers';
+import { countGiftCards, extractImageUrlFromContent, formatTime, removeImageUrlFromContent } from '@/helpers/helpers';
 import { useSession } from 'next-auth/react';
 import { Card } from '@/components/ui/Card';
 import CoffeeChart from '@/components/CoffeeCharts';
@@ -48,7 +48,7 @@ const UserPostPage = () => {
   }, [data]);
 
   if (loading) return <Loading />;
-  if (error) return <ErrorPage/>
+  if (error) return <ErrorPage />
 
 
   const handleFilterSelect = (value: string) => {
@@ -74,7 +74,7 @@ const UserPostPage = () => {
       </div>
 
       <div className='flex flex-col gap-4'>
-        <h2 className='font-bold text-lg text-gray-900'>Overview</h2>
+        <h2 className='font-bold text-xl text-gray-900'>Overview</h2>
         <div className='flex w-full justify-between gap-8'>
           <Card className="mt-2 mb-4 w-full h-full flex items-center gap-2 justify-center border-0">
             <ThankYouChart thankYous={totalThanksCards} totalPost={data?.postsByOrganizationId.length} />

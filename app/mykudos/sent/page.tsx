@@ -8,7 +8,7 @@ import { RiHeartAddLine } from "react-icons/ri";
 import { useRouter } from 'next/navigation';
 import { Post, User } from '@/lib/types/types';
 import Loading from '@/components/ui/Loading';
-import { extractImageUrlFromContent, formatTime, removeImageUrlFromContent, topFansCount } from '@/helpers/helpers';
+import { capitalizeEachWord, extractImageUrlFromContent, formatTime, removeImageUrlFromContent, topFansCount } from '@/helpers/helpers';
 import { useSession } from 'next-auth/react';
 import { Card } from '@/components/ui/Card';
 import FilterDropdown from '@/components/FilterDropdown';
@@ -20,7 +20,7 @@ const UserPostPage = () => {
   const currentUserId = parseInt(sessionData?.user?.id);
   const [selectedFilter, setSelectedFilter] = useState('MONTH');
 
-  const { data: usersData, loading: usersLoading, error: usersError } = useQuery<{ usersByOrganizationId: User[] }>(GET_USERS_BY_ORGANIZATION_ID, {
+  const { data: usersData, error: usersError } = useQuery<{ usersByOrganizationId: User[] }>(GET_USERS_BY_ORGANIZATION_ID, {
     variables: { orgId: currentOrgId },
   });
 
@@ -30,8 +30,8 @@ const UserPostPage = () => {
 
   const router = useRouter();
 
-  if (loading || !data || !usersData) return <Loading />;
-  if (error || usersError) return <ErrorPage/>
+  if (loading || !data) return <Loading />;
+  if (error || usersError) return <ErrorPage />
 
 
   const handleFilterSelect = (value: string) => {
@@ -61,23 +61,23 @@ const UserPostPage = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-        <Card className="mt-2 mb-6 w-full h-full flex items-center gap-6 justify-center border-0">
+        <Card className="mt-2 px-6 mb-6 w-full h-full flex items-center gap-6 justify-center border-0">
           <div> <img src='/mvp.png' alt='mvp logo' height={100} width={100}></img> </div>
           <div className='flex gap-2 flex-col pr-6'>
             <h2 className='text-lg font-bold text-gray-800'>Your MVP this {selectedFilter.toLocaleLowerCase()}</h2>
             <div className='p-0'>
-              {topMVP.map(name => <p className='text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-700 to-gray-800'>{name}</p>)}
+              {topMVP.map(name => <p className='text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-700 to-gray-800'>{capitalizeEachWord(name)}</p>)}
             </div>
           </div>
         </Card>
-        <Card className="mt-2 mb-6 w-full h-full flex items-center gap-6 justify-center border-0">
+        <Card className="mt-2 px-6 mb-6 w-full h-full flex items-center gap-6 justify-center border-0">
           <div> <img src='/kudos.png' alt='kudos logo' height={100} width={100}></img> </div>
           <div className='flex gap-2 flex-col pr-6'>
             <h2 className='text-lg font-bold text-gray-800'>Total kudos delivered</h2>
             <p className='text-2xl font-extrabold bg-clip-text  text-transparent bg-gradient-to-r from-purple-700 to-gray-800'>{data.postsBySpecificSender.length}</p>
           </div>
         </Card>
-        <Card className="mt-2 mb-6 w-full h-full flex items-center gap-6 justify-center border-0">
+        <Card className="mt-2 px-6 mb-6 w-full h-full flex items-center gap-6 justify-center border-0">
           <div> <img src='/team.png' alt='team logo' height={100} width={100}></img> </div>
           <div className='flex gap-2 flex-col pr-6'>
             <h2 className='text-lg font-bold text-gray-800 flex justify-start'>My Team</h2>

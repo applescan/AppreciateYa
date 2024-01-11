@@ -1,6 +1,5 @@
 'use client'
 
-import Link from "next/link";
 import React from "react";
 import SigninButton from "./SigninButton";
 import { FaBars } from "react-icons/fa"
@@ -8,11 +7,23 @@ import { MdClose } from "react-icons/md"
 import { useState } from 'react'
 import Image from 'next/image';
 import { Dialog, Popover } from '@headlessui/react'
-import { useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/Avatar";
+import { capitalizeEachWord, getInitials } from "@/helpers/helpers";
+import { useQuery } from "@apollo/client";
+import { GET_USER_BY_ID } from "@/graphql/queries";
+import { useRouter } from 'next/navigation'
 
 const AppBar = () => {
   const { data: sessionData, status } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const { id: userId, image } = sessionData?.user || {};
+  const router = useRouter();
+  const { data: userData } = useQuery(GET_USER_BY_ID, {
+    variables: { id: userId },
+    skip: !userId
+  });
+  const profileImg = userData?.user?.image || image;
 
   return (
     <>
@@ -20,13 +31,13 @@ const AppBar = () => {
         <nav className="flex items-center justify-between py-6 px-6" aria-label="Global">
           <div className="flex justify-between">
             {status === 'authenticated' ? (
-              <Link href="/dashboard" passHref>
+              <div onClick={() => router.push('/dashboard')} className="cursor-pointer">
                 <Image src="/logo.png" width={160} height={100} alt="Appreciate ya logo" />
-              </Link>
+              </div>
             ) : (
-              <Link href="/" passHref>
+              <div onClick={() => router.push('/')} className="cursor-pointer">
                 <Image src="/logo.png" width={160} height={100} alt="Appreciate ya logo" />
-              </Link>
+              </div>
             )}
 
           </div>
@@ -37,15 +48,20 @@ const AppBar = () => {
             </button>
           </div>
           <Popover.Group className="hidden lg:flex lg:gap-x-12 items-center">
-            <Link
-              href={{ pathname: "/dashboard" }}
-              className="-mx-3 block rounded-lg px-3 py-2 text-base font-normal leading-7 text-gray-900 hover:bg-gray-50">
+            <div
+              onClick={() => router.push('/dashboard')}
+              className="cursor-pointer block rounded-lg px-3 py-2 text-base font-normal leading-7 text-gray-900 hover:bg-gray-50">
               Dashboard
-            </Link>
+            </div>
             {(sessionData?.user?.role === 'ADMIN' && status === 'authenticated') && (
-              <Link href="/admin/users" passHref>
-                <p className="-mx-3 block rounded-lg px-3 py-2 text-base font-normal leading-7 text-gray-900 hover:bg-gray-50">User Management</p>
-              </Link>
+              <div onClick={() => router.push('/admin/users')} className="cursor-pointer">
+                <p className="block rounded-lg px-3 py-2 text-base font-normal leading-7 text-gray-900 hover:bg-gray-50">User Management</p>
+              </div>
+            )}
+            {(status === 'authenticated') && (
+              <div onClick={() => router.push('/mykudos/received')} className="cursor-pointer">
+                <p className="block rounded-lg px-3 py-2 text-base font-normal leading-7 text-gray-900 hover:bg-gray-50">My Kudos</p>
+              </div>
             )}
             <SigninButton />
           </Popover.Group>
@@ -64,42 +80,54 @@ const AppBar = () => {
               </button>
             </div>
             <div className="mt-6 flow-root">
-              <div className="my-6 divide-y divide-gray-500/10">
-                <div className="">
-                  <Link
-                    href={{ pathname: "/dashboard" }}
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-normal leading-7 text-gray-900 hover:bg-gray-50">
-                    Dashboard
-                  </Link>
-                  {(sessionData?.user?.role === 'ADMIN' && status === 'authenticated') && (
-                    <Link href="/admin/users" passHref>
-                      <p className="-mx-3 block rounded-lg px-3 py-2 text-base font-normal leading-7 text-gray-900 hover:bg-gray-50">User Management</p>
-                    </Link>
+              <div className="my-16">
+                <div className="pb-2">
+                  {(status === 'authenticated') && (
+                    <div className="flex flex-col gap-2 cursor-pointer">
+                      <button className="flex items-center gap-3" onClick={() => router.push('/profile')}>
+                        <Avatar>
+                          <AvatarImage src={profileImg} />
+                          <AvatarFallback>
+                            {sessionData?.user.name ? getInitials(sessionData?.user.name) : 'NA'}
+                          </AvatarFallback>
+                        </Avatar>
+                        <p className="text-gray-800 font-normal">{capitalizeEachWord(sessionData?.user.name)}</p>
+                      </button>
+                      <hr></hr>
+                    </div>
                   )}
-                  <SigninButton />
                 </div>
+
+                <div className="flex flex-col pt-2">
+                  <p
+                    onClick={() => router.push('/dashboard')}
+                    className="cursor-pointer block rounded-lg px-3 py-2 text-base font-normal leading-7 text-gray-900 hover:bg-gray-50">
+                    Dashboard
+                  </p>
+                  {(sessionData?.user?.role === 'ADMIN' && status === 'authenticated') && (
+                    <div onClick={() => router.push('/admin/users')} className="cursor-pointer">
+                      <p className="block rounded-lg px-3 py-2 text-base font-normal leading-7 text-gray-900 hover:bg-gray-50">User Management</p>
+                    </div>
+                  )}
+                  {(status === 'authenticated') && (
+                    <div onClick={() => router.push('/mykudos/received')} className="cursor-pointer">
+                      <p className="block rounded-lg px-3 py-2 text-base font-normal leading-7 text-gray-900 hover:bg-gray-50">My Kudos</p>
+                    </div>
+                  )}
+                </div>
+
               </div>
             </div>
 
-            <div className="absolute bottom-0 right-0 mr-6 mb-6">
+            <div className="absolute bottom-0 mr-6 mb-6">
               {status === 'authenticated' ? (
-                <Link href="/dashboard">
-                  <Image
-                    src="/logo.png"
-                    width={120}
-                    height={50}
-                    alt="Your image"
-                  />
-                </Link>
+                <button onClick={() => signOut()} className="text-red-600 text-left font-normal cursor-pointer">
+                  Sign Out
+                </button>
               ) : (
-                <Link href="/">
-                  <Image
-                    src="/logo.png"
-                    width={120}
-                    height={50}
-                    alt="Your image"
-                  />
-                </Link>
+                <button onClick={() => signIn()} className="text-green-600 ml-auto cursor-pointer">
+                  Sign In
+                </button>
               )}
             </div>
           </Dialog.Panel>

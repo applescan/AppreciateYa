@@ -1,15 +1,15 @@
 'use client'
 import React, { useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { GET_POSTS_BY_SPECIFIC_RECIPIENT } from '@/graphql/queries';
+import { GET_POSTS_BY_SPECIFIC_RECIPIENT, GET_USERS_BY_ORGANIZATION_ID } from '@/graphql/queries';
 import PostCard from '@/components/ui/PostCard';
-import { useRouter } from 'next/navigation';
-import { Post } from '@/lib/types/types';
+import { Post, User } from '@/lib/types/types';
 import Loading from '@/components/ui/Loading';
-import { formatTime } from '@/helpers/helpers';
+import { capitalizeEachWord, formatTime, topFansCount } from '@/helpers/helpers';
 import { useSession } from 'next-auth/react';
 import FilterDropdown from '@/components/FilterDropdown';
 import ErrorPage from '@/components/ui/Error';
+import { Card } from '@/components/ui/Card';
 
 const UserPostPage = () => {
   const { data: sessionData } = useSession();
@@ -17,11 +17,13 @@ const UserPostPage = () => {
   const currentUserId = parseInt(sessionData?.user?.id);
   const [selectedFilter, setSelectedFilter] = useState('MONTH');
 
+  const { data: usersData, error: usersError } = useQuery<{ usersByOrganizationId: User[] }>(GET_USERS_BY_ORGANIZATION_ID, {
+    variables: { orgId: currentOrgId },
+  });
+
   const { loading, error, data, refetch } = useQuery(GET_POSTS_BY_SPECIFIC_RECIPIENT, {
     variables: { orgId: currentOrgId, recipientId: currentUserId, filter: { type: selectedFilter } },
   });
-
-  const router = useRouter();
 
   function extractImageUrlFromContent(content: string) {
     // Regular expression to match Markdown image syntax
@@ -43,8 +45,8 @@ const UserPostPage = () => {
     return content.replace(regex, '').trim();
   }
 
-  if (loading) return <Loading />;
-  if (error) return <ErrorPage/>
+  if (loading || !data) return <Loading />;
+  if (error || usersError) return <ErrorPage />
 
 
   const handleFilterSelect = (value: string) => {
@@ -52,6 +54,10 @@ const UserPostPage = () => {
     setSelectedFilter(filterType);
     refetch({ orgId: currentOrgId, filter: { type: filterType } });
   };
+
+  const authorNames = data.postsBySpecificRecipient.map((post: { author: { name: string; }; }) => post.author.name);
+
+  const topMVP = topFansCount(authorNames);
 
   return (
     <>
@@ -63,6 +69,33 @@ const UserPostPage = () => {
             <FilterDropdown handleFilterSelect={handleFilterSelect} selectedFilter={selectedFilter} />
           </div>
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <Card className="mt-2 px-6 mb-6 w-full h-full flex items-center gap-6 justify-center border-0">
+          <div> <img src='/fan.png' alt='mvp logo' height={100} width={100}></img> </div>
+          <div className='flex gap-2 flex-col pr-6'>
+            <h2 className='text-lg font-bold text-gray-800'>Your top fan this {selectedFilter.toLocaleLowerCase()}</h2>
+            <div className='p-0'>
+              {topMVP.map(name => <p className='text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-700 to-gray-800'>{capitalizeEachWord(name)}</p>)}
+            </div>
+          </div>
+        </Card>
+        <Card className="mt-2 px-6 mb-6 w-full h-full flex items-center gap-6 justify-center border-0">
+          <div> <img src='/received.png' alt='kudos logo' height={100} width={100}></img> </div>
+          <div className='flex gap-2 flex-col pr-6'>
+            <h2 className='text-lg font-bold text-gray-800'>Total kudos received</h2>
+            <p className='text-2xl font-extrabold bg-clip-text  text-transparent bg-gradient-to-r from-purple-700 to-gray-800'>{data.postsBySpecificRecipient.length}</p>
+          </div>
+        </Card>
+        <Card className="mt-2 px-6 mb-6 w-full h-full flex items-center gap-6 justify-center border-0">
+          <div> <img src='/team.png' alt='team logo' height={100} width={100}></img> </div>
+          <div className='flex gap-2 flex-col pr-6'>
+            <h2 className='text-lg font-bold text-gray-800 flex justify-start'>My Team</h2>
+            <p className='text-2xl font-extrabold bg-clip-text  text-transparent bg-gradient-to-r from-purple-700 to-gray-800'>{usersData?.usersByOrganizationId.length} people</p>
+
+          </div>
+        </Card>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">

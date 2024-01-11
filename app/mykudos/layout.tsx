@@ -10,9 +10,17 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-
+    const {  status } = useSession();
     const router = useRouter();
     const pathname = usePathname()
+
+    if (status === 'loading') {
+        return <Loading />;
+    }
+
+    if (status === 'unauthenticated') {
+        router.push('/')
+    }
 
     const getDefaultTab = () => {
         if (pathname?.endsWith("/received")) {
@@ -20,7 +28,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         } else if (pathname?.endsWith("/sent")) {
             return "sent";
         } else {
-            return "received";
+            return "sent";
         }
     };
 
@@ -34,8 +42,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <div>
                 <Tabs defaultValue={getDefaultTab()} className="w-full flex justify-center">
                     <TabsList>
-                        <TabsTrigger value="Received" onClick={() => router.push('/mykudos/received')}>📥 Received</TabsTrigger>
-                        <TabsTrigger value="Sent" onClick={() => router.push('/mykudos/sent')}>📬 Sent</TabsTrigger>
+                        <TabsTrigger value="received" onClick={() => router.push('/mykudos/received')}>📥 Received</TabsTrigger>
+                        <TabsTrigger value="sent" onClick={() => router.push('/mykudos/sent')}>📬 Sent</TabsTrigger>
                     </TabsList>
                 </Tabs>
             </div>
@@ -45,3 +53,4 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 }
 
 export default Layout;
+
