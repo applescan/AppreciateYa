@@ -34,17 +34,17 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({ isOpen, onOpenChang
         variables: { orgId: parseInt(orgId) },
     });
 
-    const [selectedRecipient, setSelectedRecipient] = useState({ id: '', name: '' });
+    const [selectedRecipient, setSelectedRecipient] = useState({ id: '', name: '', recipientEmail: '', });
     const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
 
-    const handleRecipientSelect = (userId: string, userName: string) => {
+    const handleRecipientSelect = (userId: string, userName: string, email: string) => {
         setRecipientId(userId);
-        setSelectedRecipient({ id: userId, name: userName });
+        setSelectedRecipient({ id: userId, name: userName, recipientEmail: email });
     };
 
     const resetForm = () => {
         setRecipientId('');
-        setSelectedRecipient({ id: '', name: '' });
+        setSelectedRecipient({ id: '', name: '', recipientEmail: '' })
         setContent('');
     };
 
@@ -60,6 +60,84 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({ isOpen, onOpenChang
                         recipientId: parseInt(recipientId),
                     },
                 });
+                const response = await fetch('/api/email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        to: selectedRecipient.recipientEmail,
+                        subject: 'You have received a new kudos!',
+                        message: `
+                        <div marginheight="0" topmargin="0" marginwidth="0" style="margin: 0px; background-color: #f2f3f8;" leftmargin="0">
+                        <!--100% body table-->
+                        <table cellspacing="0" border="0" cellpadding="0" width="100%" bgcolor="#f2f3f8"
+                            style="@import url(https://fonts.googleapis.com/css?family=Rubik:300,400,500,700|Open+Sans:300,400,600,700); font-family: 'Open Sans', sans-serif;">
+                            <tr>
+                                <td>
+                                    <table style="background-color: #f2f3f8; max-width:670px;  margin:0 auto;" width="100%" border="0"
+                                        align="center" cellpadding="0" cellspacing="0">
+                                        <tr>
+                                            <td style="height:80px;">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:center;">
+                                              <a href="https://appreciateya.com" title="logo" target="_blank">
+                                                <img width="100" src="https://res.cloudinary.com/dek61sfoh/image/upload/v1705564118/misc/bjtwdlwiwarrjvgjybct.png" title="logo" alt="logo">
+                                              </a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="height:20px;">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0"
+                                                    style="max-width:670px;background:#fff; border-radius:3px; text-align:center;-webkit-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);-moz-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);box-shadow:0 6px 18px 0 rgba(0,0,0,.06);">
+                                                    <tr>
+                                                        <td style="height:40px;">&nbsp;</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding:0 35px;">
+                                                            <h1 style="color:#1e1e2d; font-weight:500; margin:0;font-size:32px;font-family:'Rubik',sans-serif;">You have received a new kudos</h1>
+                                                            <span
+                                                                style="display:inline-block; vertical-align:middle; margin:29px 0 26px; border-bottom:1px solid #cecece; width:100px;"></span>
+                                                            <p style="color:#455056; font-size:15px;line-height:24px; margin:0;">You've received kudos from a coworker! This is a shout-out to your hard work and the positive difference you make in our team. Keep up the great work.
+                                                            </p>
+                                                            <a href="javascript:void(0);"
+                                                                style="background:#ec4899;text-decoration:none !important; font-weight:500; margin-top:35px; color:#fff;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px;">See your kudos</a>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="height:40px;">&nbsp;</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        <tr>
+                                            <td style="height:20px;">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:center;">
+                                                <p style="font-size:14px; color:rgba(69, 80, 86, 0.7411764705882353); line-height:18px; margin:0 0 0;">&copy; <strong>www.appreciateya.com</strong></p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="height:80px;">&nbsp;</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                          
+                        `,
+                    }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to send email');
+                }
+
                 resetForm()
                 setIsSuccessDialogOpen(true);
             } catch (error) {
@@ -101,7 +179,7 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({ isOpen, onOpenChang
                                     <Select onValueChange={(value) => {
                                         const user = usersData.usersByOrganizationId.find(user => user.id === value);
                                         if (user) {
-                                            handleRecipientSelect(user.id, user.name);
+                                            handleRecipientSelect(user.id, user.name, user.email);
                                         }
                                     }}>
                                         <SelectTrigger aria-label="Recipient">

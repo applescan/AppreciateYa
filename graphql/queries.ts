@@ -99,6 +99,7 @@ export const GET_ALL_POSTS = gql`
       recipient {
         name
         image
+        email
       }
     }
   }
@@ -122,6 +123,7 @@ export const GET_ALL_POSTS_BY_ORG = gql`
       recipient {
         name
         image
+        email
       }
     }
   }
@@ -146,6 +148,7 @@ export const GET_POSTS_BY_SPECIFIC_RECIPIENT = gql`
         id
         name
         image
+        email
       }
     }
   }
@@ -170,6 +173,7 @@ export const GET_POSTS_BY_SPECIFIC_AUTHOR = gql`
         id
         name
         image
+        email
       }
     }
   }

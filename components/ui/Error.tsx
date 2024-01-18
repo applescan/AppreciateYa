@@ -8,13 +8,13 @@ export default function ErrorPage() {
 
     return (
         <div style={{
-            backgroundImage: `url("/404.png")`,
-            height: "100%",
+        
+            height: "60vh",
             backgroundRepeat: "repeat",
             backgroundSize: "cover",
         }} className='flex items-center px-24'>
             <div className='w-1/2 flex justify-center flex-col items-center gap-6'>
-                <img src={"/error.png"} alt={"error"} height={300} width={600} className="object-cover mb-4" />
+                <img src={"/error.png"} alt={"error"} height={300} width={500} className="object-cover mb-4" />
                 <Button onClick={() => router.push('/')} className='text-md'>Return Home</Button>
             </div>
             <div className='w-1/2 flex flex-col pl-10'>

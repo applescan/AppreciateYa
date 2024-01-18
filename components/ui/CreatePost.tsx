@@ -10,6 +10,7 @@ const imageOptions = Array.from({ length: 9 }, (_, i) => `/giftCards/${i + 1}.pn
 export default function CreatePost() {
     const [selectedImage, setSelectedImage] = useState('');
     const [recipientId, setRecipientId] = useState('');
+    const [recipientEmail, setRecipientEmail] = useState('');
     const [content, setContent] = useState('');
     const [userOptions, setUserOptions] = useState([]);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
