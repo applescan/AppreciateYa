@@ -21,6 +21,16 @@ export const resolvers = {
                 }
             });
         },
+        postById: async (_: any, args: { id: number }, context: Context) => {
+            return await context.prisma.post.findUnique({
+                where: { id: args.id },
+            });
+        },
+        commentsByPost: async (_: any, args: { postId: number; }, context: Context) => {
+            return await context.prisma.comment.findMany({
+                where: { postId: args.postId }
+            });
+        },
         postsByOrganizationId: async (_: any, args: { orgId: number, filter: { type: 'MONTH' | 'QUARTER' | 'YEAR' } }, context: Context) => {
             let dateFilterStart, dateFilterEnd;
             const now = new Date();
@@ -205,6 +215,27 @@ export const resolvers = {
             const { id } = args;
             return await context.prisma.post.delete({ where: { id } });
         },
+        createComment: async (_: any, args: any, context: Context) => {
+            const { content, authorId, postId } = args;
+            return await context.prisma.comment.create({
+                data: {
+                    content,
+                    authorId: Number(authorId),
+                    postId: Number(postId),
+                },
+            });
+        },
+        updateComment: async (_: any, args: any, context: Context) => {
+            const { id, content } = args;
+            return await context.prisma.comment.update({
+                where: { id },
+                data: { content },
+            });
+        },
+        deleteComment: async (_: any, args: any, context: Context) => {
+            const { id } = args;
+            return await context.prisma.comment.delete({ where: { id } });
+        },
         createOrganization: async (_: any, args: any, context: Context) => {
             const { name, address, country, organizationType } = args.data;
 
@@ -260,7 +291,6 @@ export const resolvers = {
             return await context.prisma.organization.findUnique({ where: { id: parent.orgId } });
         },
     },
-
     Post: {
         author: async (parent: any, _: any, context: Context) => {
             return await context.prisma.user.findUnique({ where: { id: parent.authorId } });
@@ -270,6 +300,17 @@ export const resolvers = {
         },
         recipient: async (parent: any, _: any, context: Context) => {
             return await context.prisma.user.findUnique({ where: { id: parent.recipientId } });
+        },
+        comments: async (parent: any, _: any, context: Context) => {
+            return await context.prisma.comment.findMany({ where: { postId: parent.id } });
+        },
+    },
+    Comment: {
+        author: async (parent: any, _: any, context: Context) => {
+            return await context.prisma.user.findUnique({ where: { id: parent.authorId } });
+        },
+        post: async (parent: any, _: any, context: Context) => {
+            return await context.prisma.post.findUnique({ where: { id: parent.postId } });
         },
     },
     Organization: {

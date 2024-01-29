@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactECharts from 'echarts-for-react';
-import * as echarts from 'echarts';
 
 const GiftCharts = ({ gifts, totalPost }: { gifts: number, totalPost: number }) => {
     const symbols =

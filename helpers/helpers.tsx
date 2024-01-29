@@ -102,36 +102,39 @@ export function removeImageUrlFromContent(content: string) {
     return content.replace(regex, '').trim();
 }
 
+
+export type CardCounts = {
+    [key: string]: number;
+  };
+  
+
 export function countGiftCards(
     posts: Post[],
-    setGiftCardCounts: React.Dispatch<React.SetStateAction<any>>,
-    setTotalCards: React.Dispatch<React.SetStateAction<any>>,
-    card1: string,
-    card2: string,
-    card3: string) {
-
-    let card1Count = 0;
-    let card2Count = 0;
-    let card3Count = 0;
-
-    posts.forEach(post => {
-        const content = post.content;
-        if (content.includes(card1)) {
-            card1Count++;
-        }
-        if (content.includes(card2)) {
-            card2Count++;
-        }
-        if (content.includes(card3)) {
-            card3Count++;
-        }
+    setGiftCardCounts: React.Dispatch<React.SetStateAction<CardCounts>>,
+    setTotalCards: React.Dispatch<React.SetStateAction<number>>,
+    cardPaths: string[]
+  ) {
+    const counts: CardCounts = {};
+  
+    cardPaths.forEach(cardPath => {
+      counts[cardPath] = 0;
     });
-
-    setGiftCardCounts({ card1: card1Count, card2: card2Count, card3: card3Count });
-
-    const total = card1Count + card2Count + card3Count;
+  
+    posts.forEach(post => {
+      cardPaths.forEach(cardPath => {
+        if (post.content.includes(cardPath)) {
+          counts[cardPath]++;
+        }
+      });
+    });
+  
+    setGiftCardCounts(counts);
+  
+    const total = Object.values(counts).reduce((acc, count) => acc + count, 0);
     setTotalCards(total);
-}
+  }
+  
+
 
 export function topFansCount(authorNames: string[]) {
 

@@ -24,7 +24,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className='px-12 py-12 flex flex-col gap-6 justify-center'>
             <div>
                 <h2 className='font-extrabold flex justify-center text-3xl text-gray-900'>
-                    Kudos</h2>
+                    Dashboard</h2>
             </div>
 
             <main>{React.cloneElement(children as React.ReactElement, { sessionData })}</main>

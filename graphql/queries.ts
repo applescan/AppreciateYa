@@ -101,6 +101,48 @@ export const GET_ALL_POSTS = gql`
         image
         email
       }
+      comments { 
+        id
+        content
+        updatedAt
+        author {
+          id
+          name
+          image
+        }
+      }
+    }
+  }
+`;
+
+export const GET_POST_BY_ID = gql`
+  query PostById($id: Int!) {
+    postById(id: $id) {
+      id
+      content
+      createdAt
+      updatedAt
+      author {
+        id
+        name
+        image
+      }
+      recipient {
+        id
+        name
+        image
+        email
+      }
+      comments {
+        id
+        content
+        createdAt
+        author {
+          id
+          name
+          image
+        }
+      }
     }
   }
 `;
@@ -124,6 +166,16 @@ export const GET_ALL_POSTS_BY_ORG = gql`
         name
         image
         email
+      }
+      comments { 
+        id
+        content
+        updatedAt
+        author {
+          id
+          name
+          image
+        }
       }
     }
   }
@@ -150,6 +202,16 @@ export const GET_POSTS_BY_SPECIFIC_RECIPIENT = gql`
         image
         email
       }
+      comments { 
+        id
+        content
+        updatedAt
+        author {
+          id
+          name
+          image
+        }
+      }
     }
   }
 `;
@@ -174,6 +236,16 @@ export const GET_POSTS_BY_SPECIFIC_AUTHOR = gql`
         name
         image
         email
+      }
+      comments { 
+        id
+        content
+        updatedAt
+        author {
+          id
+          name
+          image
+        }
       }
     }
   }

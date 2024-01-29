@@ -8,7 +8,7 @@ import { RiHeartAddLine } from "react-icons/ri";
 import { useRouter } from 'next/navigation';
 import { Post } from '@/lib/types/types';
 import Loading from '@/components/ui/Loading';
-import { countGiftCards, extractImageUrlFromContent, formatTime, removeImageUrlFromContent } from '@/helpers/helpers';
+import { CardCounts, countGiftCards, extractImageUrlFromContent, formatTime, removeImageUrlFromContent } from '@/helpers/helpers';
 import { useSession } from 'next-auth/react';
 import { Card } from '@/components/ui/Card';
 import CoffeeChart from '@/components/CoffeeCharts';
@@ -28,9 +28,9 @@ const UserPostPage = () => {
 
   const router = useRouter();
 
-  const [thanksCards, setThanksCards] = useState({ card1: 0, card2: 0, card3: 0 });
-  const [giftCards, setGiftCards] = useState({ card4: 0, card5: 0, card6: 0 });
-  const [coffeeCards, setCoffeeCards] = useState({ card7: 0, card8: 0, card9: 0 });
+  const [thanksCards, setThanksCards] = useState<CardCounts>({});
+  const [giftCards, setGiftCards] = useState<CardCounts>({});
+  const [coffeeCards, setCoffeeCards] = useState<CardCounts>({});
 
 
   const [totalCoffeeCards, setTotalCoffeeCards] = useState(0);
@@ -41,15 +41,38 @@ const UserPostPage = () => {
 
   useEffect(() => {
     if (data && data.postsByOrganizationId) {
-      countGiftCards(data.postsByOrganizationId, setThanksCards, setTotalThanksCards, '/giftCards/1.png', '/giftCards/2.png', '/giftCards/3.png');
-      countGiftCards(data.postsByOrganizationId, setGiftCards, setTotalGiftCards, '/giftCards/4.png', '/giftCards/5.png', '/giftCards/6.png');
-      countGiftCards(data.postsByOrganizationId, setCoffeeCards, setTotalCoffeeCards, '/giftCards/7.png', '/giftCards/8.png', '/giftCards/9.png');
+      countGiftCards(
+        data.postsByOrganizationId,
+        setThanksCards,
+        setTotalThanksCards,
+        [
+          '/giftCards/1.png',
+          '/giftCards/2.png',
+          '/giftCards/3.png',
+          '/giftCards/4.png',
+          '/giftCards/5.png',
+          '/giftCards/6.png',
+          '/giftCards/7.png',
+          '/giftCards/8.png',
+          '/giftCards/9.png',
+          '/giftCards/10.png'
+        ]
+      );
+      countGiftCards(data.postsByOrganizationId, setGiftCards, setTotalGiftCards, [
+        '/giftCards/11.png',
+        '/giftCards/12.png',
+        '/giftCards/13.png',
+      ]);
+      countGiftCards(data.postsByOrganizationId, setCoffeeCards, setTotalCoffeeCards, [
+        '/giftCards/14.png',
+        '/giftCards/15.png',
+        '/giftCards/16.png',
+      ]);
     }
   }, [data]);
 
   if (loading) return <Loading />;
   if (error) return <ErrorPage />
-
 
   const handleFilterSelect = (value: string) => {
     const filterType = value
@@ -101,8 +124,7 @@ const UserPostPage = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-
-        {data.postsByOrganizationId ? (
+        {data.postsByOrganizationId && (
           data.postsByOrganizationId.map((post: Post) => (
             <PostCard
               key={post.id}
@@ -112,12 +134,22 @@ const UserPostPage = () => {
               postImage={extractImageUrlFromContent(post.content)}
               recipient={post.recipient.name}
               content={removeImageUrlFromContent(post.content)}
-              postTime={formatTime(post.createdAt)} edit={false} deletePost={false} />
+              comment={post.comments}
+              currentUserId={sessionData?.user.id}
+              postTime={formatTime(post.createdAt)} edit={false} deletePost={false}
+              refetch={refetch}
+            />
+
           ))
-        ) : (
-          <p>No posts found</p>
         )}
       </div>
+
+      {data.postsByOrganizationId.length === 0 && (
+        <div className='flex justify-center w-full py-10 h-56 my-auto item'>
+          <p className='font-semibold text-gray-400 flex justify-center items-center'>It's empty in here, let's start posting!</p>
+        </div>
+      )}
+
     </>
   );
 };

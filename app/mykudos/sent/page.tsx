@@ -66,7 +66,16 @@ const UserPostPage = () => {
           <div className='flex gap-2 flex-col pr-6'>
             <h2 className='text-lg font-bold text-gray-800'>Your MVP this {selectedFilter.toLocaleLowerCase()}</h2>
             <div className='p-0'>
-              {topMVP.map(name => <p className='text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-700 to-gray-800'>{capitalizeEachWord(name)}</p>)}
+              {
+                topMVP.length > 0
+                  ? topMVP.map(name =>
+                    <p className='text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-700 to-gray-800'>
+                      {capitalizeEachWord(name)}
+                    </p>)
+                  : <p className='text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-700 to-gray-800'>
+                    Unknown
+                  </p>
+              }
             </div>
           </div>
         </Card>
@@ -88,7 +97,7 @@ const UserPostPage = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-        {data.postsBySpecificSender ? (
+        {data.postsBySpecificSender && (
           data.postsBySpecificSender.map((post: Post) => (
             <PostCard
               key={post.id}
@@ -99,12 +108,17 @@ const UserPostPage = () => {
               recipient={post.recipient.name}
               content={removeImageUrlFromContent(post.content)}
               postTime={formatTime(post.createdAt)} edit={true} deletePost={true}
+              refetch={refetch}
             />
           ))
-        ) : (
-          <p>No posts found</p>
         )}
       </div>
+
+      {data.postsBySpecificSender.length === 0 && (
+        <div className='flex justify-center w-full py-10 h-56 my-auto item'>
+          <p className='font-semibold text-gray-400 flex justify-center items-center'>It's empty in here, let's start posting!</p>
+        </div>
+      )}
     </>
   );
 };

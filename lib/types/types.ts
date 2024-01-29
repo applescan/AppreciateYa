@@ -15,6 +15,7 @@ export interface User {
   updatedAt: string;
 }
 
+
 export interface Post {
   id: string;
   content: string;
@@ -23,6 +24,16 @@ export interface Post {
   author: User;
   recipient: User;
   organization: Organization;
+  comments: Comment[];
+}
+
+export interface Comment {
+  id: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  author: User;
+  postId: string;
 }
 
 export interface Organization {
@@ -47,4 +58,7 @@ export interface Mutation {
   createPost: (content: string, authorId: number, orgId: number) => Post;
   updatePost: (id: string, content: string) => Post;
   deletePost: (id: string) => Post;
+  createComment: (content: string, authorId: string, postId: string) => Comment;
+  updateComment: (id: string, content: string) => Comment;
+  deleteComment: (id: string) => Comment;
 }

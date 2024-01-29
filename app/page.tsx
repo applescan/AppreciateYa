@@ -1,6 +1,8 @@
 'use client'
+import { Button } from '@/components/ui/Button';
 import Image from 'next/image'
 import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 
 export default function Home() {
@@ -29,17 +31,18 @@ export default function Home() {
     applyScrollEffect('.layer-1', 0.25);
     applyScrollEffect('.layer-2', 0.5);
     applyScrollEffect('.layer-3', 0.75);
-    applyScrollEffect('.rock-1', 0.8, 400);
-    applyScrollEffect('.rock-2', 0.6, 200);
-    applyScrollEffect('.rock-3', 0.4, 500);
-    applyScrollEffect('.rock-4', 0.5, 600);
-    applyScrollEffect('.rock-5', 0.7, 600);
-    applyScrollEffect('.rock-6', 0.7, 400);
-    applyScrollEffect('.rock-7', 0.5, 600);
-    applyScrollEffect('.rock-8', 0.2, 200);
-    applyScrollEffect('.rock-9', 0.4, 200);
+    applyScrollEffect('.icon-1', 0.8, 400);
+    applyScrollEffect('.icon-2', 0.6, 200);
+    applyScrollEffect('.icon-3', 0.4, 500);
+    applyScrollEffect('.icon-4', 0.5, 600);
+    applyScrollEffect('.icon-5', 0.7, 600);
+    applyScrollEffect('.icon-6', 0.7, 400);
+    applyScrollEffect('.icon-7', 0.5, 600);
+    applyScrollEffect('.icon-8', 0.2, 200);
+    applyScrollEffect('.icon-9', 0.4, 200);
   };
 
+  const router = useRouter();
 
   return (
     <div style={{
@@ -52,25 +55,31 @@ export default function Home() {
       <div className="container">
         <div className="background">
           <h1 className='text-center font-extrabold text-transparent text-6xl bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600'>
-            Show appreciation to the legends at your work!</h1>
+            Welcome to Appreciate Ya - Where Every Thank You Counts!
+          </h1>
         </div>
-        <div className="content">
-          <div className="text-black font-semibold text-base text">
-            <p>In hac habitasse platea dictumst. Vivamus nec est et augue blandit aliquam quis non magna. Nunc velit nisi, porta ac libero in, porttitor placerat purus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nunc ut posuere quam. Aenean in leo mattis, convallis dolor vel, tempor lectus.</p>
-            <p>Elit nulla vulputate ex, sed porta est risus ac lorem. Duis sed blandit felis. In hac habitasse platea dictumst. Vivamus nec est et augue blandit aliquam quis non magna. Nunc velit nisi, porta ac libero in, porttitor placerat purus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nunc ut posuere quam. Aenean in leo mattis, convallis dolor vel, tempor lectus.</p>
-            <p>Duis sed blandit felis. Integer dictum, mi eget tristique semper, elit nulla vulputate ex, sed porta est risus ac lorem. In hac habitasse platea dictumst. Vivamus nec est et augue blandit aliquam quis non magna. Vestibulum ante ipsum primis.</p>
-            <p>Integer dictum, mi eget tristique semper, elit nulla vulputate ex, sed porta est risus ac lorem. Duis sed blandit felis. In hac habitasse platea dictumst. Vivamus nec est et augue blandit aliquam quis non magna. Nunc velit nisi, porta ac libero in, porttitor placerat purus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nunc ut posuere quam. Aenean in leo mattis, convallis dolor vel, tempor lectus.</p>
+        <div className="content h-screen">
+          <div className="text-gray-800 font-semibold text-base text flex flex-col gap-6">
+            <h2 className='text-3xl'>🔥 Ignite a Chain of Positivity 🔥</h2>
+            <p> Your words have power! A simple "Thank You" or "Great Job" can boost morale, enhance productivity,
+              and create an environment where everyone feels valued and motivated.</p>
+            <div className='flex flex-col gap-4'>
+              <h2 className='text-xl'>Why Wait to Make Someone's Day?</h2>
+              <p>Start by sending your first appreciation message today. Let's build a culture of gratitude together!
+              </p>
+              <Button className=' rounded-md text-sm border w-fit bg-gradient-to-r from-pink-500 to-indigo-500 hover:from-pink-400 hover:to-indigo-400 text-white'
+                onClick={() => router.push('/add')}>
+                ✨ Send a Kudo Now ✨
+              </Button>
+            </div>
           </div>
-          <Image className="rock-1 rocks" src="/chat.png" alt="rock" width={1000} height={500} />
-          <Image className="rock-2 rocks" src="/like.png" alt="rock" width={1000} height={500} />
-          <Image className="rock-3 rocks" src="/suitcase.png" alt="rock" width={1000} height={500} />
-          <Image className="rock-4 rocks" src="/you-are-the-best.png" alt="rock" width={1000} height={500} />
-          <Image className="rock-5 rocks" src="/medal.png" alt="rock" width={1000} height={500} />
-          <Image className="rock-6 rocks" src="/one-hundred.png" alt="rock" width={1000} height={500} />
-          <Image className="rock-7 rocks" src="/checklist.png" alt="rock" width={1000} height={500} />
-          <Image className="rock-8 rocks" src="/smiling-face.png" alt="rock" width={1000} height={500} />
-          <Image className="rock-9 rocks" src="/win.png" alt="rock" width={1000} height={500} />
-          <div className="rock"></div>
+          <Image className="icon-1 icons" src="/chat.png" alt="icon" width={1000} height={500} />
+          <Image className="icon-2 icons" src="/like.png" alt="icon" width={1000} height={500} />
+          <Image className="icon-4 icons" src="/you-are-the-best.png" alt="icon" width={1000} height={500} />
+          <Image className="icon-5 icons" src="/medal.png" alt="icon" width={1000} height={500} />
+          <Image className="icon-8 icons" src="/smiling-face.png" alt="icon" width={1000} height={500} />
+          <Image className="icon-9 icons" src="/win.png" alt="icon" width={1000} height={500} />
+          <div className="icon"></div>
         </div>
 
       </div>

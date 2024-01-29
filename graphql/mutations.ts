@@ -62,6 +62,39 @@ export const DELETE_POST = gql`
     }
 `;
 
+export const CREATE_COMMENT = gql`
+  mutation CreateComment($content: String!, $authorId: Int!, $postId: Int!) {
+    createComment(content: $content, authorId: $authorId, postId: $postId) {
+        content
+        id
+        post {
+          comments {
+            content
+          }
+        }
+      }
+    }
+`;
+
+export const UPDATE_COMMENT = gql`
+  mutation UpdateComment($id: Int!, $content: String!) {
+    updateComment(id: $id, content: $content) {
+      id
+      content
+      updatedAt
+    }
+  }
+`;
+
+export const DELETE_COMMENT = gql`
+  mutation DeleteComment($id: Int!) {
+    deleteComment(id: $id) {
+      id
+    }
+  }
+`;
+
+
 export const CREATE_ORGANIZATION = gql`
     mutation CreateOrganization($name: String!, $address: String!, $country: String!, $organizationType: String!) {
         createOrganization(data: {name: $name, address: $address, country: $country, organizationType: $organizationType}) {
