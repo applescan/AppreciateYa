@@ -9,16 +9,12 @@ import EditUserDialog from '@/components/EditUserDialog';
 import UserCard from '@/components/UserCard';
 import ErrorPage from '@/components/ui/Error';
 
-type AdminPageProps = {
-  sessionData: any;
-}
-
 type UsersAndOrganizationsData = {
   users: User[];
   organizations: Organization[];
 }
 
-const AdminPage: React.FC<AdminPageProps> = ({ sessionData }) => {
+const AdminPage: React.FC = () => {
   const { loading, error, data, refetch } = useQuery<UsersAndOrganizationsData>(GET_USERS_AND_ORGANIZATIONS);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -37,7 +33,7 @@ const AdminPage: React.FC<AdminPageProps> = ({ sessionData }) => {
   });
 
   if (loading) return <Loading></Loading>;
-  if (error) return <ErrorPage/>
+  if (error) return <ErrorPage />
 
   return (
     <div className="container mx-auto px-4">

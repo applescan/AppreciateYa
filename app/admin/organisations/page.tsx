@@ -9,15 +9,12 @@ import OrganizationCard from '@/components/OrganizationCard';
 import EditOrganizationDialog from '@/components/EditOrgDialog';
 import ErrorPage from '@/components/ui/Error';
 
-type AdminPageProps = {
-  sessionData: any;
-}
 
 type OrganizationsData = {
   organizations: Organization[];
 }
 
-const AdminOrgsPage: React.FC<AdminPageProps> = ({ sessionData }) => {
+const AdminOrgsPage: React.FC = () => {
   const { loading, error, data, refetch } = useQuery<OrganizationsData>(GET_ORGANIZATIONS);
   const [editingOrganization, setEditingOrganization] = useState<Organization | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -36,7 +33,7 @@ const AdminOrgsPage: React.FC<AdminPageProps> = ({ sessionData }) => {
   });
 
   if (loading) return <Loading />;
-  if (error) return <ErrorPage/>
+  if (error) return <ErrorPage />
 
   return (
     <div className="container mx-auto px-4">
