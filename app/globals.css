@@ -58,7 +58,6 @@ body {
   background-position: top;
   z-index: 1;
   position: relative;
-  box-shadow: 0 50px 50px white;
 }
 
 h1 {
@@ -90,23 +89,12 @@ h1 {
   position: relative;
   background-image: url("/header.png");
   background-size: cover;
-  background-attachment: fixed;
+  background-attachment: relative;
+  cursor: pointer;
 }
 
 .text {
-  padding: 4rem 10rem 20rem 40rem;
-}
-
-.icon {
-  background-image: url("/header-2.png");
-  width: 100%;
-  height: 100vh;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  background-position: center;
-  -webkit-transform: scaleX(-1);
-  transform: scaleX(-1);
+  padding: 15rem 10rem 20rem 50%;
 }
 
 .icons {
@@ -115,29 +103,29 @@ h1 {
 }
 
 .icon-1 {
-  width: 100px;
-  height: 100px;
+  width: 140px;
+  height: 140px;
   left: 10%;
-  top: 50%;
+  top: 60%;
 }
 
 .icon-2 {
-  width: 120px;
-  height: 120px;
+  width: 140px;
+  height: 140px;
   left: 20%;
   top: 30%;
 }
 
 .icon-4 {
-  width: 130px;
-  height: 130px;
-  bottom: 40%;
-  left: 21%;
+  width: 200px;
+  height: 200px;
+  top: 50%;
+  left: 30%;
 }
 
 .icon-5 {
-  width: 110px;
-  height: 110px;
+  width: 180px;
+  height: 180px;
   bottom: 0;
   left: 5%;
   -webkit-transform: scaleX(-1);
@@ -145,8 +133,8 @@ h1 {
 }
 
 .icon-8 {
-  width: 50px;
-  height: 50px;
+  width: 120px;
+  height: 120px;
   bottom: 25%;
   left: 25%;
   -webkit-transform: scaleX(-1);
@@ -154,8 +142,8 @@ h1 {
 }
 
 .icon-9 {
-  width: 70px;
-  height: 70px;
+  width: 100px;
+  height: 100px;
   bottom: 35%;
   left: 30%;
 }

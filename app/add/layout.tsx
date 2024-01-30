@@ -1,6 +1,6 @@
 'use client'
 import React, { ReactNode } from 'react'
-import { useSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import Loading from '@/components/ui/Loading';
 import { useRouter } from 'next/navigation';
 import { FaArrowLeft } from 'react-icons/fa';
@@ -19,7 +19,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }
 
     if (status === 'unauthenticated') {
-        router.push('/')
+        signIn()
     }
 
     return (

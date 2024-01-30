@@ -1,14 +1,14 @@
 'use client'
 
 import React from "react";
-import SigninButton from "./SigninButton";
+import SigninButton from "../SigninButton";
 import { FaBars } from "react-icons/fa"
 import { MdClose } from "react-icons/md"
 import { useState } from 'react'
 import Image from 'next/image';
 import { Dialog, Popover } from '@headlessui/react'
 import { signIn, signOut, useSession } from "next-auth/react";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/Avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "./Avatar";
 import { capitalizeEachWord, getInitials } from "@/helpers/helpers";
 import { useQuery } from "@apollo/client";
 import { GET_USER_BY_ID } from "@/graphql/queries";
