@@ -15,7 +15,7 @@ const handler = NextAuth({
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials, req) {
-                const res = await fetch("http://localhost:3000/api/login", {
+                const res = await fetch("https://appreciate-ya.vercel.app/api/login", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json", // Fixed typo in MIME type
