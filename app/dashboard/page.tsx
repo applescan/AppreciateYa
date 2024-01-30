@@ -62,11 +62,25 @@ const UserPostPage = () => {
         '/giftCards/11.png',
         '/giftCards/12.png',
         '/giftCards/13.png',
-      ]);
-      countGiftCards(data.postsByOrganizationId, setCoffeeCards, setTotalCoffeeCards, [
         '/giftCards/14.png',
         '/giftCards/15.png',
         '/giftCards/16.png',
+        '/giftCards/17.png',
+        '/giftCards/18.png',
+        '/giftCards/19.png',
+        '/giftCards/20.png',
+      ]);
+      countGiftCards(data.postsByOrganizationId, setCoffeeCards, setTotalCoffeeCards, [
+        '/giftCards/21.png',
+        '/giftCards/22.png',
+        '/giftCards/23.png',
+        '/giftCards/24.png',
+        '/giftCards/25.png',
+        '/giftCards/26.png',
+        '/giftCards/27.png',
+        '/giftCards/28.png',
+        '/giftCards/29.png',
+        '/giftCards/30.png',
       ]);
     }
   }, [data]);

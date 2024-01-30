@@ -69,7 +69,7 @@ export const PostEmail = ({
 
                         <Section className="text-center pt-20">
                             <Link href="https://airbnb.com" className="text-gray-700 font-bold">
-                                www.appreciateya.com
+                                https://appreciate-ya.vercel.app
                             </Link>
                         </Section>
                     </Container>

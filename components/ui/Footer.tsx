@@ -36,21 +36,13 @@ const Footer: React.FC = () => {
         <footer className="pt-10 bg-purple-50">
             <div className="max-w-screen-xl mx-auto px-4 text-gray-600 md:px-8">
                 <div className="space-y-6 w-full sm:text-center">
-
-                    {/* <img
-                        className="w-32 sm:mx-auto"
-                        src={"/"}
-                        width={120}
-                        height={50}
-                        alt="What to eat logo"
-                    /> */}
                     <Image src="/logo.png" width={160} height={100} alt="Appreciate ya logo" className="w-32 sm:mx-auto"/>
                     <p className="text-sm w-full">
                         Boost Morale with a Click: Send a Token of Appreciation to a Coworker Today!
                     </p>
                 </div>
                 <div className="mt-10 pb-10 pt-5 border-t items-center justify-between sm:flex">
-                    <p className="flex flex-wrap items-center gap-4 mt-6 text-sm sm:mt-0 font-semibold">© 2023 Felicia Fel. All rights reserved. 😶‍🌫️🥚</p>
+                    <p className="flex flex-wrap items-center gap-4 mt-6 text-sm sm:mt-0 font-semibold">© 2024 Felicia Fel. All rights reserved. 😶‍🌫️🥚</p>
                     <ul className="flex flex-wrap items-center gap-4 mt-6 text-xs sm:mt-0">
                         {
                             footerNavs.map((item) => (

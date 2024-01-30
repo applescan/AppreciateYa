@@ -57,7 +57,8 @@ export default function Home() {
           </h1>
         </div>
         <div className="content">
-          <div className="text-gray-700 font-semibold text-base flex flex-col gap-6 text h-[700px]">
+          <div className="text-gray-700 font-semibold text-base flex flex-col gap-6 text h-[700px]"
+            style={{ backgroundImage: 'url("/header.jpg")', backgroundRepeat: 'no-repeat', backgroundSize: "cover", height: '700px' }}>
             <h2 className='text-4xl'>Ignite a Chain of Positivity 🔥</h2>
             <p> Your words have power! A simple "Thank You" or "Great Job" can boost morale, enhance productivity,
               and create an environment where everyone feels valued and motivated.</p>
@@ -77,7 +78,7 @@ export default function Home() {
           <Image className="icon-5 icons" src="/medal.png" alt="icon" width={1000} height={1000} />
           <Image className="icon-8 icons" src="/smiling-face.png" alt="icon" width={1000} height={500} />
           <Image className="icon-9 icons" src="/win.png" alt="icon" width={1000} height={500} />
-          <div className='w-full' style={{ backgroundImage: 'url("/header-2.png")', backgroundRepeat: 'repeat', height: '400px' }}>
+          <div className='w-full' style={{ backgroundImage: 'url("/header-2.png")', backgroundRepeat: 'repeat', height: '400px', }}>
           </div>
           <Footer />
         </div>

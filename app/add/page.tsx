@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import { GET_USERS } from '@/graphql/queries';
 import CreatePostDialog from '@/components/CreatePostDialog';
 
-const imageOptions = Array.from({ length: 16 }, (_, i) => `/giftCards/${i + 1}.png`);
+const imageOptions = Array.from({ length: 30 }, (_, i) => `/giftCards/${i + 1}.png`);
 
 export default function page() {
     const [selectedImage, setSelectedImage] = useState('');
