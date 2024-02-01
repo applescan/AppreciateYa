@@ -67,8 +67,8 @@ export const CommentEmail = ({
                         </Section>
 
                         <Section className="text-center pt-20">
-                            <Link href="https://airbnb.com" className="text-gray-700 font-bold">
-                                https://appreciate-ya.vercel.app
+                            <Link href="https://appreciate-ya.vercel.app" className="text-gray-700 font-bold">
+                                appreciate-ya.vercel.app
                             </Link>
                         </Section>
                     </Container>

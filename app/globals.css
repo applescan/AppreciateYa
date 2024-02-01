@@ -60,17 +60,7 @@ body {
   position: relative;
 }
 
-h1 {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 100;
-  letter-spacing: 0.2rem;
-  font-size: 3rem;
-  color: white;
-  text-shadow: 2px 2px 5px;
-}
+
 
 .layer {
   position: absolute;
@@ -94,7 +84,7 @@ h1 {
 }
 
 .text {
-  padding: 15rem 10rem 20rem 50%;
+  padding: 15rem 10rem 15rem 50%;
 }
 
 .icons {

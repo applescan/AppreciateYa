@@ -31,7 +31,7 @@ export default function page() {
 
     return (
         <div className="my-4">
-            <div className="grid grid-cols-4 gap-8 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 gap-8 mb-6">
                 {imageOptions.map((image, index) => (
                     <img
                         key={index}
@@ -54,5 +54,6 @@ export default function page() {
                 orgId={orgId}
                 filter={'MONTH'} />
         </div>
+
     );
 }

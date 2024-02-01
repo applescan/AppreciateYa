@@ -37,7 +37,7 @@ const AdminPage: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4">
-      <div className='flex justify-end gap-2 pb-4'>
+      <div className='flex justify-center md:justify-end gap-2 pb-4'>
         <CreateUserDialog
           isOpen={isCreateDialogOpen}
           onOpenChange={setIsCreateDialogOpen}

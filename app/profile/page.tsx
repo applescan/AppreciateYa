@@ -212,16 +212,17 @@ export default function Page() {
 
 
     if (loading) return <Loading></Loading>;
-    if (error) return <ErrorPage/>
+    if (error) return <ErrorPage />
 
 
     return (
         <div>
             <main className='flex flex-col gap-8 mb-10'>
-                <div className='border border-gray-200 rounded-lg px-10 py-4'>
-                    <div className='flex items-center gap-4 justify-between'>
-                        <div className='flex items-center gap-10'>
-                            <Avatar className='h-36 w-36'>
+                <div className='border border-gray-200 rounded-lg p-4 sm:p-10'>
+                    <div className='flex flex-col sm:flex-row items-center gap-4 sm:justify-between'>
+                        {/* User avatar and info */}
+                        <div className='flex items-center gap-2 md:gap-10'>
+                            <Avatar className='h-28 w-28 md:w-36 md:h-36'>
                                 <AvatarImage src={currentUser.image} />
                                 <AvatarFallback className='text-3xl'>
                                     {currentUser?.name ? getInitials(currentUser.name) : 'NA'}
@@ -232,23 +233,19 @@ export default function Page() {
                                 <p className='text-base	text-gray-500'>{`${capitalizeEachWord(currentUser.role)} @${currentUser.organization.name}`}</p>
                             </div>
                         </div>
+                        {/* Picture upload and removal */}
                         <div className='flex gap-4 items-center'>
                             <form method="post" onChange={handleOnChange} onSubmit={handleOnSubmit}>
-                                <p>
-                                    <input type="file" name="file" style={{ display: 'none' }} ref={fileInputRef} />
-                                </p>
-                                <p>
-                                    <Button type="button" onClick={() => {
-                                        if (fileInputRef.current) {
-                                            fileInputRef.current.click();
-                                        }
-                                    }}>Upload new picture</Button>
-                                </p>
+                                <input type="file" name="file" className="hidden" ref={fileInputRef} />
+                                <div className='flex gap-4 justify-between'>
+                                    <Button type="button" onClick={() => fileInputRef.current?.click()}>Upload new picture</Button>
+                                    <Button onClick={handleDeletePicture} variant="outline">Remove</Button>
+                                </div>
                             </form>
-                            <Button onClick={handleDeletePicture} variant={"outline"}>Remove</Button>
                         </div>
                     </div>
                 </div>
+
 
                 {/* Profile Details Form */}
                 <div className='border border-gray-200 rounded-lg px-10 py-4'>
@@ -316,7 +313,7 @@ export default function Page() {
                             />
                         </div>
 
-                        <div className="mt-4 flex gap-4 w-full ">
+                        <div className="mt-4 flex gap-4 w-full items-center">
                             <div className="flex-1">
                                 <label htmlFor="newPassword">New Password</label>
                                 <Input

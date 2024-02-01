@@ -24,7 +24,7 @@ export default function Page() {
 
     return (
         <div className='w-full h-full flex items-center justify-center pb-10'>
-            <div className='w-1/3'>
+            <div className='md:w-1/3 w-full flex my-auto'>
                 {post ? (
                     <PostCard
                         postId={post.id}

@@ -79,45 +79,45 @@ const AppBar = () => {
                 <MdClose className="h-6 w-6" aria-hidden="true" />
               </button>
             </div>
-            <div className="mt-6 flow-root">
-              <div className="my-16">
-                <div className="pb-2">
-                  {(status === 'authenticated') && (
-                    <div className="flex flex-col gap-2 cursor-pointer">
-                      <button className="flex items-center gap-3" onClick={() => router.push('/profile')}>
-                        <Avatar>
-                          <AvatarImage src={profileImg} />
-                          <AvatarFallback>
-                            {sessionData?.user.name ? getInitials(sessionData?.user.name) : 'NA'}
-                          </AvatarFallback>
-                        </Avatar>
-                        <p className="text-gray-800 font-normal">{capitalizeEachWord(sessionData?.user.name)}</p>
-                      </button>
-                      <hr></hr>
-                    </div>
-                  )}
-                </div>
+            <div>
 
-                <div className="flex flex-col pt-2">
-                  <p
-                    onClick={() => router.push('/dashboard')}
-                    className="cursor-pointer block rounded-lg px-3 py-2 text-base font-normal leading-7 text-gray-900 hover:bg-gray-50">
-                    Dashboard
-                  </p>
-                  {(sessionData?.user?.role === 'ADMIN' && status === 'authenticated') && (
-                    <div onClick={() => router.push('/admin/users')} className="cursor-pointer">
-                      <p className="block rounded-lg px-3 py-2 text-base font-normal leading-7 text-gray-900 hover:bg-gray-50">User Management</p>
-                    </div>
-                  )}
-                  {(status === 'authenticated') && (
-                    <div onClick={() => router.push('/mykudos/received')} className="cursor-pointer">
-                      <p className="block rounded-lg px-3 py-2 text-base font-normal leading-7 text-gray-900 hover:bg-gray-50">My Kudos</p>
-                    </div>
-                  )}
-                </div>
-
+              <div className="pb-2">
+                {(status === 'authenticated') && (
+                  <div className="flex flex-col gap-2 cursor-pointer">
+                    <button className="flex items-center gap-3" onClick={() => router.push('/profile')}>
+                      <Avatar>
+                        <AvatarImage src={profileImg} />
+                        <AvatarFallback>
+                          {sessionData?.user.name ? getInitials(sessionData?.user.name) : 'NA'}
+                        </AvatarFallback>
+                      </Avatar>
+                      <p className="text-gray-800 font-normal">{capitalizeEachWord(sessionData?.user.name)}</p>
+                    </button>
+                    <hr></hr>
+                  </div>
+                )}
               </div>
+
+              <div className="flex flex-col pt-2">
+                <p
+                  onClick={() => router.push('/dashboard')}
+                  className="cursor-pointer block rounded-lg px-3 py-2 text-base font-normal leading-7 text-gray-900 hover:bg-gray-50">
+                  Dashboard
+                </p>
+                {(sessionData?.user?.role === 'ADMIN' && status === 'authenticated') && (
+                  <div onClick={() => router.push('/admin/users')} className="cursor-pointer">
+                    <p className="block rounded-lg px-3 py-2 text-base font-normal leading-7 text-gray-900 hover:bg-gray-50">User Management</p>
+                  </div>
+                )}
+                {(status === 'authenticated') && (
+                  <div onClick={() => router.push('/mykudos/received')} className="cursor-pointer">
+                    <p className="block rounded-lg px-3 py-2 text-base font-normal leading-7 text-gray-900 hover:bg-gray-50">My Kudos</p>
+                  </div>
+                )}
+              </div>
+
             </div>
+
 
             <div className="absolute bottom-0 mr-6 mb-6">
               {status === 'authenticated' ? (

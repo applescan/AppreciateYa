@@ -96,13 +96,14 @@ const UserPostPage = () => {
 
   return (
     <>
-      <div className='pb-5 flex justify-between'>
-        <Button className='p-2 rounded-md text-sm border bg-gradient-to-r from-pink-500 to-indigo-500 hover:from-pink-400 hover:to-indigo-400 text-white'
+      <div className='pb-5 flex flex-col md:flex-row justify-between'>
+        <Button className='mb-4 md:mb-0 p-2 rounded-md text-sm border bg-gradient-to-r from-pink-500 to-indigo-500 hover:from-pink-400 hover:to-indigo-400 text-white'
           onClick={() => router.push('/add')}>
           <div className='flex items-center gap-2'>
-            <RiHeartAddLine />Send Kudos</div>
+            <RiHeartAddLine />Send Kudos
+          </div>
         </Button>
-        <div className='flex min-w-fit items-center gap-2'>
+        <div className='flex items-center gap-2'>
           <span className='text-gray-500 font-normal text-sm min-w-[55px]'>Filter by</span>
           <div className='w-[150px]'>
             <FilterDropdown handleFilterSelect={handleFilterSelect} selectedFilter={selectedFilter} />
@@ -110,34 +111,29 @@ const UserPostPage = () => {
         </div>
       </div>
 
-      <div className='flex flex-col gap-4'>
-        <h2 className='font-bold text-xl text-gray-900'>Overview</h2>
-        <div className='flex w-full justify-between gap-8'>
-          <Card className="mt-2 mb-4 w-full h-full flex items-center gap-2 justify-center border-0">
-            <ThankYouChart thankYous={totalThanksCards} totalPost={data?.postsByOrganizationId.length} />
-            <div className='flex gap-4 flex-col pr-6'>
-              <h2 className='text-xl font-bold text-gray-800'>Thank yous</h2>
-              <p className='text-5xl font-extrabold bg-clip-text  text-transparent bg-gradient-to-r from-purple-700 to-gray-800'>{totalThanksCards}/{data?.postsByOrganizationId.length}</p>
-            </div>
-          </Card>
-          <Card className="mt-2 mb-4 w-full h-full flex items-center gap-2 justify-center border-0">
-            <CoffeeChart coffees={totalCoffeeCards} totalPost={data?.postsByOrganizationId.length} />
-            <div className='flex gap-4 flex-col pr-6'>
-              <h2 className='text-xl font-bold text-gray-800'>Coffees</h2>
-              <p className='text-5xl font-extrabold bg-clip-text  text-transparent bg-gradient-to-r from-purple-700 to-gray-800'>{totalCoffeeCards}/{data?.postsByOrganizationId.length}</p>
-            </div>
-          </Card>
-          <Card className="mt-2 mb-4 w-full h-full flex items-center gap-2 justify-center border-0">
-            <GiftCharts gifts={totalGiftCards} totalPost={data?.postsByOrganizationId.length} />
-            <div className='flex gap-4 flex-col pr-6'>
-              <h2 className='text-xl font-bold text-gray-800'>Vouchers</h2>
-              <p className='text-5xl font-extrabold bg-clip-text  text-transparent bg-gradient-to-r from-purple-700 to-gray-800'>{totalGiftCards}/{data?.postsByOrganizationId.length}</p>
-            </div>
-          </Card>
-        </div>
-      </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <Card className="flex items-center gap-2 justify-center border-0 px-4">
+          <ThankYouChart thankYous={totalThanksCards} totalPost={data?.postsByOrganizationId.length} />
+          <div className='flex gap-4 flex-col'>
+            <h2 className='text-xl font-bold text-gray-800'>Thank yous</h2>
+            <p className='text-5xl font-extrabold bg-clip-text  text-transparent bg-gradient-to-r from-purple-700 to-gray-800'>{totalThanksCards}/{data?.postsByOrganizationId.length}</p>
+          </div>
+        </Card>
+        <Card className="flex items-center gap-2 justify-center border-0 px-4">
+          <CoffeeChart coffees={totalCoffeeCards} totalPost={data?.postsByOrganizationId.length} />
+          <div className='flex gap-4 flex-col'>
+            <h2 className='text-xl font-bold text-gray-800'>Coffees</h2>
+            <p className='text-5xl font-extrabold bg-clip-text  text-transparent bg-gradient-to-r from-purple-700 to-gray-800'>{totalCoffeeCards}/{data?.postsByOrganizationId.length}</p>
+          </div>
+        </Card>
+        <Card className="flex items-center gap-2 justify-center border-0 px-4">
+          <GiftCharts gifts={totalGiftCards} totalPost={data?.postsByOrganizationId.length} />
+          <div className='flex gap-4 flex-col'>
+            <h2 className='text-xl font-bold text-gray-800'>Vouchers</h2>
+            <p className='text-5xl font-extrabold bg-clip-text  text-transparent bg-gradient-to-r from-purple-700 to-gray-800'>{totalGiftCards}/{data?.postsByOrganizationId.length}</p>
+          </div>
+        </Card>
+
         {data.postsByOrganizationId && (
           data.postsByOrganizationId.map((post: Post) => (
             <PostCard
@@ -153,7 +149,6 @@ const UserPostPage = () => {
               postTime={formatTime(post.createdAt)} edit={false} deletePost={false}
               refetch={refetch}
             />
-
           ))
         )}
       </div>
@@ -163,7 +158,6 @@ const UserPostPage = () => {
           <p className='font-semibold text-gray-400 flex justify-center items-center'>It's empty in here, let's start posting!</p>
         </div>
       )}
-
     </>
   );
 };

@@ -104,7 +104,7 @@ const SignUp: React.FC = () => {
             <div className="w-1/2 bg-no-repeat bg-cover bg-center relative" style={{ backgroundImage: `url('/bg-2.jpg')` }} />
 
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <div className="flex flex-col items-center justify-center h-full w-full min-w-[400px] mx-auto text-gray-600">
+                <div className="flex flex-col items-center justify-center h-full w-full min-w-[350px] mx-auto text-gray-600">
                     <div className="w-full bg-white rounded-xl shadow-xl p-8 space-y-2 md:space-y-2">
                         <h2 className="text-4xl font-extrabold text-center text-purple-900">
                             Sign-up
@@ -118,7 +118,7 @@ const SignUp: React.FC = () => {
                             </ul>
                         )}
 
-                        <form className="space-y-1 md:space-y-4" onSubmit={handleSignUpSubmit}>
+                        <form className="space-y-2 md:space-y-4" onSubmit={handleSignUpSubmit}>
                             <div>
                                 <label htmlFor="name" className='text-sm font-medium'>Name</label>
                                 <Input

@@ -108,7 +108,7 @@ const CreateOrganizationDialog: React.FC<CreateOrganizationDialogProps> = ({ isO
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
             <DialogTrigger>
                 <div className='p-2 rounded-md text-sm border bg-gradient-to-r from-pink-500 to-indigo-500 hover:from-pink-400 hover:to-indigo-400 text-white'>
-                    <div className='flex items-center gap-2'><BiSolidMessageSquareAdd /> Create new user</div>
+                    <div className='flex items-center gap-2'><BiSolidMessageSquareAdd /> Create new organisation</div>
                 </div>
             </DialogTrigger>
             <DialogContent>

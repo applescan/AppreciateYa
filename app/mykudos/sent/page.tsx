@@ -46,21 +46,21 @@ const UserPostPage = () => {
 
   return (
     <>
-      <div className='pb-5 flex justify-between'>
-        <Button className='p-2 rounded-md text-sm border bg-gradient-to-r from-pink-500 to-indigo-500 hover:from-pink-400 hover:to-indigo-400 text-white'
+      <div className='pb-5 flex flex-col md:flex-row justify-between'>
+        <Button className='mb-4 md:mb-0 p-2 rounded-md text-sm border bg-gradient-to-r from-pink-500 to-indigo-500 hover:from-pink-400 hover:to-indigo-400 text-white'
           onClick={() => router.push('/add')}>
           <div className='flex items-center gap-2'>
-            <RiHeartAddLine />Send Kudos</div>
+            <RiHeartAddLine />Send Kudos
+          </div>
         </Button>
-        <div className='flex min-w-fit items-center gap-2'>
+        <div className='flex items-center gap-2'>
           <span className='text-gray-500 font-normal text-sm min-w-[55px]'>Filter by</span>
           <div className='w-[150px]'>
             <FilterDropdown handleFilterSelect={handleFilterSelect} selectedFilter={selectedFilter} />
           </div>
         </div>
       </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 pb-8">
         <Card className="mt-2 px-6 mb-6 w-full h-full flex items-center gap-6 justify-center border-0">
           <div> <img src='/mvp.png' alt='mvp logo' height={100} width={100}></img> </div>
           <div className='flex gap-2 flex-col pr-6'>

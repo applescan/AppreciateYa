@@ -122,7 +122,7 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({ isOpen, onOpenChang
                     <DialogHeader>
                         <DialogTitle>What do you want to say?</DialogTitle>
                     </DialogHeader>
-                    <div>
+                    <div className='flex flex-col items-center'>
                         <form onSubmit={handleSubmit}>
                             <div className="mb-4">
                                 <img src={selectedImage} alt="Selected" className="w-full rounded-lg" />

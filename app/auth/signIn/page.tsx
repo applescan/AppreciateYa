@@ -52,7 +52,7 @@ const LoginPage: React.FC = () => {
       <div className="w-1/2 bg-no-repeat bg-cover bg-center relative" style={{ backgroundImage: `url('/bg-4.jpg')` }} />
 
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-        <div className="flex flex-col items-center justify-center h-full w-full min-w-[400px] mx-auto text-gray-600">
+        <div className="flex flex-col items-center justify-center h-full w-full min-w-[350px] mx-auto text-gray-600">
           <div className="w-full bg-white rounded-xl shadow-xl p-8 space-y-2 md:space-y-2">
             <h2 className="text-4xl font-extrabold text-center text-purple-900">
               Login
@@ -66,7 +66,7 @@ const LoginPage: React.FC = () => {
               </ul>
             )}
 
-            <form className="space-y-1 md:space-y-4" onSubmit={handleLoginSubmit}>
+            <form className="space-y-2 md:space-y-4" onSubmit={handleLoginSubmit}>
               <div>
                 <label htmlFor="email" className='text-sm font-medium'>Email</label>
                 <Input
@@ -93,7 +93,7 @@ const LoginPage: React.FC = () => {
               </div>
 
               <div className="mt-6 flex w-full items-center gap-2">
-              <Button type="submit" className='w-full text-center flex justify-center items-center'>Let's go!</Button>
+                <Button type="submit" className='w-full text-center flex justify-center items-center'>Let's go!</Button>
               </div>
             </form>
             <p className='font-normal text-center py-4 text-sm text-purple-900'>Don't have an account? <span className='underline font-bold text-sm text-purple-900 italic cursor-pointer' onClick={() => router.push('/auth/signup')}>Sign up</span></p>

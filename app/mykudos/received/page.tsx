@@ -61,7 +61,7 @@ const UserPostPage = () => {
 
   return (
     <>
-      <div className='pb-5 flex justify-end'>
+      <div className='pb-5 flex justify-center md:justify-end'>
 
         <div className='flex min-w-fit items-center gap-2'>
           <span className='text-gray-500 font-normal text-sm min-w-[55px]'>Filter by</span>
@@ -71,7 +71,7 @@ const UserPostPage = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 pb-8">
         <Card className="mt-2 px-6 mb-6 w-full h-full flex items-center gap-6 justify-center border-0">
           <div> <img src='/fan.png' alt='mvp logo' height={100} width={100}></img> </div>
           <div className='flex gap-2 flex-col pr-6'>
