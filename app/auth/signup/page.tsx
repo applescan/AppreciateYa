@@ -141,7 +141,7 @@ const SignUp: React.FC = () => {
                                     name="email"
                                     placeholder='Enter email...'
                                     className="w-full border rounded"
-                                    value={signupData.email}
+                                    value={signupData.email.toLowerCase()}
                                     onChange={handleInputChange}
 
                                 />
