@@ -18,7 +18,7 @@ const handler = NextAuth({
                 const res = await fetch("https://appreciate-ya.vercel.app/api/login", {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json", // Fixed typo in MIME type
+                        "Content-Type": "application/json", 
                     },
                     body: JSON.stringify({
                         username: credentials?.username,

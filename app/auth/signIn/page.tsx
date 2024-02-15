@@ -31,15 +31,13 @@ const LoginPage: React.FC = () => {
     const result = await signIn("credentials", {
       username: loginData.username,
       password: loginData.password,
-      redirect: false, // don't auto redirect, handle it manually
+      redirect: false, 
       callbackUrl: "/",
     });
 
     if (result?.error) {
-      console.log(result)
       setFormErrors(["Invalid email or password"]);
     } else {
-      // Redirect on successful login
       window.location.href = "/";
     }
   };
@@ -75,7 +73,7 @@ const LoginPage: React.FC = () => {
                   name="username"
                   placeholder='Enter Email...'
                   className="w-full border rounded"
-                  value={loginData.username}
+                  value={loginData.username.toLowerCase()}
                   onChange={handleInputChange}
                 />
               </div>
