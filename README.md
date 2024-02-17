@@ -1,34 +1,62 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# AppreciateYa - Together, Let's Build a Happier, More Connected Workspace!
+<table>
+<tr>
+<td>
 
-## Getting Started
+<h4>About This Project</h4>
 
-First, run the development server:
+AppreciateYa transforms workplace gratitude with easy-to-send kudos, virtual coffees, and gift cards. It promotes a positive culture by celebrating every contribution. ✨
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+<h4>Why is this problem valuable to address?</h4>
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+In today's fast-paced work environment, it's easy to overlook the power of a simple "thank you" or "great job." However, these small gestures of appreciation can significantly impact morale, motivation, and workplace happiness. That's where AppreciateYa comes in.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+<h4>Features</h4>
+💌 Send personalized appreciation messages, whether it's a warm thank you, congratulations, or a virtual coffee or gift card. <br>
+🏆 Discover your top fans and MVPs, and make sure no one feels left out. <br>
+📊 Gain insights into the appreciation culture within your team or organization.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+</td>
+</tr>
+</table>
 
-## Learn More
+## Screenshots
+![](https://github.com/applescan/appreciate.ya/blob/main/appreciateYa.jpg)
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Demo
+Here is a working live demo :  https://appreciate-ya.vercel.app/
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+### Built with
+•	Next.js
+•	Prisma
+•	Canva
+•	Figma
+•	React
+•	Tailwind CSS
+•	GraphQL
+•	Typescript
+•	Supabase
+•	NextAuth
+•	Node.js
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### User Guide
+How to run on your own system:
+- Copy/fork this repository to your github/local drive
+- In the folder, run the command ``npm install``
+- In the folder, run the command ``npm run dev``
+- Once running, open a browser and open ``http://localhost:3000``
+- If everything was successful, the page will show up.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Feature Request
+- I'm working on incorporating an AI chatbot to help user generate a nice kudos messages or suggest user on what to write 
+
+## Author
+
+- Website - https://applescan.github.io/Portfolio-Website/
+
+## License
+
+MIT © Felicia Fel
+
