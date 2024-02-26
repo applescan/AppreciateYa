@@ -17,6 +17,8 @@ import PostSuccessDialog from './PostSuccessDialog';
 import { Skeleton } from './ui/Skeleton';
 import { render } from '@react-email/render';
 import { PostEmail } from './PostEmail';
+import { IoSend } from 'react-icons/io5';
+import { MdCopyAll } from 'react-icons/md';
 
 type CreatePostDialogProps = {
     isOpen: boolean;
@@ -43,9 +45,11 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({ isOpen, onOpenChang
     const { data: usersData, loading: usersLoading, error: usersError } = useQuery<{ usersByOrganizationId: User[] }>(GET_USERS_BY_ORGANIZATION_ID, {
         variables: { orgId: parseInt(orgId) },
     });
-
     const [selectedRecipient, setSelectedRecipient] = useState({ id: '', name: '', recipientEmail: '', });
     const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
+    const [isAIChatActive, setIsAIChatActive] = useState(false);
+    const [aiChatInput, setAIChatInput] = useState('');
+    const [aiChatResponse, setAIChatResponse] = useState('');
 
     const handleRecipientSelect = (userId: string, userName: string, email: string) => {
         setRecipientId(userId);
@@ -102,10 +106,56 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({ isOpen, onOpenChang
         }
     };
 
+    const handleAIChatSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!aiChatInput.trim()) {
+            alert("Please enter a question for the AI.");
+            return;
+        }
+
+        await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ messages: [{ role: "user", content: aiChatInput + "in 3 sentences or less" }] })
+        })
+            .then(async (response) => {
+                if (!response.body) {
+                    throw new Error("Failed to get a response body");
+                }
+                const reader = response.body.getReader();
+                setAIChatResponse("");
+
+                // Process the stream
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) {
+                        break; // Exit the loop when the stream is finished
+                    }
+
+                    // Decode the stream chunk to a string and update the response state
+                    var currentChunk = new TextDecoder().decode(value);
+                    setAIChatResponse((prev) => prev + currentChunk);
+                }
+            })
+            .catch((error) => {
+                console.error("Failed to fetch AI chat response:", error);
+                setAIChatResponse("Failed to communicate with AI.");
+            });
+        setAIChatInput("")
+    };
+
+
+    const toggleAIChat = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        setIsAIChatActive(!isAIChatActive);
+    };
 
     const handleClose = (isOpen: boolean) => {
         if (!isOpen) {
             resetForm();
+            setIsAIChatActive(isAIChatActive);
+            setIsAIChatActive(false)
+            setAIChatResponse("")
         }
         onOpenChange(isOpen);
     };
@@ -115,14 +165,24 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({ isOpen, onOpenChang
         onOpenChange(false);
     };
 
+    const handleCopyToClipboard = (text: string, e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        navigator.clipboard.writeText(text).then(() => {
+            alert('AI response copied to clipboard!');
+        }).catch((err) => {
+            console.error('Error copying text: ', err);
+            alert('Failed to copy text.');
+        });
+    };
+
     return (
         <>
             <Dialog open={isOpen} onOpenChange={handleClose}>
-                <DialogContent>
+                <DialogContent className='h-5/6'>
                     <DialogHeader>
                         <DialogTitle>What do you want to say?</DialogTitle>
                     </DialogHeader>
-                    <div className='flex flex-col items-center'>
+                    <div className='flex flex-col items-center overflow-auto'>
                         <form onSubmit={handleSubmit}>
                             <div className="mb-4">
                                 <img src={selectedImage} alt="Selected" className="w-full rounded-lg" />
@@ -155,6 +215,7 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({ isOpen, onOpenChang
                                     <div>Error: {usersError.message}</div>
                                 ) : null}
                             </div>
+
                             <div className="mb-4">
                                 <label htmlFor="content" className="block text-sm font-medium text-gray-700">Content:</label>
                                 <textarea
@@ -165,9 +226,50 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({ isOpen, onOpenChang
                                     placeholder='Give a shout-out, express thanks, or cheer on a teammate! Your kudos make a difference.'
                                 />
                             </div>
-                            <div className="flex justify-end">
+
+                            {/* AI Chat Interface */}
+                            {isAIChatActive && (
+                                <div className="my-4">
+                                    <form onSubmit={handleAIChatSubmit} className='flex flex-col gap-2'>
+                                        <label htmlFor="content" className="block text-sm font-medium text-gray-700">Ask AI for a suggestion:</label>
+                                        <div className='flex items-center gap-2 justify-between'>
+                                            <textarea
+                                                value={aiChatInput}
+                                                onChange={(e) => setAIChatInput(e.target.value)}
+                                                placeholder="Ask the AI something..."
+                                                className="block w-full py-2 px-3 border border-purple-800/30 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                            />
+                                            <div className='text-pink-600' onClick={(e) => handleAIChatSubmit(e)}><IoSend className='h-6 w-6' /></div>
+                                        </div>
+                                    </form>
+                                    {aiChatResponse && (
+                                        <div className="mt-4">
+                                            <label htmlFor="aiResponse" className="block text-sm font-medium text-gray-700">AI Response:</label>
+                                            <div className="flex items-center space-x-2 mt-1 justify-between text-sm">
+                                                {aiChatResponse}
+                                                <Button
+                                                    onClick={(e) => handleCopyToClipboard(aiChatResponse, e)}
+                                                    variant={"ghost"}>
+                                                    <p className='flex items-center gap-1 text-xs text-pink-600'> <MdCopyAll />
+                                                        Copy</p>
+
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            <div className="flex justify-between pt-2">
+                                <Button onClick={toggleAIChat} type="button" variant={"ghost"}>
+                                    <div className='flex items-center gap-2'>
+                                        <img src="robot.png" alt="AI chat" width="35" height="35" />
+                                        {isAIChatActive ? "Close AI Chat" : "Need suggestion?"}
+                                    </div>
+                                </Button>
                                 <Button type="submit">Create Post</Button>
                             </div>
+
                         </form>
                     </div>
                 </DialogContent >
