@@ -24,6 +24,8 @@ In today's fast-paced work environment, it's easy to overlook the power of a sim
 ## Screenshots
 ![](https://github.com/applescan/appreciate.ya/blob/main/appreciateYa.jpg)
 
+## New Feature
+Introducing the latest feature to spark your creativity: AI Suggestion! Now, whenever you need a dose of inspiration or just a little nudge in the right direction, our AI can craft personalized kudos for you. Whether you're celebrating a team win, recognizing a colleague's hard work, or just spreading some positivity, AI Suggestion is here to help you express your appreciation in the most impactful way. Let AI ignite your imagination and help you pen the perfect note of praise.
 
 ## Demo
 Here is a working live demo :  https://appreciate-ya.vercel.app/
