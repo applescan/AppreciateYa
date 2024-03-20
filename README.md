@@ -14,7 +14,7 @@ In today's fast-paced work environment, it's easy to overlook the power of a sim
 <h4>Features</h4>
 💌 Send personalized appreciation messages, whether it's a warm thank you, congratulations, or a virtual coffee or gift card. <br>
 🏆 Discover your top fans and MVPs, and make sure no one feels left out. <br>
-📊 Gain insights into the appreciation culture within your team or organization.
+📊 Gain insights into the appreciation culture within your team or organization. <br>
 🤖 Meet AI Suggestion, your quick tool for crafting inspiring kudos. Express appreciation with creativity and ease.
 
 </td>
