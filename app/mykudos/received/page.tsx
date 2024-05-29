@@ -15,7 +15,7 @@ const UserPostPage = () => {
   const { data: sessionData } = useSession();
   const currentOrgId = parseInt(sessionData?.user?.orgId);
   const currentUserId = parseInt(sessionData?.user?.id);
-  const [selectedFilter, setSelectedFilter] = useState('MONTH');
+  const [selectedFilter, setSelectedFilter] = useState('YEAR');
 
   const { data: usersData, error: usersError } = useQuery<{ usersByOrganizationId: User[] }>(GET_USERS_BY_ORGANIZATION_ID, {
     variables: { orgId: currentOrgId },

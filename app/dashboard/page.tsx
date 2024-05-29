@@ -20,7 +20,7 @@ import ErrorPage from '@/components/ui/Error';
 const UserPostPage = () => {
   const { data: sessionData } = useSession();
   const currentOrgId = parseInt(sessionData?.user?.orgId);
-  const [selectedFilter, setSelectedFilter] = useState('MONTH');
+  const [selectedFilter, setSelectedFilter] = useState('YEAR');
 
   const { loading, error, data, refetch } = useQuery(GET_ALL_POSTS_BY_ORG, {
     variables: { orgId: currentOrgId, filter: { type: selectedFilter } },
