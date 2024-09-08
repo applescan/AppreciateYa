@@ -55,9 +55,6 @@ How to run on your own system:
 - Once running, open a browser and open ``http://localhost:3000``
 - If everything was successful, the page will show up.
 
-### Feature Request
-- I'm working on incorporating an AI chatbot to help user generate a nice kudos messages or suggest user on what to write 
-
 ## Author
 
 - Website - https://applescan.github.io/Portfolio-Website/
