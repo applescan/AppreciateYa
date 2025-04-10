@@ -1,6 +1,12 @@
 export enum UserRole {
-  USER = 'USER',
-  ADMIN = 'ADMIN',
+  USER = "USER",
+  ADMIN = "ADMIN",
+}
+
+export enum Status {
+  AUTHENTICATED = "authenticated",
+  UNAUTHENTICATED = "unauthenticated",
+  LOADING = "loading",
 }
 
 export interface User {
@@ -14,7 +20,6 @@ export interface User {
   createdAt: string;
   updatedAt: string;
 }
-
 
 export interface Post {
   id: string;
@@ -54,7 +59,13 @@ export interface Query {
 }
 
 export interface Mutation {
-  createUser: (email: string, password: string, name: string, role: UserRole, orgId: number) => User;
+  createUser: (
+    email: string,
+    password: string,
+    name: string,
+    role: UserRole,
+    orgId: number,
+  ) => User;
   createPost: (content: string, authorId: number, orgId: number) => Post;
   updatePost: (id: string, content: string) => Post;
   deletePost: (id: string) => Post;

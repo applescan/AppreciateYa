@@ -55,8 +55,8 @@ const Button = ({
       className={`
  
         ${getVariant()}  transition duration-500  ${
-        !paddingLess && "py-2 px-4"
-      }  ${!square && "rounded-md"} active:scale-95 ${className} `}
+          !paddingLess && "py-2 px-4"
+        }  ${!square && "rounded-md"} active:scale-95 ${className} `}
     >
       {children}
     </button>

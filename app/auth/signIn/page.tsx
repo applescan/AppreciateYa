@@ -1,15 +1,17 @@
 "use client";
-import { Button } from '@/components/ui/Button';
+import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { signIn } from "next-auth/react";
 import React, { ChangeEvent, FormEvent, useState } from "react";
-import { useRouter } from 'next/navigation'
-
+import { useRouter } from "next/navigation";
 
 const LoginPage: React.FC = () => {
-  const [loginData, setLoginData] = useState<{ username: string; password: string; }>({ username: '', password: '' });
+  const [loginData, setLoginData] = useState<{
+    username: string;
+    password: string;
+  }>({ username: "", password: "" });
   const [formErrors, setFormErrors] = useState<string[]>([]);
-  const router = useRouter()
+  const router = useRouter();
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -31,7 +33,7 @@ const LoginPage: React.FC = () => {
     const result = await signIn("credentials", {
       username: loginData.username,
       password: loginData.password,
-      redirect: false, 
+      redirect: false,
       callbackUrl: "/",
     });
 
@@ -42,12 +44,16 @@ const LoginPage: React.FC = () => {
     }
   };
 
-
   return (
     <div className="relative flex h-full">
-      <div className="w-1/2 bg-no-repeat bg-cover bg-center relative" style={{ backgroundImage: `url('/bg-3.jpg')` }}>
-      </div>
-      <div className="w-1/2 bg-no-repeat bg-cover bg-center relative" style={{ backgroundImage: `url('/bg-4.jpg')` }} />
+      <div
+        className="w-1/2 bg-no-repeat bg-cover bg-center relative"
+        style={{ backgroundImage: `url('/bg-3.jpg')` }}
+      ></div>
+      <div
+        className="w-1/2 bg-no-repeat bg-cover bg-center relative"
+        style={{ backgroundImage: `url('/bg-4.jpg')` }}
+      />
 
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <div className="flex flex-col items-center justify-center h-full w-full min-w-[350px] mx-auto text-gray-600">
@@ -64,26 +70,33 @@ const LoginPage: React.FC = () => {
               </ul>
             )}
 
-            <form className="space-y-2 md:space-y-4" onSubmit={handleLoginSubmit}>
+            <form
+              className="space-y-2 md:space-y-4"
+              onSubmit={handleLoginSubmit}
+            >
               <div>
-                <label htmlFor="email" className='text-sm font-medium'>Email</label>
+                <label htmlFor="email" className="text-sm font-medium">
+                  Email
+                </label>
                 <Input
                   type="text"
                   id="username"
                   name="username"
-                  placeholder='Enter Email...'
+                  placeholder="Enter Email..."
                   className="w-full border rounded"
                   value={loginData.username.toLowerCase()}
                   onChange={handleInputChange}
                 />
               </div>
               <div>
-                <label htmlFor="password" className='text-sm font-medium'>Password</label>
+                <label htmlFor="password" className="text-sm font-medium">
+                  Password
+                </label>
                 <Input
                   type="password"
                   id="password"
                   name="password"
-                  placeholder='Enter Password...'
+                  placeholder="Enter Password..."
                   className="w-full border rounded"
                   value={loginData.password}
                   onChange={handleInputChange}
@@ -91,15 +104,28 @@ const LoginPage: React.FC = () => {
               </div>
 
               <div className="mt-6 flex w-full items-center gap-2">
-                <Button type="submit" className='w-full text-center flex justify-center items-center'>Let's go!</Button>
+                <Button
+                  type="submit"
+                  className="w-full text-center flex justify-center items-center"
+                >
+                  Let's go!
+                </Button>
               </div>
             </form>
-            <p className='font-normal text-center py-4 text-sm text-purple-900'>Don't have an account? <span className='underline font-bold text-sm text-purple-900 italic cursor-pointer' onClick={() => router.push('/auth/signup')}>Sign up</span></p>
+            <p className="font-normal text-center py-4 text-sm text-purple-900">
+              Don't have an account?{" "}
+              <span
+                className="underline font-bold text-sm text-purple-900 italic cursor-pointer"
+                onClick={() => router.push("/auth/signup")}
+              >
+                Sign up
+              </span>
+            </p>
           </div>
         </div>
-      </div >
+      </div>
     </div>
   );
-}
+};
 
 export default LoginPage;

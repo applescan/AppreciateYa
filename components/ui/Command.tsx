@@ -6,7 +6,7 @@ import { Command as CommandPrimitive } from "cmdk";
 import { FaSearch } from "react-icons/fa";
 
 import { cn } from "@/lib/utils";
-import { Dialog, DialogContent } from "./Dialog"
+import { Dialog, DialogContent } from "./Dialog";
 
 const Command = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,
@@ -16,7 +16,7 @@ const Command = React.forwardRef<
     ref={ref}
     className={cn(
       "bg-popover text-popover-foreground flex h-full w-full flex-col overflow-auto rounded-md",
-      className
+      className,
     )}
     {...props}
   />
@@ -50,7 +50,7 @@ const CommandInput = React.forwardRef<
       ref={ref}
       className={cn(
         "placeholder:text-foreground-muted flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none disabled:cursor-not-allowed disabled:opacity-50",
-        className
+        className,
       )}
       {...props}
     />
@@ -93,7 +93,7 @@ const CommandGroup = React.forwardRef<
     ref={ref}
     className={cn(
       "text-foreground [&_[cmdk-group-heading]]:text-muted-foreground overflow-auto [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium",
-      className
+      className,
     )}
     {...props}
   />
@@ -121,7 +121,7 @@ const CommandItem = React.forwardRef<
     ref={ref}
     className={cn(
       "aria-selected:bg-accent aria-selected:text-accent-foreground text-md relative flex cursor-default select-none items-center py-1.5 pl-4 outline-none hover:bg-secondary-800 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      className
+      className,
     )}
     {...props}
   />
@@ -137,7 +137,7 @@ const CommandShortcut = ({
     <span
       className={cn(
         "text-muted-foreground ml-auto text-xs tracking-widest",
-        className
+        className,
       )}
       {...props}
     />

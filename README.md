@@ -1,4 +1,5 @@
 # AppreciateYa - Together, Let's Build a Happier, More Connected Workspace!
+
 <table>
 <tr>
 <td>
@@ -22,37 +23,41 @@ In today's fast-paced work environment, it's easy to overlook the power of a sim
 </table>
 
 ## Screenshots
+
 ![](https://github.com/applescan/appreciate.ya/blob/main/appreciateYa.jpg)
 
 ## New Feature
+
 Introducing the latest feature to spark your creativity: AI Suggestion! Now, whenever you need a dose of inspiration or just a little nudge in the right direction, our AI can craft personalized kudos for you. Whether you're celebrating a team win, recognizing a colleague's hard work, or just spreading some positivity, AI Suggestion is here to help you express your appreciation in the most impactful way. Let AI ignite your imagination and help you pen the perfect note of praise.
 
 ![](https://github.com/applescan/appreciate.ya/blob/main/AI.png)
 
-
 ## Demo
-Here is a working live demo :  https://appreciate-ya.vercel.app/
 
+Here is a working live demo : https://appreciate-ya.vercel.app/
 
 ### Built with
-•	Next.js
-•	Prisma
-•	Canva
-•	Figma
-•	React
-•	Tailwind CSS
-•	GraphQL
-•	Typescript
-•	Supabase
-•	NextAuth
-•	Node.js
+
+• Next.js
+• Prisma
+• Canva
+• Figma
+• React
+• Tailwind CSS
+• GraphQL
+• Typescript
+• Supabase
+• NextAuth
+• Node.js
 
 ### User Guide
+
 How to run on your own system:
+
 - Copy/fork this repository to your github/local drive
-- In the folder, run the command ``npm install``
-- In the folder, run the command ``npm run dev``
-- Once running, open a browser and open ``http://localhost:3000``
+- In the folder, run the command `npm install`
+- In the folder, run the command `npm run dev`
+- Once running, open a browser and open `http://localhost:3000`
 - If everything was successful, the page will show up.
 
 ## Author
@@ -62,4 +67,3 @@ How to run on your own system:
 ## License
 
 MIT © Felicia Fel
-

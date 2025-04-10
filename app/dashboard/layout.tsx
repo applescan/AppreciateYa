@@ -1,35 +1,38 @@
-'use client'
-import React, { ReactNode } from 'react'
-import { useSession } from 'next-auth/react';
-import Loading from '@/components/ui/Loading';
-import { useRouter } from 'next/navigation' 
+"use client";
+import React, { ReactNode } from "react";
+import { useSession } from "next-auth/react";
+import Loading from "@/components/ui/Loading";
+import { useRouter } from "next/navigation";
 
 interface LayoutProps {
-    children: ReactNode;
+  children: ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-    const { data: sessionData, status } = useSession();
-    const router = useRouter()
+  const { data: sessionData, status } = useSession();
+  const router = useRouter();
 
-    if (status === 'loading') {
-        return <Loading />;
-    }
+  if (status === Status.LOADING) {
+    return <Loading />;
+  }
 
-    if (status === 'unauthenticated') {
-        router.push('/')
-    }
+  if (status === Status.UNAUTHENTICATED) {
+    router.push("/");
+  }
 
-    return (
-        <div className='px-12 py-12 flex flex-col gap-6 justify-center'>
-            <div>
-                <h2 className='font-extrabold flex justify-center text-3xl text-gray-900'>
-                    Dashboard</h2>
-            </div>
+  return (
+    <div className="px-12 py-12 flex flex-col gap-6 justify-center">
+      <div>
+        <h2 className="font-extrabold flex justify-center text-3xl text-gray-900">
+          Dashboard
+        </h2>
+      </div>
 
-            <main>{React.cloneElement(children as React.ReactElement, { sessionData })}</main>
-        </div>
-    )
-}
+      <main>
+        {React.cloneElement(children as React.ReactElement, { sessionData })}
+      </main>
+    </div>
+  );
+};
 
 export default Layout;

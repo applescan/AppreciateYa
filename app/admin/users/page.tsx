@@ -1,21 +1,23 @@
-'use client'
-import React, { useState } from 'react';
-import { useQuery } from '@apollo/client';
-import { Organization, User } from '@/lib/types/types';
-import { GET_USERS_AND_ORGANIZATIONS } from '@/graphql/queries';
-import CreateUserDialog from '@/components/CreateUserDialog';
-import Loading from '@/components/ui/Loading';
-import EditUserDialog from '@/components/EditUserDialog';
-import UserCard from '@/components/UserCard';
-import ErrorPage from '@/components/ui/Error';
+"use client";
+import React, { useState } from "react";
+import { useQuery } from "@apollo/client";
+import { Organization, User } from "@/lib/types/types";
+import { GET_USERS_AND_ORGANIZATIONS } from "@/graphql/queries";
+import CreateUserDialog from "@/components/CreateUserDialog";
+import Loading from "@/components/ui/Loading";
+import EditUserDialog from "@/components/EditUserDialog";
+import UserCard from "@/components/UserCard";
+import ErrorPage from "@/components/ui/Error";
 
 type UsersAndOrganizationsData = {
   users: User[];
   organizations: Organization[];
-}
+};
 
 const AdminPage: React.FC = () => {
-  const { loading, error, data, refetch } = useQuery<UsersAndOrganizationsData>(GET_USERS_AND_ORGANIZATIONS);
+  const { loading, error, data, refetch } = useQuery<UsersAndOrganizationsData>(
+    GET_USERS_AND_ORGANIZATIONS,
+  );
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
@@ -26,23 +28,24 @@ const AdminPage: React.FC = () => {
     role: string;
     orgId: number | null;
   }>({
-    name: '',
-    email: '',
-    role: '',
+    name: "",
+    email: "",
+    role: "",
     orgId: null,
   });
 
   if (loading) return <Loading></Loading>;
-  if (error) return <ErrorPage />
+  if (error) return <ErrorPage />;
 
   return (
     <div className="container mx-auto px-4">
-      <div className='flex justify-center md:justify-end gap-2 pb-4'>
+      <div className="flex justify-center md:justify-end gap-2 pb-4">
         <CreateUserDialog
           isOpen={isCreateDialogOpen}
           onOpenChange={setIsCreateDialogOpen}
           data={data || { organizations: [] }}
-          refetchUsers={refetch} />
+          refetchUsers={refetch}
+        />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -56,7 +59,7 @@ const AdminPage: React.FC = () => {
                 name: user.name,
                 email: user.email,
                 role: user.role,
-                orgId: Number(user.organization.id)
+                orgId: Number(user.organization.id),
               });
               setIsEditDialogOpen(true);
             }}
@@ -69,10 +72,9 @@ const AdminPage: React.FC = () => {
           organizations={data?.organizations || []}
           refetchUsers={refetch}
         />
-
       </div>
-    </div >
+    </div>
   );
 };
 
-export default AdminPage; 
+export default AdminPage;

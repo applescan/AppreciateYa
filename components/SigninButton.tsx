@@ -8,12 +8,13 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/HoverCard";
 import { capitalizeEachWord, getInitials } from "@/helpers/helpers";
-import { useQuery } from '@apollo/client';
+import { useQuery } from "@apollo/client";
 import { GET_ORG_NAME_BY_IDS } from "@/graphql/queries";
-import { GET_USER_BY_ID } from '@/graphql/queries';
-import { HiOutlineOfficeBuilding } from 'react-icons/hi';
+import { GET_USER_BY_ID } from "@/graphql/queries";
+import { HiOutlineOfficeBuilding } from "react-icons/hi";
 import { Skeleton } from "./ui/Skeleton";
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation";
+import { Status } from "@/lib/types/types";
 
 const SigninButton = () => {
   const { data: session, status } = useSession();
@@ -26,31 +27,35 @@ const SigninButton = () => {
     variables: { id: orgId },
   });
 
-  const orgName = orgData?.organization?.name || 'No Organisation data';
+  const orgName = orgData?.organization?.name || "No Organisation data";
 
   const { data: userData } = useQuery(GET_USER_BY_ID, {
     variables: { id: userId },
-    skip: !userId
+    skip: !userId,
   });
 
   const profileImg = userData?.user?.image || image;
 
-  if (status === "loading") {
-    return <div className="flex items-center space-x-2">
-      <Skeleton className="h-10 w-10 rounded-full" />
-      <div className="space-y-2">
-        <Skeleton className="h-4 w-[60px]" />
+  if (status === Status.LOADING) {
+    return (
+      <div className="flex items-center space-x-2">
+        <Skeleton className="h-10 w-10 rounded-full" />
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-[60px]" />
+        </div>
       </div>
-    </div>;
+    );
   }
 
   if (loading) {
-    return <div className="flex items-center space-x-2">
-      <Skeleton className="h-10 w-10 rounded-full" />
-      <div className="space-y-2">
-        <Skeleton className="h-4 w-[60px]" />
+    return (
+      <div className="flex items-center space-x-2">
+        <Skeleton className="h-10 w-10 rounded-full" />
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-[60px]" />
+        </div>
       </div>
-    </div>;
+    );
   }
 
   if (session && session.user) {
@@ -62,18 +67,26 @@ const SigninButton = () => {
               <Avatar>
                 <AvatarImage src={profileImg} />
                 <AvatarFallback>
-                  {session.user.name ? getInitials(session.user.name) : 'NA'}
+                  {session.user.name ? getInitials(session.user.name) : "NA"}
                 </AvatarFallback>
               </Avatar>
-              <p className="text-gray-800 font-normal">{capitalizeEachWord(session.user.name)}</p>
+              <p className="text-gray-800 font-normal">
+                {capitalizeEachWord(session.user.name)}
+              </p>
             </button>
           </HoverCardTrigger>
           <HoverCardContent className="w-52 flex flex-col text-left">
             <div className="flex flex-col gap-1">
-              <button onClick={() => router.push('/profile')} className="text-gray-900 text-left font-normal">
+              <button
+                onClick={() => router.push("/profile")}
+                className="text-gray-900 text-left font-normal"
+              >
                 Profile
               </button>
-              <button onClick={() => signOut()} className="text-red-600 text-left font-normal">
+              <button
+                onClick={() => signOut()}
+                className="text-red-600 text-left font-normal"
+              >
                 Sign Out
               </button>
             </div>

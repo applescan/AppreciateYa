@@ -1,26 +1,32 @@
-'use client'
-import React, { useEffect, useState } from 'react';
-import { useQuery } from '@apollo/client';
-import { GET_ALL_POSTS_BY_ORG } from '@/graphql/queries';
-import PostCard from '@/components/ui/PostCard';
+"use client";
+import React, { useEffect, useState } from "react";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_POSTS_BY_ORG } from "@/graphql/queries";
+import PostCard from "@/components/ui/PostCard";
 import Button from "@/components/Button";
 import { RiHeartAddLine } from "react-icons/ri";
-import { useRouter } from 'next/navigation';
-import { Post } from '@/lib/types/types';
-import Loading from '@/components/ui/Loading';
-import { CardCounts, countGiftCards, extractImageUrlFromContent, formatTime, removeImageUrlFromContent } from '@/helpers/helpers';
-import { useSession } from 'next-auth/react';
-import { Card } from '@/components/ui/Card';
-import CoffeeChart from '@/components/CoffeeCharts';
-import ThankYouChart from '@/components/ThankYouCharts';
-import GiftCharts from '@/components/GiftCharts';
-import FilterDropdown from '@/components/FilterDropdown';
-import ErrorPage from '@/components/ui/Error';
+import { useRouter } from "next/navigation";
+import { Post } from "@/lib/types/types";
+import Loading from "@/components/ui/Loading";
+import {
+  CardCounts,
+  countGiftCards,
+  extractImageUrlFromContent,
+  formatTime,
+  removeImageUrlFromContent,
+} from "@/helpers/helpers";
+import { useSession } from "next-auth/react";
+import { Card } from "@/components/ui/Card";
+import CoffeeChart from "@/components/CoffeeCharts";
+import ThankYouChart from "@/components/ThankYouCharts";
+import GiftCharts from "@/components/GiftCharts";
+import FilterDropdown from "@/components/FilterDropdown";
+import ErrorPage from "@/components/ui/Error";
 
 const UserPostPage = () => {
   const { data: sessionData } = useSession();
   const currentOrgId = parseInt(sessionData?.user?.orgId);
-  const [selectedFilter, setSelectedFilter] = useState('YEAR');
+  const [selectedFilter, setSelectedFilter] = useState("YEAR");
 
   const { loading, error, data, refetch } = useQuery(GET_ALL_POSTS_BY_ORG, {
     variables: { orgId: currentOrgId, filter: { type: selectedFilter } },
@@ -32,12 +38,9 @@ const UserPostPage = () => {
   const [giftCards, setGiftCards] = useState<CardCounts>({});
   const [coffeeCards, setCoffeeCards] = useState<CardCounts>({});
 
-
   const [totalCoffeeCards, setTotalCoffeeCards] = useState(0);
   const [totalGiftCards, setTotalGiftCards] = useState(0);
   const [totalThanksCards, setTotalThanksCards] = useState(0);
-
-
 
   useEffect(() => {
     if (data && data.postsByOrganizationId) {
@@ -46,116 +49,152 @@ const UserPostPage = () => {
         setThanksCards,
         setTotalThanksCards,
         [
-          '/giftCards/1.png',
-          '/giftCards/2.png',
-          '/giftCards/3.png',
-          '/giftCards/4.png',
-          '/giftCards/5.png',
-          '/giftCards/6.png',
-          '/giftCards/7.png',
-          '/giftCards/8.png',
-          '/giftCards/9.png',
-          '/giftCards/10.png'
-        ]
+          "/giftCards/1.png",
+          "/giftCards/2.png",
+          "/giftCards/3.png",
+          "/giftCards/4.png",
+          "/giftCards/5.png",
+          "/giftCards/6.png",
+          "/giftCards/7.png",
+          "/giftCards/8.png",
+          "/giftCards/9.png",
+          "/giftCards/10.png",
+        ],
       );
-      countGiftCards(data.postsByOrganizationId, setGiftCards, setTotalGiftCards, [
-        '/giftCards/11.png',
-        '/giftCards/12.png',
-        '/giftCards/13.png',
-        '/giftCards/14.png',
-        '/giftCards/15.png',
-        '/giftCards/16.png',
-        '/giftCards/17.png',
-        '/giftCards/18.png',
-        '/giftCards/19.png',
-        '/giftCards/20.png',
-      ]);
-      countGiftCards(data.postsByOrganizationId, setCoffeeCards, setTotalCoffeeCards, [
-        '/giftCards/21.png',
-        '/giftCards/22.png',
-        '/giftCards/23.png',
-        '/giftCards/24.png',
-        '/giftCards/25.png',
-        '/giftCards/26.png',
-        '/giftCards/27.png',
-        '/giftCards/28.png',
-        '/giftCards/29.png',
-        '/giftCards/30.png',
-      ]);
+      countGiftCards(
+        data.postsByOrganizationId,
+        setGiftCards,
+        setTotalGiftCards,
+        [
+          "/giftCards/11.png",
+          "/giftCards/12.png",
+          "/giftCards/13.png",
+          "/giftCards/14.png",
+          "/giftCards/15.png",
+          "/giftCards/16.png",
+          "/giftCards/17.png",
+          "/giftCards/18.png",
+          "/giftCards/19.png",
+          "/giftCards/20.png",
+        ],
+      );
+      countGiftCards(
+        data.postsByOrganizationId,
+        setCoffeeCards,
+        setTotalCoffeeCards,
+        [
+          "/giftCards/21.png",
+          "/giftCards/22.png",
+          "/giftCards/23.png",
+          "/giftCards/24.png",
+          "/giftCards/25.png",
+          "/giftCards/26.png",
+          "/giftCards/27.png",
+          "/giftCards/28.png",
+          "/giftCards/29.png",
+          "/giftCards/30.png",
+        ],
+      );
     }
   }, [data]);
 
   if (loading) return <Loading />;
-  if (error) return <ErrorPage />
+  if (error) return <ErrorPage />;
 
   const handleFilterSelect = (value: string) => {
-    const filterType = value
+    const filterType = value;
     setSelectedFilter(filterType);
     refetch({ orgId: currentOrgId, filter: { type: filterType } });
   };
 
   return (
     <>
-      <div className='pb-5 flex flex-col md:flex-row justify-between'>
-        <Button className='mb-4 md:mb-0 p-2 rounded-md text-sm border bg-gradient-to-r from-pink-500 to-indigo-500 hover:from-pink-400 hover:to-indigo-400 text-white'
-          onClick={() => router.push('/add')}>
-          <div className='flex items-center gap-2'>
-            <RiHeartAddLine />Send Kudos
+      <div className="pb-5 flex flex-col md:flex-row justify-between">
+        <Button
+          className="mb-4 md:mb-0 p-2 rounded-md text-sm border bg-gradient-to-r from-pink-500 to-indigo-500 hover:from-pink-400 hover:to-indigo-400 text-white"
+          onClick={() => router.push("/add")}
+        >
+          <div className="flex items-center gap-2">
+            <RiHeartAddLine />
+            Send Kudos
           </div>
         </Button>
-        <div className='flex items-center gap-2'>
-          <span className='text-gray-500 font-normal text-sm min-w-[55px]'>Filter by</span>
-          <div className='w-[150px]'>
-            <FilterDropdown handleFilterSelect={handleFilterSelect} selectedFilter={selectedFilter} />
+        <div className="flex items-center gap-2">
+          <span className="text-gray-500 font-normal text-sm min-w-[55px]">
+            Filter by
+          </span>
+          <div className="w-[150px]">
+            <FilterDropdown
+              handleFilterSelect={handleFilterSelect}
+              selectedFilter={selectedFilter}
+            />
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
         <Card className="flex items-center gap-2 justify-center border-0 px-4">
-          <ThankYouChart thankYous={totalThanksCards} totalPost={data?.postsByOrganizationId.length} />
-          <div className='flex gap-4 flex-col'>
-            <h2 className='text-xl font-bold text-gray-800'>Thank yous</h2>
-            <p className='text-5xl font-extrabold bg-clip-text  text-transparent bg-gradient-to-r from-purple-700 to-gray-800'>{totalThanksCards}/{data?.postsByOrganizationId.length}</p>
+          <ThankYouChart
+            thankYous={totalThanksCards}
+            totalPost={data?.postsByOrganizationId.length}
+          />
+          <div className="flex gap-4 flex-col">
+            <h2 className="text-xl font-bold text-gray-800">Thank yous</h2>
+            <p className="text-5xl font-extrabold bg-clip-text  text-transparent bg-gradient-to-r from-purple-700 to-gray-800">
+              {totalThanksCards}/{data?.postsByOrganizationId.length}
+            </p>
           </div>
         </Card>
         <Card className="flex items-center gap-2 justify-center border-0 px-4">
-          <CoffeeChart coffees={totalCoffeeCards} totalPost={data?.postsByOrganizationId.length} />
-          <div className='flex gap-4 flex-col'>
-            <h2 className='text-xl font-bold text-gray-800'>Coffees</h2>
-            <p className='text-5xl font-extrabold bg-clip-text  text-transparent bg-gradient-to-r from-purple-700 to-gray-800'>{totalCoffeeCards}/{data?.postsByOrganizationId.length}</p>
+          <CoffeeChart
+            coffees={totalCoffeeCards}
+            totalPost={data?.postsByOrganizationId.length}
+          />
+          <div className="flex gap-4 flex-col">
+            <h2 className="text-xl font-bold text-gray-800">Coffees</h2>
+            <p className="text-5xl font-extrabold bg-clip-text  text-transparent bg-gradient-to-r from-purple-700 to-gray-800">
+              {totalCoffeeCards}/{data?.postsByOrganizationId.length}
+            </p>
           </div>
         </Card>
         <Card className="flex items-center gap-2 justify-center border-0 px-4">
-          <GiftCharts gifts={totalGiftCards} totalPost={data?.postsByOrganizationId.length} />
-          <div className='flex gap-4 flex-col'>
-            <h2 className='text-xl font-bold text-gray-800'>Vouchers</h2>
-            <p className='text-5xl font-extrabold bg-clip-text  text-transparent bg-gradient-to-r from-purple-700 to-gray-800'>{totalGiftCards}/{data?.postsByOrganizationId.length}</p>
+          <GiftCharts
+            gifts={totalGiftCards}
+            totalPost={data?.postsByOrganizationId.length}
+          />
+          <div className="flex gap-4 flex-col">
+            <h2 className="text-xl font-bold text-gray-800">Vouchers</h2>
+            <p className="text-5xl font-extrabold bg-clip-text  text-transparent bg-gradient-to-r from-purple-700 to-gray-800">
+              {totalGiftCards}/{data?.postsByOrganizationId.length}
+            </p>
           </div>
         </Card>
 
-        {data.postsByOrganizationId && (
+        {data.postsByOrganizationId &&
           data.postsByOrganizationId.map((post: Post) => (
             <PostCard
               key={post.id}
               postId={Number(post.id)}
               authorName={post.author.name}
-              authorImage={post.author.image || 'default-avatar-url'}
+              authorImage={post.author.image || "default-avatar-url"}
               postImage={extractImageUrlFromContent(post.content)}
               recipient={post.recipient.name}
               content={removeImageUrlFromContent(post.content)}
               comment={post.comments}
               currentUserId={sessionData?.user.id}
-              postTime={formatTime(post.createdAt)} edit={false} deletePost={false}
+              postTime={formatTime(post.createdAt)}
+              edit={false}
+              deletePost={false}
               refetch={refetch}
             />
-          ))
-        )}
+          ))}
       </div>
 
       {data.postsByOrganizationId.length === 0 && (
-        <div className='flex justify-center w-full py-10 h-56 my-auto item'>
-          <p className='font-semibold text-gray-400 flex justify-center items-center'>It's empty in here, let's start posting!</p>
+        <div className="flex justify-center w-full py-10 h-56 my-auto item">
+          <p className="font-semibold text-gray-400 flex justify-center items-center">
+            It's empty in here, let's start posting!
+          </p>
         </div>
       )}
     </>

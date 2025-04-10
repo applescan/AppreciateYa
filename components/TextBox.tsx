@@ -23,8 +23,8 @@ const TextBox = React.forwardRef<HTMLInputElement, IProps>(
             autoComplete="off"
             className={`border border-slate-400 disabled:border-slate-100 w-full block outline-none py-2 px-1 transition-all text-xs lg:text-sm xl:text-base  bg-slate-50 focus:shadow focus:shadow-blue-500
               ${error && "border-red-500 border  animate-shake"} ${
-              children ? "rounded-r-md" : "rounded-md"
-            }`}
+                children ? "rounded-r-md" : "rounded-md"
+              }`}
             {...props}
             ref={ref}
             type={type}
@@ -37,7 +37,7 @@ const TextBox = React.forwardRef<HTMLInputElement, IProps>(
         )}
       </div>
     );
-  }
+  },
 );
 
 TextBox.displayName = "TextBox";

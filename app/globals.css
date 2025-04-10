@@ -36,9 +36,8 @@
 
 html {
   scrollbar-width: thin;
-  scrollbar-color: #999 #ffffff; 
+  scrollbar-color: #999 #ffffff;
 }
-
 
 * {
   box-sizing: border-box;
@@ -47,7 +46,7 @@ html {
 }
 
 body {
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-weight: 300;
   color: black;
 }
@@ -147,7 +146,6 @@ body {
   opacity: 0.5;
   z-index: -1;
 }
-
 
 @media only screen and (max-width: 1200px) {
   h1 {
