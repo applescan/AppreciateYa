@@ -172,21 +172,25 @@ const AppBar = () => {
               </div>
             </div>
 
-            <div className="absolute top-0 mr-6 mt-6">
+            <div>
               {status === Status.AUTHENTICATED ? (
-                <button
-                  onClick={() => signOut()}
-                  className="text-red-600 text-left font-semibold cursor-pointer"
-                >
-                  Sign Out
-                </button>
+                <div className="absolute bottom-0 mr-6 mb-6">
+                  <button
+                    onClick={() => signOut()}
+                    className="text-red-600 text-left font-semibold cursor-pointer"
+                  >
+                    Sign Out
+                  </button>
+                </div>
               ) : (
-                <button
-                  onClick={() => signIn()}
-                  className="text-green-600 ml-auto font-semibold cursor-pointer"
-                >
-                  Sign In
-                </button>
+                <div className="absolute top-0 mr-6 mt-6">
+                  <button
+                    onClick={() => signIn()}
+                    className="text-green-600 ml-auto font-semibold cursor-pointer"
+                  >
+                    Sign In
+                  </button>
+                </div>
               )}
             </div>
           </Dialog.Panel>
