@@ -3,6 +3,7 @@ import React, { ReactNode } from "react";
 import { useSession } from "next-auth/react";
 import Loading from "@/components/ui/Loading";
 import { useRouter } from "next/navigation";
+import { Status } from "@/lib/types/types";
 
 interface LayoutProps {
   children: ReactNode;

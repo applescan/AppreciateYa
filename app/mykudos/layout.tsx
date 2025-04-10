@@ -4,6 +4,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { useSession } from "next-auth/react";
 import { useRouter, usePathname } from "next/navigation";
 import Loading from "@/components/ui/Loading";
+import { Status } from "@/lib/types/types";
 
 interface LayoutProps {
   children: ReactNode;

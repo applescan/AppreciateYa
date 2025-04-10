@@ -11,6 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar";
 import { capitalizeEachWord, getInitials } from "@/helpers/helpers";
 import { VERIFY_CURRENT_PASSWORD } from "@/graphql/mutations";
 import ErrorPage from "@/components/ui/Error";
+import { Status } from "@/lib/types/types";
 
 export default function Page() {
   const { data: sessionData, status } = useSession();
@@ -56,7 +57,7 @@ export default function Page() {
       orgId: editUserData.orgId,
       password: editUserData.newPassword ? editUserData.newPassword : undefined,
     }),
-    [user, editUserData],
+    [user, editUserData]
   );
 
   const isPasswordValid = useMemo(() => {
@@ -75,7 +76,7 @@ export default function Page() {
 
     if (!isPasswordValid) {
       setErrorMessage(
-        "New password fields can't be empty when current password is provided.",
+        "New password fields can't be empty when current password is provided."
       );
       return;
     }
@@ -160,7 +161,7 @@ export default function Page() {
 
     const form = event.currentTarget;
     const fileInput = Array.from(form.elements).find(
-      (element: any) => element.name === "file",
+      (element: any) => element.name === "file"
     ) as HTMLInputElement;
     const formData = new FormData();
 
@@ -178,7 +179,7 @@ export default function Page() {
       {
         method: "POST",
         body: formData,
-      },
+      }
     ).then((r) => r.json());
 
     // After uploading to Cloudinary, update the user's image in the database.
@@ -245,7 +246,7 @@ export default function Page() {
                   {capitalizeEachWord(currentUser.name)}
                 </p>
                 <p className="text-base	text-gray-500">{`${capitalizeEachWord(
-                  currentUser.role,
+                  currentUser.role
                 )} @${currentUser.organization.name}`}</p>
               </div>
             </div>
