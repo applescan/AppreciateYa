@@ -58,6 +58,19 @@ const LoginPage: React.FC = () => {
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <div className="flex flex-col items-center justify-center h-full w-full min-w-[350px] mx-auto text-gray-600">
           <div className="w-full bg-white rounded-xl shadow-xl p-8 space-y-2 md:space-y-2">
+            <div className="bg-purple-100 text-purple-900 border border-purple-300 rounded-lg px-6 py-4 text-sm text-center mb-6 shadow-sm">
+              <h3 className="text-md font-bold mb-1">
+                👉 Too lazy to sign up?
+              </h3>
+              <p className="text-sm">Use our test account:</p>
+              <p className="mt-2 font-mono text-base font-semibold text-purple-800">
+                test@gmail.com
+              </p>
+              <p className="text-sm mt-2 text-purple-800">
+                Password hint:
+                <span className="font-bold"> It's a number from 1 to 4</span> 😉
+              </p>
+            </div>
             <h2 className="text-4xl font-extrabold text-center text-purple-900">
               Login
             </h2>

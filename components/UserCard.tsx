@@ -26,7 +26,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, onEditClick }) => {
             {user?.name ? getInitials(user.name) : "NA"}
           </AvatarFallback>
         </Avatar>
-        <CardHeader>
+        <CardHeader className="min-w-0">
           <div className="flex gap-2">
             <CardTitle>{capitalizeEachWord(user.name)}</CardTitle>
             <MdEdit
@@ -34,9 +34,12 @@ const UserCard: React.FC<UserCardProps> = ({ user, onEditClick }) => {
               onClick={() => onEditClick(user)}
             />
           </div>
-          <CardDescription>
+          <CardDescription className="space-y-1">
             <span className="text-xs flex gap-2 items-center">
-              <MdOutlineMailOutline className="text-gray-600" /> {user.email}
+              <MdOutlineMailOutline className="text-gray-600" />
+              <span className="truncate max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
+                {user.email}
+              </span>
             </span>
             <span className="text-xs flex gap-2 items-center">
               <MdWorkOutline className="text-gray-600" />
