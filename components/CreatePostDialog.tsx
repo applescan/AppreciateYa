@@ -109,25 +109,27 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
           },
         });
 
-        const newPostId = postData.createPost.id;
-        const emailLink = `https://appreciate-ya.vercel.app/post/${newPostId}`;
-        const emailHtml = render(<PostEmail links={emailLink} />);
+        //Remove sending emial for now due to sendgrid new policy
 
-        const response = await fetch("/api/email", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            to: selectedRecipient.recipientEmail,
-            subject: "You have received a new kudos!",
-            message: emailHtml,
-          }),
-        });
+        // const newPostId = postData.createPost.id;
+        // const emailLink = `https://appreciate-ya.vercel.app/post/${newPostId}`;
+        // const emailHtml = render(<PostEmail links={ emailLink } />);
 
-        if (!response.ok) {
-          throw new Error("Failed to send email");
-        }
+        // const response = await fetch("/api/email", {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        //   body: JSON.stringify({
+        //     to: selectedRecipient.recipientEmail,
+        //     subject: "You have received a new kudos!",
+        //     message: emailHtml,
+        //   }),
+        // });
+
+        // if (!response.ok) {
+        //   throw new Error("Failed to send email");
+        // }
 
         resetForm();
         setIsSuccessDialogOpen(true);
@@ -220,16 +222,16 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
 
   return (
     <>
-      <Dialog open={isOpen} onOpenChange={handleClose}>
+      <Dialog open={ isOpen } onOpenChange={ handleClose }>
         <DialogContent className="h-5/6">
           <DialogHeader>
             <DialogTitle>What do you want to say?</DialogTitle>
           </DialogHeader>
           <div className="flex flex-col items-center overflow-auto">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={ handleSubmit }>
               <div className="mb-4">
                 <img
-                  src={selectedImage}
+                  src={ selectedImage }
                   alt="Selected"
                   className="w-full rounded-lg"
                 />
@@ -241,37 +243,37 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
                 >
                   Select Recipient:
                 </label>
-                {usersData ? (
+                { usersData ? (
                   <Select
-                    onValueChange={(value) => {
+                    onValueChange={ (value) => {
                       const user = usersData.usersByOrganizationId.find(
                         (user) => user.id === value,
                       );
                       if (user) {
                         handleRecipientSelect(user.id, user.name, user.email);
                       }
-                    }}
+                    } }
                   >
                     <SelectTrigger aria-label="Recipient">
                       <SelectValue placeholder="Select Recipient">
-                        {selectedRecipient.name}
+                        { selectedRecipient.name }
                       </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        {usersData.usersByOrganizationId.map((user) => (
-                          <SelectItem key={user.id} value={user.id}>
-                            {user.name}
+                        { usersData.usersByOrganizationId.map((user) => (
+                          <SelectItem key={ user.id } value={ user.id }>
+                            { user.name }
                           </SelectItem>
-                        ))}
+                        )) }
                       </SelectGroup>
                     </SelectContent>
                   </Select>
                 ) : usersLoading ? (
                   <Skeleton />
                 ) : usersError ? (
-                  <div>Error: {usersError.message}</div>
-                ) : null}
+                  <div>Error: { usersError.message }</div>
+                ) : null }
               </div>
 
               <div className="mb-4">
@@ -283,18 +285,18 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
                 </label>
                 <textarea
                   id="content"
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
+                  value={ content }
+                  onChange={ (e) => setContent(e.target.value) }
                   className="mt-1 block w-full py-2 px-3 border border-purple-800/30 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                   placeholder="Give a shout-out, express thanks, or cheer on a teammate! Your kudos make a difference."
                 />
               </div>
 
-              {/* AI Chat Interface */}
-              {isAIChatActive && (
+              {/* AI Chat Interface */ }
+              { isAIChatActive && (
                 <div className="my-4">
                   <form
-                    onSubmit={handleAIChatSubmit}
+                    onSubmit={ handleAIChatSubmit }
                     className="flex flex-col gap-2"
                   >
                     <label
@@ -305,20 +307,20 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
                     </label>
                     <div className="flex items-center gap-2 justify-between">
                       <textarea
-                        value={aiChatInput}
-                        onChange={(e) => setAIChatInput(e.target.value)}
+                        value={ aiChatInput }
+                        onChange={ (e) => setAIChatInput(e.target.value) }
                         placeholder="Ask the AI something..."
                         className="block w-full py-2 px-3 border border-purple-800/30 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                       />
                       <div
                         className="text-pink-600"
-                        onClick={(e) => handleAIChatSubmit(e)}
+                        onClick={ (e) => handleAIChatSubmit(e) }
                       >
                         <IoSend className="h-6 w-6" />
                       </div>
                     </div>
                   </form>
-                  {aiChatResponse && (
+                  { aiChatResponse && (
                     <div className="mt-4">
                       <label
                         htmlFor="aiResponse"
@@ -327,30 +329,30 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
                         AI Response:
                       </label>
                       <div className="flex items-center space-x-2 mt-1 justify-between text-sm">
-                        {aiChatResponse}
+                        { aiChatResponse }
                         <Button
-                          onClick={(e) =>
+                          onClick={ (e) =>
                             handleCopyToClipboard(aiChatResponse, e)
                           }
-                          variant={"ghost"}
+                          variant={ "ghost" }
                         >
                           <p className="flex items-center gap-1 text-xs text-pink-600">
-                            {" "}
+                            { " " }
                             <MdCopyAll />
                             Copy
                           </p>
                         </Button>
                       </div>
                     </div>
-                  )}
+                  ) }
                 </div>
-              )}
+              ) }
 
               <div className="flex justify-between pt-2">
-                <Button onClick={toggleAIChat} type="button" variant={"ghost"}>
+                <Button onClick={ toggleAIChat } type="button" variant={ "ghost" }>
                   <div className="flex items-center gap-2">
                     <img src="robot.png" alt="AI chat" width="35" height="35" />
-                    {isAIChatActive ? "Close AI Chat" : "Need suggestion?"}
+                    { isAIChatActive ? "Close AI Chat" : "Need suggestion?" }
                   </div>
                 </Button>
                 <Button type="submit">Create Post</Button>
@@ -360,10 +362,10 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
         </DialogContent>
       </Dialog>
 
-      {/* Success Dialog */}
+      {/* Success Dialog */ }
       <PostSuccessDialog
-        isOpen={isSuccessDialogOpen}
-        onOpenChange={handleSuccessDialogClose}
+        isOpen={ isSuccessDialogOpen }
+        onOpenChange={ handleSuccessDialogClose }
       />
     </>
   );
