@@ -17,20 +17,30 @@ import {
 } from "@/helpers/helpers";
 import { useSession } from "next-auth/react";
 import { Card } from "@/components/ui/Card";
-import CoffeeChart from "@/components/CoffeeCharts";
-import ThankYouChart from "@/components/ThankYouCharts";
-import GiftCharts from "@/components/GiftCharts";
+import dynamic from "next/dynamic";
 import FilterDropdown from "@/components/FilterDropdown";
 import ErrorPage from "@/components/ui/Error";
 
+const CoffeeChart = dynamic(() => import("@/components/CoffeeCharts"), {
+  ssr: false,
+  loading: () => <div className="animate-pulse bg-gray-200 h-32 w-32 rounded-full"></div>
+});
+
+const ThankYouChart = dynamic(() => import("@/components/ThankYouCharts"), {
+  ssr: false,
+  loading: () => <div className="animate-pulse bg-gray-200 h-32 w-32 rounded-full"></div>
+});
+
+const GiftCharts = dynamic(() => import("@/components/GiftCharts"), {
+  ssr: false,
+  loading: () => <div className="animate-pulse bg-gray-200 h-32 w-32 rounded-full"></div>
+});
+
 const UserPostPage = () => {
   const { data: sessionData } = useSession();
-  const currentOrgId = parseInt(sessionData?.user?.orgId);
+  const [currentOrgId, setCurrentOrgId] = useState<number | null>(null);
   const [selectedFilter, setSelectedFilter] = useState("YEAR");
-
-  const { loading, error, data, refetch } = useQuery(GET_ALL_POSTS_BY_ORG, {
-    variables: { orgId: currentOrgId, filter: { type: selectedFilter } },
-  });
+  const [isMounted, setIsMounted] = useState(false);
 
   const router = useRouter();
 
@@ -41,6 +51,21 @@ const UserPostPage = () => {
   const [totalCoffeeCards, setTotalCoffeeCards] = useState(0);
   const [totalGiftCards, setTotalGiftCards] = useState(0);
   const [totalThanksCards, setTotalThanksCards] = useState(0);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (sessionData?.user?.orgId) {
+      setCurrentOrgId(parseInt(sessionData.user.orgId));
+    }
+  }, [sessionData]);
+
+  const { loading, error, data, refetch } = useQuery(GET_ALL_POSTS_BY_ORG, {
+    variables: { orgId: currentOrgId, filter: { type: selectedFilter } },
+    skip: !currentOrgId,
+  });
 
   useEffect(() => {
     if (data && data.postsByOrganizationId) {
@@ -98,13 +123,19 @@ const UserPostPage = () => {
     }
   }, [data]);
 
+  if (!isMounted) {
+    return <Loading />;
+  }
+
   if (loading) return <Loading />;
   if (error) return <ErrorPage />;
 
   const handleFilterSelect = (value: string) => {
     const filterType = value;
     setSelectedFilter(filterType);
-    refetch({ orgId: currentOrgId, filter: { type: filterType } });
+    if (currentOrgId) {
+      refetch({ orgId: currentOrgId, filter: { type: filterType } });
+    }
   };
 
   return (
@@ -112,7 +143,7 @@ const UserPostPage = () => {
       <div className="pb-5 flex flex-col md:flex-row justify-between">
         <Button
           className="mb-4 md:mb-0 p-2 rounded-md text-sm border bg-gradient-to-r from-pink-500 to-indigo-500 hover:from-pink-400 hover:to-indigo-400 text-white"
-          onClick={() => router.push("/add")}
+          onClick={ () => router.push("/add") }
         >
           <div className="flex items-center gap-2">
             <RiHeartAddLine />
@@ -125,8 +156,8 @@ const UserPostPage = () => {
           </span>
           <div className="w-[150px]">
             <FilterDropdown
-              handleFilterSelect={handleFilterSelect}
-              selectedFilter={selectedFilter}
+              handleFilterSelect={ handleFilterSelect }
+              selectedFilter={ selectedFilter }
             />
           </div>
         </div>
@@ -135,68 +166,68 @@ const UserPostPage = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
         <Card className="flex items-center gap-2 justify-center border-0 px-4">
           <ThankYouChart
-            thankYous={totalThanksCards}
-            totalPost={data?.postsByOrganizationId.length}
+            thankYous={ totalThanksCards }
+            totalPost={ data?.postsByOrganizationId?.length || 0 }
           />
           <div className="flex gap-4 flex-col">
             <h2 className="text-xl font-bold text-gray-800">Thank yous</h2>
-            <p className="text-5xl font-extrabold bg-clip-text  text-transparent bg-gradient-to-r from-purple-700 to-gray-800">
-              {totalThanksCards}/{data?.postsByOrganizationId.length}
+            <p className="text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-700 to-gray-800">
+              { totalThanksCards }/{ data?.postsByOrganizationId?.length || 0 }
             </p>
           </div>
         </Card>
         <Card className="flex items-center gap-2 justify-center border-0 px-4">
           <CoffeeChart
-            coffees={totalCoffeeCards}
-            totalPost={data?.postsByOrganizationId.length}
+            coffees={ totalCoffeeCards }
+            totalPost={ data?.postsByOrganizationId?.length || 0 }
           />
           <div className="flex gap-4 flex-col">
             <h2 className="text-xl font-bold text-gray-800">Coffees</h2>
-            <p className="text-5xl font-extrabold bg-clip-text  text-transparent bg-gradient-to-r from-purple-700 to-gray-800">
-              {totalCoffeeCards}/{data?.postsByOrganizationId.length}
+            <p className="text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-700 to-gray-800">
+              { totalCoffeeCards }/{ data?.postsByOrganizationId?.length || 0 }
             </p>
           </div>
         </Card>
         <Card className="flex items-center gap-2 justify-center border-0 px-4">
           <GiftCharts
-            gifts={totalGiftCards}
-            totalPost={data?.postsByOrganizationId.length}
+            gifts={ totalGiftCards }
+            totalPost={ data?.postsByOrganizationId?.length || 0 }
           />
           <div className="flex gap-4 flex-col">
             <h2 className="text-xl font-bold text-gray-800">Vouchers</h2>
-            <p className="text-5xl font-extrabold bg-clip-text  text-transparent bg-gradient-to-r from-purple-700 to-gray-800">
-              {totalGiftCards}/{data?.postsByOrganizationId.length}
+            <p className="text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-700 to-gray-800">
+              { totalGiftCards }/{ data?.postsByOrganizationId?.length || 0 }
             </p>
           </div>
         </Card>
 
-        {data.postsByOrganizationId &&
+        { data?.postsByOrganizationId &&
           data.postsByOrganizationId.map((post: Post) => (
             <PostCard
-              key={post.id}
-              postId={Number(post.id)}
-              authorName={post.author.name}
-              authorImage={post.author.image || "default-avatar-url"}
-              postImage={extractImageUrlFromContent(post.content)}
-              recipient={post.recipient.name}
-              content={removeImageUrlFromContent(post.content)}
-              comment={post.comments}
-              currentUserId={sessionData?.user.id}
-              postTime={formatTime(post.createdAt)}
-              edit={false}
-              deletePost={false}
-              refetch={refetch}
+              key={ post.id }
+              postId={ Number(post.id) }
+              authorName={ post.author.name }
+              authorImage={ post.author.image || "default-avatar-url" }
+              postImage={ extractImageUrlFromContent(post.content) }
+              recipient={ post.recipient.name }
+              content={ removeImageUrlFromContent(post.content) }
+              comment={ post.comments }
+              currentUserId={ sessionData?.user.id }
+              postTime={ formatTime(post.createdAt) }
+              edit={ false }
+              deletePost={ false }
+              refetch={ refetch }
             />
-          ))}
+          )) }
       </div>
 
-      {data.postsByOrganizationId.length === 0 && (
+      { data?.postsByOrganizationId?.length === 0 && (
         <div className="flex justify-center w-full py-10 h-56 my-auto item">
           <p className="font-semibold text-gray-400 flex justify-center items-center">
             It's empty in here, let's start posting!
           </p>
         </div>
-      )}
+      ) }
     </>
   );
 };

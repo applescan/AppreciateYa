@@ -89,7 +89,7 @@ export default function PostCard({
       });
 
       const commentId = commentData.createComment.id;
-      const emailLink = `https://appreciate-ya.vercel.app/post/${postId}`;
+      const emailLink = `http://localhost:3000/post/${postId}`;
       const emailHtml = render(<CommentEmail links={emailLink} />);
 
       const response = await fetch("/api/email", {

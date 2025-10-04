@@ -1,44 +1,47 @@
-import * as sgMail from "@sendgrid/mail";
+import { Resend } from "resend";
 
-if (process.env.SENDGRID_API_KEY) {
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-}
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
   try {
     const { to, subject, message } = await request.json();
 
-    const msg = {
-      to,
-      from: "appreciateyanz@gmail.com",
-      subject,
-      text: message,
-      html: `<div>${message}</div>`,
-    };
-
-    await sgMail.send(msg);
-
-    return new Response(
-      JSON.stringify({ message: "Email sent successfully" }),
-      {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
+    if (!to || !subject || !message) {
+      return new Response(
+        JSON.stringify({ error: "Missing 'to', 'subject', or 'message'." }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
         },
-      },
-    );
-  } catch (error: unknown) {
-    console.error("Error sending email:", error);
-
-    if (error instanceof Error && "response" in error) {
-      console.error(error.response);
+      );
     }
 
-    return new Response(JSON.stringify({ error: "Error sending email" }), {
-      status: 500,
-      headers: {
-        "Content-Type": "application/json",
-      },
+    const data = await resend.emails.send({
+      from: "Appreciate Ya <appreciateya@resend.dev>",
+      to,
+      subject,
+      html: message,
     });
+
+    if (data.error) {
+      throw new Error(data.error.message);
+    }
+
+    return new Response(
+      JSON.stringify({ message: "Email sent successfully via Resend" }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+  } catch (error) {
+    console.error("Error sending email:", error);
+    return new Response(
+      JSON.stringify({ error: "Error sending email" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      },
+    );
   }
 }

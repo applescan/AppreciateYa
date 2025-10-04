@@ -109,27 +109,25 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
           },
         });
 
-        //Remove sending emial for now due to sendgrid new policy
+        const newPostId = postData.createPost.id;
+        const emailLink = `http://localhost:3000/post/${newPostId}`;
+        const emailHtml = render(<PostEmail links={ emailLink } />);
 
-        // const newPostId = postData.createPost.id;
-        // const emailLink = `https://appreciate-ya.vercel.app/post/${newPostId}`;
-        // const emailHtml = render(<PostEmail links={ emailLink } />);
+        const response = await fetch("/api/email", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            to: selectedRecipient.recipientEmail,
+            subject: "You have received a new kudos!",
+            message: emailHtml,
+          }),
+        });
 
-        // const response = await fetch("/api/email", {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: JSON.stringify({
-        //     to: selectedRecipient.recipientEmail,
-        //     subject: "You have received a new kudos!",
-        //     message: emailHtml,
-        //   }),
-        // });
-
-        // if (!response.ok) {
-        //   throw new Error("Failed to send email");
-        // }
+        if (!response.ok) {
+          throw new Error("Failed to send email");
+        }
 
         resetForm();
         setIsSuccessDialogOpen(true);
