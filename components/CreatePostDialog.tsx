@@ -110,7 +110,7 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
         });
 
         const newPostId = postData.createPost.id;
-        const emailLink = `http://localhost:3000/post/${newPostId}`;
+        const emailLink = `https://appreciate-ya.vercel.app/post/${newPostId}`;
         const emailHtml = render(<PostEmail links={ emailLink } />);
 
         const response = await fetch("/api/email", {

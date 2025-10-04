@@ -23,7 +23,7 @@ export const PostEmail = ({ links }: EmailProps) => {
     <Html>
       <Head />
       <Tailwind
-        config={{
+        config={ {
           theme: {
             extend: {
               spacing: {
@@ -33,11 +33,11 @@ export const PostEmail = ({ links }: EmailProps) => {
               },
             },
           },
-        }}
+        } }
       >
         <Body className="bg-gray-100 text-base font-sans py-10">
           <Img
-            src={`https://res.cloudinary.com/dek61sfoh/image/upload/v1705564118/misc/bjtwdlwiwarrjvgjybct.png`}
+            src={ `https://res.cloudinary.com/dek61sfoh/image/upload/v1705564118/misc/bjtwdlwiwarrjvgjybct.png` }
             width="150"
             height="150"
             alt="AppreciateYa"
@@ -61,7 +61,7 @@ export const PostEmail = ({ links }: EmailProps) => {
             <Section className="text-center">
               <Button
                 className="bg-pink-500 text-white rounded-lg py-3 px-[18px]"
-                href={links}
+                href={ links }
               >
                 See your kudos
               </Button>
@@ -69,7 +69,7 @@ export const PostEmail = ({ links }: EmailProps) => {
 
             <Section className="text-center pt-20">
               <Link
-                href="http://localhost:3000"
+                href="https://appreciate-ya.vercel.app"
                 className="text-gray-700 font-bold"
               >
                 appreciate-ya.vercel.app

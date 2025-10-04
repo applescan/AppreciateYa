@@ -57,7 +57,7 @@ How to run on your own system:
 - Copy/fork this repository to your github/local drive
 - In the folder, run the command `npm install`
 - In the folder, run the command `npm run dev`
-- Once running, open a browser and open `http://localhost:3000`
+- Once running, open a browser and open `https://appreciate-ya.vercel.app`
 - If everything was successful, the page will show up.
 
 ## Author

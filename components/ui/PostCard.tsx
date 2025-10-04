@@ -89,8 +89,8 @@ export default function PostCard({
       });
 
       const commentId = commentData.createComment.id;
-      const emailLink = `http://localhost:3000/post/${postId}`;
-      const emailHtml = render(<CommentEmail links={emailLink} />);
+      const emailLink = `https://appreciate-ya.vercel.app/post/${postId}`;
+      const emailHtml = render(<CommentEmail links={ emailLink } />);
 
       const response = await fetch("/api/email", {
         method: "POST",
@@ -151,180 +151,180 @@ export default function PostCard({
     <div className="flex flex-col p-6 space-y-2 overflow-hidden rounded-lg shadow-xl bg-gray-100/30 text-gray-900">
       <div className="flex space-x-4 items-center">
         <Avatar className="w-12 h-12">
-          <AvatarImage src={authorImage} />
+          <AvatarImage src={ authorImage } />
           <AvatarFallback>
-            {authorName ? getInitials(authorName) : "NA"}
+            { authorName ? getInitials(authorName) : "NA" }
           </AvatarFallback>
         </Avatar>
         <div className="flex flex-col space-y-1">
           <span className="text-sm font-semibold">
-            {capitalizeEachWord(authorName)}
+            { capitalizeEachWord(authorName) }
           </span>
           <span className="text-xs text-gray-600 flex gap-0.5 items-center">
             <CiClock2 className="h-3 w-3" />
-            {postTime}
+            { postTime }
           </span>
         </div>
       </div>
       <div>
         <img
-          src={postImage}
-          alt={recipient}
-          height={100}
-          width={200}
+          src={ postImage }
+          alt={ recipient }
+          height={ 100 }
+          width={ 200 }
           className="object-cover w-full mb-4 bg-gray-500"
         />
         <span className="text-lg font-bold text-gray-800">
-          {" "}
-          To: {capitalizeEachWord(recipient)}
+          { " " }
+          To: { capitalizeEachWord(recipient) }
         </span>
-        <p className="text-sm text-gray-800 text-medium pt-2 pb-4">{content}</p>
+        <p className="text-sm text-gray-800 text-medium pt-2 pb-4">{ content }</p>
       </div>
-      {comment && (
+      { comment && (
         <div
           className="text-gray-500 hover:text-pink-700 flex gap-2 pt-4 items-center border-t-2 justify-end underline underline-offset-2 decoration-1 cursor-pointer"
-          onClick={() => router.push(`/post/${postId}`)}
+          onClick={ () => router.push(`/post/${postId}`) }
         >
           <FaRegCommentDots />
-          {comment.length > 1
+          { comment.length > 1
             ? `${comment.length} comments`
-            : `${comment.length} comment`}
+            : `${comment.length} comment` }
         </div>
-      )}
+      ) }
       <div
-        className={`${deletePost ? "flex items-center justify-between border-t-2 pt-6" : "hidden"}`}
+        className={ `${deletePost ? "flex items-center justify-between border-t-2 pt-6" : "hidden"}` }
       >
         <Button
-          variant={"outline"}
-          onClick={() => setIsDelete(true)}
-          className={`${deletePost ? "" : "hidden"}`}
+          variant={ "outline" }
+          onClick={ () => setIsDelete(true) }
+          className={ `${deletePost ? "" : "hidden"}` }
         >
           Delete
         </Button>
         <Button
-          variant={"outline"}
-          onClick={() => setIsEdit(true)}
-          className={`${edit ? "px-4" : "hidden"}`}
+          variant={ "outline" }
+          onClick={ () => setIsEdit(true) }
+          className={ `${edit ? "px-4" : "hidden"}` }
         >
           Edit
         </Button>
       </div>
       <EditPostDialog
-        isOpen={isEdit}
-        onOpenChange={setIsEdit}
-        postId={postId}
-        content={content}
-        selectedImage={postImage}
+        isOpen={ isEdit }
+        onOpenChange={ setIsEdit }
+        postId={ postId }
+        content={ content }
+        selectedImage={ postImage }
       />
       <DeleteDialog
-        isOpen={isDelete}
-        onOpenChange={setIsDelete}
-        handleSubmit={handleDelete}
+        isOpen={ isDelete }
+        onOpenChange={ setIsDelete }
+        handleSubmit={ handleDelete }
       />
-      {addComment && (
+      { addComment && (
         <>
-          {/* Add Comment Section */}
+          {/* Add Comment Section */ }
           <div className="flex items-center gap-2 justify-between">
             <>
               <Input
                 type="text"
-                value={newCommentContent}
-                onChange={(e) => setNewCommentContent(e.target.value)}
+                value={ newCommentContent }
+                onChange={ (e) => setNewCommentContent(e.target.value) }
                 className="w-full border-gray-200"
                 placeholder="Write a comment..."
               />
-              <div className="text-pink-600" onClick={handleAddComment}>
+              <div className="text-pink-600" onClick={ handleAddComment }>
                 <IoSend className="h-6 w-6" />
               </div>
             </>
           </div>
-          {comment?.map((comment) => (
-            <div key={comment.id} className="flex flex-col w-full gap-1 pt-4">
+          { comment?.map((comment) => (
+            <div key={ comment.id } className="flex flex-col w-full gap-1 pt-4">
               <div className="flex gap-2 items-center">
-                {/* Always show the avatar */}
+                {/* Always show the avatar */ }
                 <Avatar className="w-10 h-10">
                   <AvatarImage
-                    src={comment.author.image || "default-avatar-url"}
+                    src={ comment.author.image || "default-avatar-url" }
                   />
                   <AvatarFallback>
-                    {getInitials(comment.author.name)}
+                    { getInitials(comment.author.name) }
                   </AvatarFallback>
                 </Avatar>
 
-                {/* Conditional rendering for editing mode */}
-                {editingCommentId === Number(comment.id) ? (
+                {/* Conditional rendering for editing mode */ }
+                { editingCommentId === Number(comment.id) ? (
                   <div className="w-full  border-gray-200 bg-pink-50/30 rounded-xl py-2 px-4">
                     <p className="text-gray-800 font-semibold text-sm">
-                      {comment.author.name}
+                      { comment.author.name }
                     </p>
                     <Input
                       type="text"
-                      value={editingCommentContent}
+                      value={ editingCommentContent }
                       className="w-full"
-                      onChange={(e) => setEditingCommentContent(e.target.value)}
+                      onChange={ (e) => setEditingCommentContent(e.target.value) }
                     />
                   </div>
                 ) : (
                   <div className="py-2 px-4 w-full bg-pink-50/30 rounded-xl">
                     <p className="text-gray-800 font-semibold text-sm">
-                      {comment.author.name}
+                      { comment.author.name }
                     </p>
                     <p className="text-sm text-gray-500 text-medium">
-                      {comment.content}
+                      { comment.content }
                     </p>
                   </div>
-                )}
+                ) }
               </div>
 
-              {/* Edit and Delete buttons */}
-              {Number(comment.author.id) === currentUserId &&
+              {/* Edit and Delete buttons */ }
+              { Number(comment.author.id) === currentUserId &&
                 editingCommentId !== Number(comment.id) && (
                   <div className="flex gap-2 justify-end pt-2">
                     <div
                       className="text-xs text-gray-600 py-2 cursor-pointer"
-                      onClick={() => startEditing(comment)}
+                      onClick={ () => startEditing(comment) }
                     >
                       Edit
                     </div>
                     <div
                       className="text-xs text-gray-600 py-2 cursor-pointer"
-                      onClick={() => initiateDeleteComment(Number(comment.id))}
+                      onClick={ () => initiateDeleteComment(Number(comment.id)) }
                     >
                       Delete
                     </div>
                   </div>
-                )}
+                ) }
 
-              {/* Save and Cancel buttons for editing mode */}
-              {editingCommentId === Number(comment.id) && (
+              {/* Save and Cancel buttons for editing mode */ }
+              { editingCommentId === Number(comment.id) && (
                 <div className="flex gap-2 justify-end pt-2 items-center">
                   <div
                     className="text-xs text-gray-600 py-2 cursor-pointer"
-                    onClick={() => setEditingCommentId(null)}
+                    onClick={ () => setEditingCommentId(null) }
                   >
                     Cancel
                   </div>
-                  <Button variant={"ghost"} onClick={handleEditComment}>
+                  <Button variant={ "ghost" } onClick={ handleEditComment }>
                     <IoSend className="h-6 w-6 text-pink-600" />
                   </Button>
                 </div>
-              )}
+              ) }
             </div>
-          ))}
+          )) }
 
           <DeleteDialog
-            isOpen={isDeleteCommentModalOpen}
-            onOpenChange={setIsDeleteCommentModalOpen}
-            handleSubmit={() => {
+            isOpen={ isDeleteCommentModalOpen }
+            onOpenChange={ setIsDeleteCommentModalOpen }
+            handleSubmit={ () => {
               if (deletingCommentId !== null) {
                 handleDeleteComment(deletingCommentId);
                 setDeletingCommentId(null);
               }
               setIsDeleteCommentModalOpen(false);
-            }}
+            } }
           />
         </>
-      )}{" "}
+      ) }{ " " }
     </div>
   );
 }

@@ -69,7 +69,7 @@ export const CommentEmail = ({ links }: EmailProps) => {
 
             <Section className="text-center pt-20">
               <Link
-                href="http://localhost:3000"
+                href="https://appreciate-ya.vercel.app"
                 className="text-gray-700 font-bold"
               >
                 appreciate-ya.vercel.app
